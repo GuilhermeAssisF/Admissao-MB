@@ -1,0 +1,836 @@
+/* ==========================================================================
+   TEMA MULTI-CLIENTE - FLUIG MODERNO (Minimalista, Cards & Variáveis)
+   ========================================================================== */
+
+:root {
+    /* 1. CORES DA MARCA (IDENTIDADE VISUAL) */
+    --cor-primaria: #8371d0;
+    --cor-secundaria: #111111;
+
+    /* 2. MENU LATERAL (CARD DE PROGRESSO GRADIENTE) */
+    --sidebar-grad-inicio: #7261bc;
+    --sidebar-grad-fim: #443585;
+    --sidebar-texto-ativo: #ffffff;
+    --sidebar-texto-inativo: #ffffff;
+    --sidebar-linha-hover: rgba(255, 255, 255, 0.3);
+    --sidebar-scrollbar: rgba(255, 255, 255, 0.2);
+
+    /* 3. FUNDOS (BACKGROUNDS) */
+    --bg-pagina: #ffffff;
+    --bg-painel: #ffffff;
+    --bg-input: #FAFCFC;
+    --bg-input-addon: #F0F2F2;
+    --bg-bloqueado: #F0F2F2;
+    --bg-zoom-lista: #FFFFFF;
+    --bg-toast: #333333;
+
+    /* 4. TEXTOS (TIPOGRAFIA) */
+    --texto-padrao: #2f2f2f;
+    --texto-label: #4f575f;
+    --texto-bloqueado: #889391;
+    --texto-botao: #FFFFFF;
+    --texto-toast: #FFFFFF;
+
+    /* 5. BORDAS E CONTORNOS */
+    --borda-padrao: #E0E6E5;
+    --borda-painel: #E8ECEB;
+    --borda-painel-hover: #D1D8D6;
+    --borda-bloqueado: #E6EAEA;
+
+    /* 6. SOMBRAS E OPACIDADES */
+    --sombra-painel: rgba(0, 0, 0, 0.06);
+    --sombra-painel-hover: rgba(0, 0, 0, 0.12);
+    --sombra-botao: rgba(0, 0, 0, 0.1);
+    --sombra-menu-lateral: rgba(0, 0, 0, 0.1);
+    --sombra-toast: rgba(0, 0, 0, 0.15);
+}
+
+/* ==========================================================================
+   2. FUNDO E PAINÉIS (CARDS)
+========================================================================== */
+body,
+.fluig-style-guide {
+    background-color: var(--bg-pagina) !important;
+    font-family: 'Inter', 'Roboto', 'Open Sans', sans-serif !important;
+    color: var(--texto-padrao);
+}
+
+.fluig-style-guide .panel-default {
+    border: 1px solid var(--borda-painel) !important;
+    border-radius: 12px !important;
+    background-color: var(--bg-painel) !important;
+    box-shadow: 0 4px 20px var(--sombra-painel) !important;
+    margin-bottom: 25px !important;
+    transition: all 0.3s ease !important;
+    overflow: visible !important;
+}
+
+.fluig-style-guide .panel-default:hover {
+    border-color: var(--borda-painel-hover) !important;
+    box-shadow: 0 8px 25px var(--sombra-painel-hover) !important;
+}
+
+.fluig-style-guide .panel-heading {
+    background-color: transparent !important;
+    border-bottom: 1px solid var(--borda-padrao) !important;
+    padding: 15px 25px !important;
+    color: var(--cor-secundaria) !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fluig-style-guide .panel-heading i {
+    color: var(--cor-primaria) !important;
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.fluig-style-guide .panel-body {
+    padding: 20px 25px !important;
+}
+
+/* ==========================================================================
+   3. INPUTS, LABELS E BOTÕES GERAIS
+========================================================================== */
+.fluig-style-guide label {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: var(--texto-label) !important;
+    margin-bottom: 6px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fluig-style-guide .form-control {
+    border-radius: 6px !important;
+    border: 1px solid var(--borda-padrao) !important;
+    background-color: var(--bg-input) !important;
+    padding: 8px 12px !important;
+    height: auto !important;
+    font-size: 13px !important;
+    color: var(--texto-padrao) !important;
+    box-shadow: none !important;
+    transition: border-color 0.2s ease !important;
+}
+
+.fluig-style-guide .form-control:focus {
+    border-color: var(--cor-primaria) !important;
+    background-color: var(--bg-painel) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cor-primaria) 20%, transparent) !important;
+}
+
+.fluig-style-guide .form-control[readonly],
+.fluig-style-guide .form-control[disabled] {
+    background-color: var(--bg-bloqueado) !important;
+    border-color: var(--borda-bloqueado) !important;
+    color: var(--texto-bloqueado) !important;
+    cursor: not-allowed;
+}
+
+.fluig-style-guide .btn-primary,
+.fluig-style-guide .btn-success {
+    background-color: var(--cor-primaria) !important;
+    border-color: var(--cor-primaria) !important;
+    color: var(--texto-botao) !important;
+    border-radius: 6px !important;
+    padding: 8px 20px !important;
+    font-weight: 600 !important;
+    transition: filter 0.2s ease;
+}
+
+.fluig-style-guide .btn-primary:hover,
+.fluig-style-guide .btn-success:hover {
+    filter: brightness(0.9);
+    box-shadow: 0 4px 10px var(--sombra-botao) !important;
+}
+
+/* ==========================================================================
+   4. ESTRUTURA DA SIDEBAR CARD
+========================================================================== */
+#layout_wrapper {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    margin: 0 auto;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+#sidebar_etapas_card {
+    position: sticky;
+    top: 20px;
+    width: 260px;
+    height: calc(100vh - 40px);
+    background: linear-gradient(135deg, var(--sidebar-grad-inicio) 0%, var(--sidebar-grad-fim) 100%);
+    border-radius: 16px !important;
+    box-shadow: 0 4px 15px var(--sombra-menu-lateral) !important;
+    padding: 20px 15px 20px 20px;
+    margin-right: 20px;
+    flex-shrink: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.sidebar-header {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar_etapas_card .sidebar-title {
+    color: var(--sidebar-texto-ativo) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    margin: 8px 0 0 0 !important;
+    text-transform: uppercase !important;
+    text-shadow: none !important;
+    text-align: center;
+    opacity: 0.9;
+    letter-spacing: 0.5px;
+}
+
+.sidebar-logo-wrapper {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px 10px;
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#sidebar_etapas_card .sidebar-logo {
+    max-width: 100%;
+    max-height: 45px;
+    object-fit: contain;
+    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.192)) !important;
+}
+
+.sidebar-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.sidebar-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+    background: var(--sidebar-scrollbar);
+    border-radius: 4px;
+}
+
+#sidebar_etapas_card .sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sidebar_etapas_card .sidebar-menu li {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sidebar-texto-inativo) !important;
+    padding: 8px 0 8px 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+#sidebar_etapas_card .sidebar-menu li:hover {
+    color: var(--sidebar-texto-ativo) !important;
+    border-left-color: var(--sidebar-linha-hover);
+}
+
+#sidebar_etapas_card .sidebar-menu li.ativa {
+    color: var(--sidebar-texto-ativo) !important;
+    font-weight: 700;
+    border-left-color: var(--cor-primaria);
+}
+
+.sidebar-footer {
+    flex-shrink: 0;
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid rgba(249, 249, 249, 0.619);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-text-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: left;
+}
+
+.sidebar-footer p.footer-company {
+    color: var(--texto-toast);
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.sidebar-footer span.footer-version {
+    color: var(--texto-toast);
+    font-size: 11px;
+    margin: 0;
+}
+
+.footer-socials-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-socials-right a {
+    color: var(--texto-toast);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.2s ease;
+}
+
+.footer-socials-right a:hover {
+    color: var(--borda-painel-hover);
+    transform: scale(1.1);
+    text-decoration: none !important;
+}
+
+#form_main_container {
+    flex-grow: 1;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+@media (max-width: 992px) {
+    #layout_wrapper {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    #sidebar_etapas_card {
+        display: none;
+    }
+
+    #form_main_container {
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   5. AJUSTES COMPONENTES FLUIG (Zooms, Calendários e Select2)
+========================================================================== */
+.fluig-style-guide .select2-container .select2-selection--single,
+.fluig-style-guide .select2-container .select2-selection--multiple {
+    border-radius: 8px !important;
+    border: 1px solid var(--borda-padrao) !important;
+    background-color: var(--bg-input) !important;
+    min-height: 35px !important;
+    color: var(--texto-padrao) !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.fluig-style-guide .select2-container .select2-selection__rendered {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    padding-left: 8px !important;
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+.fluig-style-guide .select2-container .select2-search--inline {
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.fluig-style-guide .select2-container .select2-search--inline .select2-search__field {
+    margin-top: 0 !important;
+    height: 24px !important;
+    line-height: 24px !important;
+}
+
+.fluig-style-guide .select2-container--focus .select2-selection--single,
+.fluig-style-guide .select2-container--focus .select2-selection--multiple,
+.fluig-style-guide .select2-container--open .select2-selection--single,
+.fluig-style-guide .select2-container--open .select2-selection--multiple {
+    border-color: var(--cor-primaria) !important;
+    background-color: var(--bg-painel) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cor-primaria) 20%, transparent) !important;
+}
+
+.fluig-style-guide .select2-container .select2-selection__choice {
+    background-color: var(--cor-primaria) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 4px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 3px 8px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.fluig-style-guide .select2-container .select2-selection__choice__remove {
+    color: #FFFFFF !important;
+    margin-right: 8px !important;
+    font-weight: bold !important;
+}
+
+.select2-dropdown {
+    border: 1px solid var(--cor-primaria) !important;
+    border-radius: 0 0 8px 8px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    background-color: var(--bg-zoom-lista) !important;
+    overflow: hidden;
+}
+
+.select2-results__option {
+    color: var(--texto-padrao) !important;
+}
+
+.select2-results__option--highlighted[aria-selected] {
+    background-color: var(--cor-primaria) !important;
+    color: #FFFFFF !important;
+}
+
+.fluig-style-guide .select2-container--disabled .select2-selection--single,
+.fluig-style-guide .select2-container--disabled .select2-selection--multiple {
+    background-color: var(--bg-bloqueado) !important;
+    border-color: var(--borda-bloqueado) !important;
+    cursor: not-allowed !important;
+}
+
+.fluig-style-guide .select2-container--disabled .select2-search__field {
+    cursor: not-allowed !important;
+    background-color: transparent !important;
+}
+
+.fluig-style-guide .select2-container--disabled .select2-selection__choice {
+    background-color: var(--texto-bloqueado) !important;
+    cursor: not-allowed !important;
+}
+
+.fluig-style-guide .select2-container--disabled .select2-selection__choice__remove {
+    display: none !important;
+}
+
+/* INPUT GROUPS */
+.fluig-style-guide .input-group {
+    display: table;
+    width: 100%;
+}
+
+.fluig-style-guide .input-group-addon:first-child {
+    border-radius: 6px 0 0 6px !important;
+    border: 1px solid var(--borda-padrao) !important;
+    border-right: none !important;
+    background-color: var(--bg-input-addon) !important;
+    color: var(--texto-label) !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+}
+
+.fluig-style-guide .input-group-addon:first-child+.form-control {
+    border-radius: 0 6px 6px 0 !important;
+}
+
+.fluig-style-guide .input-group .form-control:not(:last-child) {
+    border-radius: 6px 0 0 6px !important;
+}
+
+.fluig-style-guide .input-group-addon:last-child {
+    border-radius: 0 6px 6px 0 !important;
+    border: 1px solid var(--borda-padrao) !important;
+    border-left: none !important;
+    background-color: var(--bg-input) !important;
+}
+
+.fluig-style-guide .input-group-addon i,
+.fluig-style-guide .input-group-addon span[class^="fluigicon"] {
+    color: var(--cor-primaria) !important;
+}
+
+.fluig-style-guide .input-group:focus-within .form-control,
+.fluig-style-guide .input-group:focus-within .input-group-addon {
+    border-color: var(--cor-primaria) !important;
+}
+
+/* ==========================================================================
+   6. PROTEÇÃO CONTRA AVISOS E VAZAMENTO (TOASTS)
+========================================================================== */
+#toast-container {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    pointer-events: none !important;
+}
+
+#toast-container>div {
+    pointer-events: auto !important;
+    background-color: var(--bg-toast) !important;
+    box-shadow: 0 4px 15px var(--sombra-toast) !important;
+    color: var(--texto-toast) !important;
+    border: none !important;
+    border-radius: 8px !important;
+}
+
+.fluig-style-guide input,
+.fluig-style-guide select,
+.fluig-style-guide textarea,
+.fluig-style-guide .select2-container {
+    max-width: 100% !important;
+}
+
+.fluig-style-guide table {
+    width: 100% !important;
+    table-layout: fixed !important;
+    word-wrap: break-word !important;
+}
+
+.fluig-style-guide .bootstrap-datetimepicker-widget table,
+.fluig-style-guide .datepicker table {
+    width: auto !important;
+    margin: 0 auto !important;
+    table-layout: auto !important;
+}
+
+.fluig-style-guide .bootstrap-datetimepicker-widget th,
+.fluig-style-guide .bootstrap-datetimepicker-widget td,
+.fluig-style-guide .datepicker th,
+.fluig-style-guide .datepicker td {
+    padding: 4px 8px !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: normal !important;
+}
+
+.fluig-style-guide .bootstrap-datetimepicker-widget,
+.fluig-style-guide .datepicker {
+    max-width: 300px !important;
+}
+
+.fluig-style-guide .panel-body .row {
+    margin-left: -10px !important;
+    margin-right: -10px !important;
+}
+
+.fluig-style-guide .panel-body [class^="col-"] {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+#toaster {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+#toaster:empty {
+    display: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* =========================================================================
+   7. BOTÕES PADRÃO DO GED E ZOOMS BLOQUEADOS
+========================================================================= */
+.btn-ged-action {
+    background-color: #8371d0;
+    border-color: #6f5ebc;
+    color: #ffffff !important;
+    min-width: 210px;
+    /* Mantido seu tamanho original global */
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-ged-action:hover:not([disabled]) {
+    background-color: #8371d0;
+    border-color: #6f5ebc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-ged-action[disabled] {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    opacity: 0.65;
+    transform: none;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.select2-container.select2-container-disabled .select2-choice,
+.select2-container.select2-container-disabled .select2-choices {
+    background-color: #eee !important;
+    background-image: none !important;
+    cursor: not-allowed !important;
+    border-color: #ccc !important;
+}
+
+.select2-container.select2-container-disabled .select2-chosen {
+    color: #777 !important;
+}
+
+/* =========================================================================
+   8. BOTÃO MASTER DO GED (PULSAÇÃO)
+========================================================================= */
+.btn-ged-master {
+    background-color: #8371d0;
+    color: #ffffff !important;
+    min-width: 310px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 6px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(131, 113, 208, 0.212);
+    animation: pulse-green 2s infinite;
+}
+
+.btn-ged-master::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: rotate(30deg) translateX(-150%);
+}
+
+.btn-ged-master:not([disabled])::after {
+    animation: shine-sweep 3s infinite;
+}
+
+.btn-ged-master:hover:not([disabled]) {
+    background-color: #8371d0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(131, 113, 208, 0.6);
+}
+
+.btn-ged-master[disabled] {
+    background-color: #6c757d;
+    box-shadow: none;
+    animation: none;
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.btn-ged-master.btn-aberto {
+    background-color: #8371d0;
+    box-shadow: 0 6px 20px rgba(131, 113, 208, 0.086);
+    animation: none;
+}
+
+.btn-ged-master.btn-aberto::after {
+    animation: none;
+}
+
+@keyframes pulse-green {
+    0% {
+        box-shadow: 0 0 0 0 rgba(131, 113, 208, 0.173);
+    }
+
+    70% {
+        box-shadow: 0 0 0 15px rgba(131, 113, 208, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(131, 113, 208, 0);
+    }
+}
+
+@keyframes shine-sweep {
+    0% {
+        transform: rotate(30deg) translateX(-150%);
+    }
+
+    50% {
+        transform: rotate(30deg) translateX(150%);
+    }
+
+    100% {
+        transform: rotate(30deg) translateX(150%);
+    }
+}
+
+/* =========================================================
+   9. ESTILIZAÇÃO SAAS / SOFT UI - KIT DINÂMICO
+========================================================= */
+
+/* Contentor da Linha (Resolve as sobreposições) */
+.row-kit-dinamico {
+    display: flex !important;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.row-kit-dinamico:hover {
+    border-color: #dbeafe;
+    background: #fafafa;
+}
+
+/* Modificação específica para os botões do kit (Para não ficarem gigantes) */
+.row-kit-dinamico .btn-ged-action {
+    min-width: 0 !important;
+    /* Desliga o tamanho global de 210px */
+    padding: 6px 12px !important;
+    border-radius: 6px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+/* CHIPS (Checkboxes Modernos Cápsula) */
+.modern-chip-checkbox {
+    cursor: pointer;
+    margin: 0;
+    width: 100%;
+}
+
+.modern-chip-checkbox input {
+    display: none;
+}
+
+.chip-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    transition: all 0.2s;
+}
+
+.modern-chip-checkbox:hover input:not(:disabled)+.chip-content {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.chip-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #d1d5db;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.modern-chip-checkbox input:checked+.chip-content {
+    background: #eff6ff;
+    border-color: #3b82f6;
+}
+
+.modern-chip-checkbox input:checked+.chip-content .chip-icon {
+    background: #8371d0;
+    border-color: #8371d0;
+}
+
+.modern-chip-checkbox input:checked+.chip-content .chip-icon::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 6px;
+    width: 5px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.modern-chip-checkbox input:disabled+.chip-content {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f9fafb;
+    box-shadow: none;
+    transform: none;
+}
+
+/* CAIXA DE UPLOAD TRACEJADA */
+.modern-file-upload {
+    position: relative;
+    display: block;
+    border: 1.5px dashed #cbd5e1;
+    border-radius: 10px;
+    background: #f8fafc;
+    padding: 10px 14px;
+    transition: all 0.2s;
+    margin: 0;
+}
+
+.modern-file-upload:hover:not(.disabled-upload) {
+    border-color: #3b82f6;
+    background: #f0f9ff;
+}
+
+.modern-file-upload input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.upload-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #475569;
+}
+
+.disabled-upload {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: #e5e7eb;
+    background: #f1f5f9;
+}
+
+.disabled-upload input[type="file"] {
+    cursor: not-allowed;
+}

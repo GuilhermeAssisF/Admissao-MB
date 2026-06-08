@@ -1,0 +1,59 @@
+table td {
+  border-top: none !important;
+}
+
+.buttonZoom {
+  height: 34px;
+}
+
+.CampoObrigatorio {
+  color: red;
+}
+
+.LinkManual {
+  color: #5bc0de !important;
+}
+
+/* Ajuste do tamanho do calendario com hora (sideBySide) */
+.bootstrap-datetimepicker-widget.dropdown-menu {
+    width: auto !important; /* Força a largura a se ajustar ao conteúdo */
+    min-width: 320px !important; /* Garante que não fique pequeno demais */
+    max-width: none !important; /* Remove limites máximos que possam esticar */
+    padding: 10px !important;
+}
+
+/* Garante que a tabela interna não estique desnecessariamente */
+.bootstrap-datetimepicker-widget table {
+    width: auto !important;
+    margin: 0 auto !important;
+}
+
+/* ========================================================================= */
+/* CORREÇÃO DO ZOOM FLUIG (SELECT2 MULTIPLE): Impede quebra de linha da tag  */
+/* ========================================================================= */
+
+/* 1. Impede que a lista inteira (texto + input invisível) tente quebrar a linha */
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    display: block !important;
+}
+
+/* 2. Aplica o limite de tamanho e as reticências (...) direto na tag com o texto */
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    max-width: calc(100% - 25px) !important; /* 100% do campo menos o espaço do input escondido */
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: inline-block !important; /* Essencial para o ellipsis funcionar */
+    vertical-align: middle !important;
+    margin-top: 5px !important; /* Mantém o alinhamento centralizado com a borda */
+}
+
+/* 3. Garante que o botão de fechar "X" (que fica na esquerda) não seja esmagado */
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    float: left; /* Garante que o X fique sempre à esquerda do texto */
+    margin-right: 5px;
+}
+
+
