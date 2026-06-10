@@ -651,15 +651,37 @@
       calNasc.setMaxDate(new Date());
     }
 
-    // Gatilho: Ao alterar a Jornada ou Prazo manualmente, limpa os campos irrelevantes
-    $("#cpJornadaAdmissao, #cpContratoPrazo").on("change", function () {
+    $("#cpJornadaAdmissao").on("change", function () {
+      aplicarBloqueioDadosContratacaoPorJornada();
       gerenciarPainelContrato(true);
       exibeDocumentosPorJornadaKit();
+
+      if (typeof aplicarObrigatoriedadeFrontEnd === "function") {
+        aplicarObrigatoriedadeFrontEnd(getWKNumState());
+      }
+
+      if (typeof validarLiberacaoGED === "function") {
+        validarLiberacaoGED();
+      }
+    });
+
+    $("#cpContratoPrazo").on("change", function () {
+      gerenciarPainelContrato(true);
+      exibeDocumentosPorJornadaKit();
+
+      if (typeof aplicarObrigatoriedadeFrontEnd === "function") {
+        aplicarObrigatoriedadeFrontEnd(getWKNumState());
+      }
+
+      if (typeof validarLiberacaoGED === "function") {
+        validarLiberacaoGED();
+      }
     });
 
     // Roda a função assim que a tela abre SEM limpar dados
     setTimeout(function () {
       gerenciarPainelContrato(false);
+      aplicarBloqueioDadosContratacaoPorJornada();
     }, 500);
 
 
@@ -1228,6 +1250,8 @@
     if (typeof window.liberarSequenciaTurno === "function") {
       window.liberarSequenciaTurno();
     }
+
+    aplicarBloqueioDadosContratacaoPorJornada();
   }, 2500);
 
   // Quando a filial é alterada, revalida os documentos do Kit
@@ -1264,6 +1288,9 @@
       $("#txtCELULAR").val(atsData.txtCELULAR).trigger('blur');
       $("#FUN_ADMISSAO").val(atsData.FUN_ADMISSAO);
       $("#cpJornadaAdmissao").val(atsData.cpJornadaAdmissao);
+      aplicarBloqueioDadosContratacaoPorJornada();
+      gerenciarPainelContrato(false);
+      exibeDocumentosPorJornadaKit();
 
       // Deficiências
       $("#txtPossuiDeficiencia").val(atsData.cand_possui_deficiencia);
@@ -1313,6 +1340,8 @@
           if (typeof window.setSelectedZoomItem === "function") {
             window.setSelectedZoomItem(zoomItemFake);
           }
+
+          aplicarBloqueioDadosContratacaoPorJornada();
         }, 500);
       }
 
@@ -2539,6 +2568,194 @@ function replicarNomeSocial() {
   }
 }
 
+function aplicarBloqueioDadosContratacaoPorJornada() {
+  var atvAtual = typeof getWKNumState !== "undefined" ? getWKNumState() : 0;
+  var etapaEditavel = atvAtual == 0 || atvAtual == 1 || atvAtual == 41;
+  var jornada = $.trim($("#cpJornadaAdmissao").val() || "");
+  var $container = $("#containerDadosContratacaoDependentes");
+
+  if (!etapaEditavel || !$container.length) {
+    return;
+  }
+
+  var $campos = $container.find("input, select, textarea, button").filter(function () {
+    var $campo = $(this);
+
+    if ($campo.is('[type="hidden"]')) {
+      return false;
+    }
+
+    if ($campo.closest(".hide").length > 0) {
+      return false;
+    }
+
+    return true;
+  });
+
+  function salvarAtributoOriginal($alvo, nomeAtributo, valor) {
+    if ($alvo.attr(nomeAtributo) === undefined) {
+      $alvo.attr(nomeAtributo, valor);
+    }
+  }
+
+  function aplicarVisualZoom($campo, bloqueado) {
+    var campoId = $campo.attr("id");
+    if (!campoId) {
+      return;
+    }
+
+    var $select2 = $("#s2id_" + campoId);
+    if (!$select2.length) {
+      return;
+    }
+
+    var $choice = $select2.find(".select2-choice");
+    salvarAtributoOriginal($select2, "data-jornada-original-style", $select2.attr("style") || "");
+    salvarAtributoOriginal($choice, "data-jornada-original-style", $choice.attr("style") || "");
+
+    if (bloqueado) {
+      $select2.addClass("select2-container-disabled");
+      $choice.css({ "background-color": "#f3f4f6", "cursor": "not-allowed", "pointer-events": "none" });
+      return;
+    }
+
+    var select2Style = $select2.attr("data-jornada-original-style");
+    var choiceStyle = $choice.attr("data-jornada-original-style");
+    if (select2Style === "") {
+      $select2.removeAttr("style");
+    } else if (select2Style !== undefined) {
+      $select2.attr("style", select2Style);
+    }
+
+    if (choiceStyle === "") {
+      $choice.removeAttr("style");
+    } else if (choiceStyle !== undefined) {
+      $choice.attr("style", choiceStyle);
+    }
+
+    if ($campo.prop("disabled")) {
+      $select2.addClass("select2-container-disabled");
+    } else {
+      $select2.removeClass("select2-container-disabled");
+    }
+
+    $select2.removeAttr("data-jornada-original-style");
+    $choice.removeAttr("data-jornada-original-style");
+  }
+
+  function aplicarVisualCampo($campo, bloqueado) {
+    salvarAtributoOriginal($campo, "data-jornada-original-style", $campo.attr("style") || "");
+
+    var $addon = $campo.closest(".input-group").find(".input-group-addon");
+    if ($addon.length) {
+      salvarAtributoOriginal($addon, "data-jornada-original-style", $addon.attr("style") || "");
+    }
+
+    if (bloqueado) {
+      $campo.css({ "pointer-events": "none", "background-color": "#f3f4f6", "cursor": "not-allowed" });
+      if ($addon.length) {
+        $addon.css({ "pointer-events": "none", "background-color": "#f3f4f6", "cursor": "not-allowed" });
+      }
+      return;
+    }
+
+    var estiloOriginal = $campo.attr("data-jornada-original-style");
+    if (estiloOriginal === "") {
+      $campo.removeAttr("style");
+    } else if (estiloOriginal !== undefined) {
+      $campo.attr("style", estiloOriginal);
+    }
+
+    if ($addon.length) {
+      var estiloAddon = $addon.attr("data-jornada-original-style");
+      if (estiloAddon === "") {
+        $addon.removeAttr("style");
+      } else if (estiloAddon !== undefined) {
+        $addon.attr("style", estiloAddon);
+      }
+      $addon.removeAttr("data-jornada-original-style");
+    }
+
+    $campo.removeAttr("data-jornada-original-style");
+  }
+
+  function bloquearCampo($campo) {
+    var jaBloqueadoPelaJornada = $campo.attr("data-bloqueio-jornada") === "true";
+
+    if (!jaBloqueadoPelaJornada) {
+      salvarAtributoOriginal($campo, "data-jornada-original-disabled", $campo.prop("disabled") ? "true" : "false");
+      salvarAtributoOriginal($campo, "data-jornada-original-readonly", $campo.prop("readonly") ? "true" : "false");
+      $campo.attr("data-bloqueio-jornada", "true");
+    }
+
+    var campoId = $campo.attr("id");
+    var isZoom = $campo.is('[type="zoom"]');
+    var usaDisabled = isZoom || $campo.is("select, button");
+
+    if (usaDisabled) {
+      $campo.prop("disabled", true).attr("disabled", "disabled");
+    } else {
+      $campo.prop("readonly", true).attr("readonly", "readonly");
+    }
+
+    if (isZoom && campoId && typeof changeZoomState === "function") {
+      changeZoomState(campoId, true);
+      aplicarVisualZoom($campo, true);
+    }
+
+    aplicarVisualCampo($campo, true);
+  }
+
+  function liberarCampo($campo) {
+    if ($campo.attr("data-bloqueio-jornada") !== "true") {
+      return;
+    }
+
+    var originalDisabled = $campo.attr("data-jornada-original-disabled") === "true";
+    var originalReadonly = $campo.attr("data-jornada-original-readonly") === "true";
+    var campoId = $campo.attr("id");
+    var isZoom = $campo.is('[type="zoom"]');
+
+    if (isZoom && campoId && typeof changeZoomState === "function") {
+      changeZoomState(campoId, originalDisabled);
+    }
+
+    $campo.prop("disabled", originalDisabled);
+    if (originalDisabled) {
+      $campo.attr("disabled", "disabled");
+    } else {
+      $campo.removeAttr("disabled");
+    }
+
+    $campo.prop("readonly", originalReadonly);
+    if (originalReadonly) {
+      $campo.attr("readonly", "readonly");
+    } else {
+      $campo.removeAttr("readonly");
+    }
+
+    aplicarVisualCampo($campo, false);
+    if (isZoom) {
+      aplicarVisualZoom($campo, false);
+    }
+
+    $campo.removeAttr("data-bloqueio-jornada");
+    $campo.removeAttr("data-jornada-original-disabled");
+    $campo.removeAttr("data-jornada-original-readonly");
+  }
+
+  if (jornada === "") {
+    $campos.each(function () {
+      bloquearCampo($(this));
+    });
+    return;
+  }
+
+  $campos.filter('[data-bloqueio-jornada="true"]').each(function () {
+    liberarCampo($(this));
+  });
+}
+
 // =========================================================================
 // MOTOR UNIFICADO DO PAINEL DE CONTRATO DE TRABALHO
 // =========================================================================
@@ -2779,6 +2996,7 @@ $(document).ready(function () {
     // E roda com 800ms de atraso para não ser "atropelada" pelo desbloqueio automático da tela
     gerenciarPainelContrato(false)
     exibeDocumentosPorJornadaKit();
+    aplicarBloqueioDadosContratacaoPorJornada();
   }, 800);
 });
 
