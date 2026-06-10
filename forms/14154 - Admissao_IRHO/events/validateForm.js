@@ -1,6 +1,5 @@
 function validateForm(form) {
     // --- BYPASS DE INTEGRAÇÃO ---
-<<<<<<< HEAD
 
     // Se quem está movendo é o usuário da Widget, IGNORA validações e permite avançar.
     // var usuarioLogado = getValue("WKUser");
@@ -17,7 +16,6 @@ function validateForm(form) {
         return;
     }
 
-=======
     // Se quem está movendo é o usuário da Widget, IGNORA validações e permite avançar.
     // Isso evita erro 500 pois os campos estarão vazios nesse momento.
     var usuarioLogado = getValue("WKUser");
@@ -32,13 +30,11 @@ function validateForm(form) {
     var acaoUsuario = getValue("WKCompletTask");
     var msg = "";
 
->>>>>>> 1b64ab32b8425e2be9acbab1de2a499f633a6b67
     // --- FUNÇÃO AUXILIAR DE SEGURANÇA ---
     // Garante que retorna String vazia se o campo for nulo, evitando erro 500
     function getSafeValue(campo) {
         var val = form.getValue(campo);
         if (val == null) return "";
-<<<<<<< HEAD
         return new java.lang.String(val).trim();
     }
 
@@ -217,7 +213,6 @@ function validateForm(form) {
     // =========================================================================
     if (msg != "") {
         throw "<br/><br/><b>Atenção! Verifique os seguintes erros antes de avançar:</b><br/><br/>" + msg;
-=======
         return new java.lang.String(val).trim(); // Converte para Java String e remove espaços
     }
 
@@ -320,6 +315,5 @@ function validateForm(form) {
 
     if (msg != "") {
         throw "<br> ERRO DE VALIDAÇÃO: <br>" + msg;
->>>>>>> 1b64ab32b8425e2be9acbab1de2a499f633a6b67
     }
 }

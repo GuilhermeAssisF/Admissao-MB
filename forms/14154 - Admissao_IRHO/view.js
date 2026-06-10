@@ -1,4 +1,4 @@
-$(document).ready(function () {
+﻿$(document).ready(function () {
 
   // ====================================================================
   // MOTOR CENTRAL DA SEQUÊNCIA DO TURNO (FONTE DA VERDADE)
@@ -826,6 +826,350 @@ $(document).ready(function () {
 
   // Descobre a atividade atual no Front-end
   var atividadeAtual = (typeof getWKNumState !== 'undefined') ? getWKNumState() : 0;
+
+  // ====================================================================
+  // MONITORAMENTO DA PÁGINA DO CANDIDATO - ATIVIDADE 122
+  // ====================================================================
+
+  function safeParseJsonCampo(idCampo, valorPadrao) {
+    var valor = $("#" + idCampo).val();
+
+    if (!valor || $.trim(valor) === "") {
+      return valorPadrao;
+    }
+
+    try {
+      return JSON.parse(valor);
+    } catch (e) {
+      console.warn("[Monitor Candidato] JSON inválido no campo " + idCampo + ":", e);
+      return valorPadrao;
+    }
+  }
+
+  function escaparHtmlMonitor(valor) {
+    if (valor === null || valor === undefined) return "";
+
+    return String(valor)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function normalizarTextoMonitor(valor) {
+    if (valor === null || valor === undefined || valor === "") return "-";
+    return escaparHtmlMonitor(valor);
+  }
+
+  function obterNomePassoCandidato(passo) {
+    var mapaPassos = {
+      "1": "Passo 1 - Dados iniciais",
+      "2": "Passo 2 - Dados pessoais",
+      "3": "Passo 3 - Dados complementares",
+      "4": "Passo 4 - Documentos",
+      "5": "Passo 5 - Assinaturas",
+      "6": "Passo 6 - Revisão e envio"
+    };
+
+    return mapaPassos[String(passo)] || ("Passo " + normalizarTextoMonitor(passo));
+  }
+
+  function obterClasseStatusMonitor(status) {
+    var s = String(status || "").toLowerCase();
+
+    if (
+      s.indexOf("conclu") > -1 ||
+      s.indexOf("enviado") > -1 ||
+      s.indexOf("assinado") > -1 ||
+      s.indexOf("salvo") > -1 ||
+      s.indexOf("anexado") > -1
+    ) {
+      return "success";
+    }
+
+    if (
+      s.indexOf("andamento") > -1 ||
+      s.indexOf("preench") > -1 ||
+      s.indexOf("parcial") > -1
+    ) {
+      return "info";
+    }
+
+    if (
+      s.indexOf("pendente") > -1 ||
+      s.indexOf("aguard") > -1 ||
+      s.indexOf("não") > -1 ||
+      s.indexOf("nao") > -1
+    ) {
+      return "warning";
+    }
+
+    if (
+      s.indexOf("erro") > -1 ||
+      s.indexOf("falha") > -1 ||
+      s.indexOf("rejeitado") > -1
+    ) {
+      return "danger";
+    }
+
+    return "default";
+  }
+
+  function montarBadgeStatusMonitor(status) {
+    var texto = status || "Pendente";
+    var classe = obterClasseStatusMonitor(texto);
+
+    return '<span class="label label-' + classe + '">' + normalizarTextoMonitor(texto) + '</span>';
+  }
+
+  function normalizarItensStatusMonitor(objetoStatus) {
+    var lista = [];
+
+    if (!objetoStatus) {
+      return lista;
+    }
+
+    if ($.isArray(objetoStatus)) {
+      $.each(objetoStatus, function (_, item) {
+        if (!item) return true;
+
+        lista.push({
+          nome: item.nome || item.label || item.titulo || item.documento || item.assinatura || "Item",
+          status: item.status || item.situacao || item.estado || "Pendente",
+          detalhe: item.detalhe || item.nomeArquivo || item.arquivo || item.data || item.dataHora || ""
+        });
+      });
+
+      return lista;
+    }
+
+    if (typeof objetoStatus === "object") {
+      $.each(objetoStatus, function (chave, valor) {
+        if (valor && typeof valor === "object") {
+          lista.push({
+            nome: valor.nome || valor.label || valor.titulo || valor.documento || valor.assinatura || chave,
+            status: valor.status || valor.situacao || valor.estado || (valor.enviado ? "Enviado" : "Pendente"),
+            detalhe: valor.detalhe || valor.nomeArquivo || valor.arquivo || valor.data || valor.dataHora || ""
+          });
+        } else {
+          lista.push({
+            nome: chave,
+            status: valor || "Pendente",
+            detalhe: ""
+          });
+        }
+      });
+    }
+
+    return lista;
+  }
+
+  function renderizarListaStatusMonitor(idContainer, objetoStatus, mensagemVazia) {
+    var lista = normalizarItensStatusMonitor(objetoStatus);
+    var $container = $("#" + idContainer);
+
+    if (!$container.length) return;
+
+    if (!lista.length) {
+      $container.html('<p class="text-muted">' + mensagemVazia + '</p>');
+      return;
+    }
+
+    var html = '<div class="table-responsive">';
+    html += '<table class="table table-condensed table-striped" style="margin-bottom: 0;">';
+    html += '<thead>';
+    html += '<tr>';
+    html += '<th>Item</th>';
+    html += '<th style="width: 140px;">Status</th>';
+    html += '<th>Detalhe</th>';
+    html += '</tr>';
+    html += '</thead>';
+    html += '<tbody>';
+
+    $.each(lista, function (_, item) {
+      html += '<tr>';
+      html += '<td>' + normalizarTextoMonitor(item.nome) + '</td>';
+      html += '<td>' + montarBadgeStatusMonitor(item.status) + '</td>';
+      html += '<td>' + normalizarTextoMonitor(item.detalhe) + '</td>';
+      html += '</tr>';
+    });
+
+    html += '</tbody>';
+    html += '</table>';
+    html += '</div>';
+
+    $container.html(html);
+  }
+
+  function renderizarResumoDadosMonitor(resumo, persistencia) {
+    var $container = $("#monCandResumoDados");
+
+    if (!$container.length) return;
+
+    var dados = resumo && typeof resumo === "object" ? resumo : {};
+    var dadosPersistidos = persistencia && typeof persistencia === "object" ? persistencia : {};
+
+    var html = "";
+
+    if (dados.nome || dados.cpf || dados.email || dados.telefone || dados.celular) {
+      html += '<ul class="list-unstyled" style="margin-bottom: 0;">';
+
+      if (dados.nome) {
+        html += '<li><strong>Nome:</strong> ' + normalizarTextoMonitor(dados.nome) + '</li>';
+      }
+
+      if (dados.cpf) {
+        html += '<li><strong>CPF:</strong> ' + normalizarTextoMonitor(dados.cpf) + '</li>';
+      }
+
+      if (dados.email) {
+        html += '<li><strong>E-mail:</strong> ' + normalizarTextoMonitor(dados.email) + '</li>';
+      }
+
+      if (dados.telefone || dados.celular) {
+        html += '<li><strong>Telefone:</strong> ' + normalizarTextoMonitor(dados.telefone || dados.celular) + '</li>';
+      }
+
+      html += '</ul>';
+
+      $container.html(html);
+      return;
+    }
+
+    var secoes = [];
+
+    $.each(dadosPersistidos, function (chave, valor) {
+      if (valor && typeof valor === "object") {
+        var totalCampos = 0;
+        var preenchidos = 0;
+
+        $.each(valor, function (_, v) {
+          totalCampos++;
+
+          if (v !== null && v !== undefined && String(v).trim() !== "") {
+            preenchidos++;
+          }
+        });
+
+        secoes.push({
+          nome: chave,
+          preenchidos: preenchidos,
+          total: totalCampos
+        });
+      }
+    });
+
+    if (!secoes.length) {
+      $container.html('<p class="text-muted">Nenhuma informação registrada ainda.</p>');
+      return;
+    }
+
+    html += '<div class="table-responsive">';
+    html += '<table class="table table-condensed table-striped" style="margin-bottom: 0;">';
+    html += '<thead>';
+    html += '<tr>';
+    html += '<th>Seção</th>';
+    html += '<th style="width: 160px;">Campos preenchidos</th>';
+    html += '</tr>';
+    html += '</thead>';
+    html += '<tbody>';
+
+    $.each(secoes, function (_, secao) {
+      html += '<tr>';
+      html += '<td>' + normalizarTextoMonitor(secao.nome) + '</td>';
+      html += '<td>' + secao.preenchidos + ' de ' + secao.total + '</td>';
+      html += '</tr>';
+    });
+
+    html += '</tbody>';
+    html += '</table>';
+    html += '</div>';
+
+    $container.html(html);
+  }
+
+  function renderizarMonitoramentoCandidato() {
+    if ($("#painelMonitoramentoCandidato").length === 0) {
+      return;
+    }
+
+    var status = $("#cpStatusCand").val() || "Não iniciado";
+    var percentual = parseInt($("#cpPctCand").val(), 10);
+    var ultimaAtualizacao = $("#cpUltAtualCand").val() || "-";
+    var origem = $("#cpOrigemAtualCand").val();
+    var dispositivo = $("#cpDispCand").val();
+
+    if (isNaN(percentual)) percentual = 0;
+    if (percentual < 0) percentual = 0;
+    if (percentual > 100) percentual = 100;
+
+    var persistencia = safeParseJsonCampo("jsonPersistCand", {});
+    var statusDocumentos = safeParseJsonCampo("jsonDocsCand", {});
+    var statusAssinaturas = safeParseJsonCampo("jsonAssCand", {});
+    var resumo = safeParseJsonCampo("jsonResumoCand", {});
+
+    $("#monCandStatus").html(montarBadgeStatusMonitor(status));
+    $("#monCandPasso").html(normalizarTextoMonitor(obterNomePassoCandidato(passoAtual)));
+
+    $("#monCandBarraProgresso")
+      .css("width", percentual + "%")
+      .attr("aria-valuenow", percentual)
+      .text(percentual + "%");
+
+    var textoUltimaAtualizacao = normalizarTextoMonitor(ultimaAtualizacao);
+
+    if (origem || dispositivo) {
+      textoUltimaAtualizacao += '<br><small class="text-muted">';
+
+      if (origem) {
+        textoUltimaAtualizacao += 'Origem: ' + normalizarTextoMonitor(origem);
+      }
+
+      if (origem && dispositivo) {
+        textoUltimaAtualizacao += ' | ';
+      }
+
+      if (dispositivo) {
+        textoUltimaAtualizacao += 'Dispositivo: ' + normalizarTextoMonitor(dispositivo);
+      }
+
+      textoUltimaAtualizacao += '</small>';
+    }
+
+    $("#monCandUltimaAtualizacao").html(textoUltimaAtualizacao);
+
+    renderizarResumoDadosMonitor(resumo, persistencia);
+
+    renderizarListaStatusMonitor(
+      "monCandAssinaturas",
+      statusAssinaturas,
+      "Nenhuma assinatura registrada ainda."
+    );
+
+    renderizarListaStatusMonitor(
+      "monCandDocumentos",
+      statusDocumentos,
+      "Nenhum documento enviado ainda."
+    );
+  }
+
+  if (atividadeAtual == 122) {
+    $("#divReenviarEmailCandidato").show();
+    $("#painelMonitoramentoCandidato").show();
+
+    renderizarMonitoramentoCandidato();
+
+    // Recalcula a sidebar depois que o painel fica visível,
+    // para ele aparecer também no menu lateral.
+    setTimeout(function () {
+      if (typeof renderizarItensSidebar === "function") {
+        renderizarItensSidebar();
+      }
+    }, 900);
+  } else {
+    $("#painelMonitoramentoCandidato").hide();
+  }
 
   aplicarObrigatoriedadeFrontEnd(atividadeAtual);
 

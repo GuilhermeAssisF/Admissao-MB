@@ -10,100 +10,6 @@ VALIDA KIT - 97
 function enableFields(form) {
   log.info("INICIO do EnableFields do formulário FLUIG-0002 - ADMISSAO");
 
-<<<<<<< HEAD
-  // Prevenção de erro caso a atividade venha vazia
-  var wkNumState = getValue("WKNumState");
-  var atividade = (wkNumState != null && wkNumState != "") ? parseInt(wkNumState) : 0;
-
-  var Campos = new Array(
-    // PAINEL: DOCUMENTOS PARA ASSINATURA (Bloqueio nas demais etapas)
-    { campo: "zoom_kit_proposta_admissao", atividade: "0,1,4" },
-    { campo: "zoom_kit_lgpd_admissao", atividade: "0,1,4" },
-
-    // PAINEL: DADOS DO COLABORADOR E FILIAÇÃO
-    { campo: "cpfcnpj", atividade: "0,1,41,97" },
-    { campo: "txtNomeColaborador", atividade: "0,1,41,97" },
-    { campo: "dtDataNascColaborador", atividade: "0,1,41,97" },
-    { campo: "txtSexo", atividade: "0,1,41,97" },
-    { campo: "txtEstCivilCod", atividade: "0,1,41,97" },
-    { campo: "CORRACA", atividade: "0,1,41,97" },
-    { campo: "NACIONALIDADECod", atividade: "0,1,41,97" },
-    { campo: "txtNaturalidadeCod", atividade: "0,1,41,97" },
-    { campo: "ESTADONatalCod", atividade: "0,1,41,97" },
-    { campo: "GRAUINSTRUCAOCod", atividade: "0,1,41,97" },
-    { campo: "NomeMae", atividade: "0,1,41,97" },
-    { campo: "NomePai", atividade: "0,1,41,97" },
-
-    // PAINEL: COMPLEMENTOS E EMERGÊNCIA
-    { campo: "txtTamanhoCamisa", atividade: "0,1,41,97" },
-    { campo: "txtTamanhoCalcado", atividade: "0,1,41,97" },
-    { campo: "txtNomeEmergencia", atividade: "0,1,41,97" },
-    { campo: "txtParentescoEmergencia", atividade: "0,1,41,97" },
-    { campo: "txtTelefoneEmergencia", atividade: "0,1,41,97" },
-
-    // PAINEL: DEFICIÊNCIAS
-    { campo: "DEFICIENTEFISICO", atividade: "0,1,41,97" },
-    { campo: "DEFICIENTEAUDITIVO", atividade: "0,1,41,97" },
-    { campo: "DEFICIENTEFALA", atividade: "0,1,41,97" },
-    { campo: "DEFICIENTEVISUAL", atividade: "0,1,41,97" },
-    { campo: "DEFICIENTEMENTAL", atividade: "0,1,41,97" },
-    { campo: "DEFICIENTEINTELECTUAL", atividade: "0,1,41,97" },
-    { campo: "DEFICIENTEREAB", atividade: "0,1,41,97" },
-
-    // PAINEL: DOCUMENTOS
-    { campo: "TxtRg", atividade: "0,1,41,97" },
-    { campo: "UFCARTIDENTIDADE", atividade: "0,1,41,97" },
-    { campo: "ORGAOCARTIDENTIDADE", atividade: "0,1,41,97" },
-    { campo: "DTEMISSAOIDENT", atividade: "0,1,41,97" },
-    { campo: "TITULOELEITOR", atividade: "0,1,41,97" },
-    { campo: "ZONATITELEITOR", atividade: "0,1,41,97" },
-    { campo: "DTTITELEITOR", atividade: "0,1,41,97" },
-    { campo: "SECAOTITELEITOR", atividade: "0,1,41,97" },
-    { campo: "UFTITULO", atividade: "0,1,41,97" },
-    { campo: "txtCartTrab", atividade: "0,1,41,97" },
-    { campo: "txtSerieCart", atividade: "0,1,41,97" },
-    { campo: "dtDataEmissaoCartTrab", atividade: "0,1,41,97" },
-    { campo: "CODUFCTPS", atividade: "0,1,41,97" },
-    { campo: "UFCARTTRAB", atividade: "0,1,41,97" },
-    { campo: "NIT", atividade: "0,1,41,97" },
-    { campo: "CARTMOTORISTA", atividade: "0,1,41,97" },
-    { campo: "TIPOCARTHABILIT", atividade: "0,1,41,97" },
-    { campo: "DTVENCHABILIT", atividade: "0,1,41,97" },
-    { campo: "ORGEMISSORCNH", atividade: "0,1,41,97" },
-    { campo: "DTEMISSAOCNH", atividade: "0,1,41,97" },
-    { campo: "PIS", atividade: "0,1,41,97" },
-    { campo: "BancoPIS", atividade: "0,1,41,97" },
-    { campo: "CERTIFRESERV", atividade: "0,1,41,97" },
-    { campo: "DtCERTIFRESERV", atividade: "0,1,41,97" },
-    { campo: "SitMilitar", atividade: "0,1,41,97" },
-    { campo: "NumRic", atividade: "0,1,41,97" },
-    { campo: "OrgEmRIC", atividade: "0,1,41,97" },
-    { campo: "DtEmRIC", atividade: "0,1,41,97" },
-    { campo: "DtChegBras", atividade: "0,1,41,97" },
-    { campo: "Visto", atividade: "0,1,41,97" },
-    { campo: "RNE", atividade: "0,1,41,97" },
-    { campo: "DTRNE", atividade: "0,1,41,97" },
-    { campo: "OrgRNE", atividade: "0,1,41,97" },
-
-    // PAINEL: ENDEREÇO E CONTATO
-    { campo: "txtNomeSocial", atividade: "0,1,41,97" },
-    { campo: "txtCEP", atividade: "0,1,41,97" },
-    { campo: "txtNOMETIPORUA", atividade: "0,1,41,97" },
-    { campo: "txtRUA", atividade: "0,1,41,97" },
-    { campo: "txtNUMERO", atividade: "0,1,41,97" },
-    { campo: "txtCOMPLEMENTO", atividade: "0,1,41,97" },
-    { campo: "txtCODTIPOBAIRRO", atividade: "0,1,41,97" },
-    { campo: "txtBAIRRO", atividade: "0,1,41,97" },
-    { campo: "txtCODETD", atividade: "0,1,41,97" },
-    { campo: "txtCODMUNICIPIO", atividade: "0,1,41,97" },
-    { campo: "txtCODPAIS", atividade: "0,1,41,97" },
-    { campo: "txtTELEFONE", atividade: "0,1,41,97" },
-    { campo: "txtCELULAR", atividade: "0,1,41,97" },
-    { campo: "txtTElCont", atividade: "0,1,41,97" },
-    { campo: "txtEmail", atividade: "0,1,41,97" },
-
-    // PAINEL: DADOS DA CONTRATAÇÃO
-=======
   var atividade = parseInt(getValue("WKNumState"));
 
   var Campos = new Array(
@@ -202,7 +108,6 @@ function enableFields(form) {
     // ==========================================
     // PAINEL: DADOS DA CONTRATAÇÃO
     // ==========================================
->>>>>>> 1b64ab32b8425e2be9acbab1de2a499f633a6b67
     { campo: "IDDESC_EMPRESAFILIAL", atividade: "0,1,41,97" },
     { campo: "descricaoJornada", atividade: "0,1,41,97" },
     { campo: "desc_kitAssinatura", atividade: "0,1,41,97" },
@@ -243,12 +148,10 @@ function enableFields(form) {
     { campo: "FUN_AJUDACUSTO", atividade: "0,1,41,97" },
     { campo: "FUN_DIASUTEISMES", atividade: "0,1,41,97" },
     { campo: "FUN_DIASUTPROXMES", atividade: "0,1,41,97" },
-<<<<<<< HEAD
-=======
+
     { campo: "FUN_INTEGRCONTABIL_IDDESC", atividade: "0,1,41,97" },
     { campo: "FUN_INTEGRGERENCIAL_IDDESC", atividade: "0,1,41,97" },
-<<<<<<< HEAD
->>>>>>> 8f64a19d4998e2e5f65abfabc3aa85d224e96d61
+
     { campo: "cpJornadaAdmissao", atividade: "0,1,41" },
     { campo: "cpTipoContrato", atividade: "0,1,41,97" },
     { campo: "cpEmailCandidato", atividade: "0,1,41,97" },
@@ -268,12 +171,11 @@ function enableFields(form) {
     { campo: "cpComplementoContrato", atividade: "0,1,41" },
 
     // PAINEL: BENEFÍCIOS E INFORMAÇÕES GERAIS
-=======
+
 
     // ==========================================
     // PAINEL: BENEFÍCIOS E INFORMAÇÕES GERAIS
     // ==========================================
->>>>>>> 1b64ab32b8425e2be9acbab1de2a499f633a6b67
     { campo: "ValeTransp", atividade: "0,1,41,97" },
     { campo: "ValeAlim", atividade: "0,1,41,97" },
     { campo: "ValeCesta", atividade: "0,1,41,97" },
@@ -311,7 +213,6 @@ function enableFields(form) {
     { campo: "AuxMoradia", atividade: "0,1,41" },
     { campo: "AddCombust", atividade: "0,1,41" },
 
-<<<<<<< HEAD
     // PAINEL: DADOS BANCÁRIOS E CHAPA
     { campo: "TxtChapa", atividade: "0,1,41" },
     { campo: "BancoPAgto", atividade: "0,1,41" },
@@ -320,26 +221,11 @@ function enableFields(form) {
     { campo: "TipodeContPagto", atividade: "0,1,41,97" },
 
     // PAINEL: PREENCHIMENTO EXCLUSIVO ÁREA RH (Somente Atividade 97)
-=======
-    // ==========================================
-    // PAINEL: DADOS BANCÁRIOS E CHAPA
-    // ==========================================
-    { campo: "TxtChapa", atividade: "0,1,41" },
-    { campo: "BancoPAgto", atividade: "0,1,41" },
-    { campo: "AgPagto", atividade: "0,1,41" },
-    { campo: "ContPagto", atividade: "0,1,41" },
-    { campo: "TipodeContPagto", atividade: "0,1,41" },
-
-    // ==========================================
-    // PAINEL: PREENCHIMENTO EXCLUSIVO DA ÁREA RH
-    // ==========================================
->>>>>>> 1b64ab32b8425e2be9acbab1de2a499f633a6b67
     { campo: "zoom_sindicato", atividade: "97" },
     { campo: "zoom_categoriaEsocial", atividade: "97" },
     { campo: "FUN_CATESOCIAL", atividade: "97" },
     { campo: "FUN_NATATIV", atividade: "97" },
     { campo: "FUN_INDADMISSAO", atividade: "97" },
-<<<<<<< HEAD
     { campo: "FUN_CONTRATOPARCIAL", atividade: "97" },
     { campo: "FUN_TPJORNADA", atividade: "97" },
     { campo: "FUN_SEQTURN_IDDESC_AD", atividade: "97" },
@@ -390,18 +276,6 @@ function enableFields(form) {
     { campo: "zoom_kit_sigilo", atividade: "135" },
 
     // CHECKLIST
-=======
-    { campo: "FUN_INSS", atividade: "97" },
-    { campo: "FUN_IRRF", atividade: "97" },
-    { campo: "FUN_ALTFGTS", atividade: "97" },
-    { campo: "FUN_SEQTURN_IDDESC_AD", atividade: "97" },
-    { campo: "FUN_CONTRATOPARCIAL", atividade: "97" },
-    { campo: "FUN_TPJORNADA", atividade: "97" },
-
-    // ==========================================
-    // CHECKLIST
-    // ==========================================
->>>>>>> 1b64ab32b8425e2be9acbab1de2a499f633a6b67
     { campo: "Ckb1", atividade: "0,1,41" },
     { campo: "Ckb2", atividade: "0,1,41" },
     { campo: "Ckb3", atividade: "0,1,41" },
@@ -442,13 +316,7 @@ function enableFields(form) {
     { campo: "Ckb39", atividade: "0,1,41" },
     { campo: "Ckb40", atividade: "0,1,41" },
 
-<<<<<<< HEAD
     // PAINEL: ETAPAS DO PROCESSO (Aprovações)
-=======
-    // ==========================================
-    // PAINEL: ETAPAS DO PROCESSO (Aprovações)
-    // ==========================================
->>>>>>> 1b64ab32b8425e2be9acbab1de2a499f633a6b67
     { campo: "cpReaberturaChamado", atividade: "41" },
     { campo: "cpParecerReabertura", atividade: "41" },
     { campo: "cpAprovacaoGestor", atividade: "7" },
@@ -468,13 +336,7 @@ function enableFields(form) {
     { campo: "cpRespValidaKit", atividade: "128" },
     { campo: "cpParecerBPO", atividade: "89" },
 
-<<<<<<< HEAD
     // CAMPOS LEGADOS OU OCULTOS
-=======
-    // ==========================================
-    // CAMPOS LEGADOS OU OCULTOS
-    // ==========================================
->>>>>>> 1b64ab32b8425e2be9acbab1de2a499f633a6b67
     { campo: "TipoSanguineo", atividade: "0,1,41" },
     { campo: "TxtSegDesemprego", atividade: "0,1,41" },
     { campo: "FGTSBANPagto", atividade: "0,1,41" },
@@ -503,18 +365,12 @@ function enableFields(form) {
     { campo: "TxtDiretoriaRH", atividade: "0,1,41" }
   );
 
-<<<<<<< HEAD
   // ==========================================================
   // LOOP SEGURO: Desbloqueia só o que está no Array acima
   // ==========================================================
   for (var i = 0; i < Campos.length; i++) {
     var Campo = Campos[i];
     var atividades = Campo["atividade"].split(",");
-=======
-  for (var item in Campos) {
-    var Campo = Campos[item],
-      atividades = Campo["atividade"].split(",");
->>>>>>> 1b64ab32b8425e2be9acbab1de2a499f633a6b67
 
     if (atividades.indexOf(atividade.toString()) >= 0) {
       form.setEnabled(Campo["campo"], true);
@@ -523,7 +379,6 @@ function enableFields(form) {
     }
   }
 
-<<<<<<< HEAD
   // ==========================================================
   // REGRAS DE SEGURANÇA EXCLUSIVAS DA ATIVIDADE 97
   // ==========================================================
@@ -547,8 +402,7 @@ function enableFields(form) {
     form.setEnabled("AgPagto", false);
   }
 
-<<<<<<< HEAD
-=======
+
   // ==========================================================
   // TRAVA DE SEGURANÇA PARA ESTÁGIO
   // ==========================================================
@@ -568,8 +422,5 @@ function enableFields(form) {
     }
   }
 
-=======
->>>>>>> 1b64ab32b8425e2be9acbab1de2a499f633a6b67
->>>>>>> 8f64a19d4998e2e5f65abfabc3aa85d224e96d61
   log.info("Fim do EnableFields do formulário FLUIG-0002 - ADMISSAO");
 }

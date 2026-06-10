@@ -103,8 +103,23 @@
       <input type="hidden" name="cpMatriculaSolicitante" id="cpMatriculaSolicitante" />
       <input type="hidden" name="cpSolicitanteColigada" id="cpSolicitanteColigada" />
 
-      <!-- Campo para salvar de onde o candidato parou na Widget -->
+      <!-- ============================================================
+     CONTROLE DA PÁGINA DO CANDIDATO / PERSISTÊNCIA FLUIG
+     Campos curtos por limite de 30 caracteres no Fluig.
+============================================================= -->
+
       <input type="hidden" name="cpPassoAtualCandidato" id="cpPassoAtualCandidato" value="1">
+      <input type="hidden" name="cpStatusCand" id="cpStatusCand" value="Não iniciado">
+      <input type="hidden" name="cpPctCand" id="cpPctCand" value="0">
+
+      <input type="hidden" name="cpUltAtualCand" id="cpUltAtualCand" value="">
+      <input type="hidden" name="cpOrigemAtualCand" id="cpOrigemAtualCand" value="">
+      <input type="hidden" name="cpDispCand" id="cpDispCand" value="">
+
+      <textarea name="jsonPersistCand" id="jsonPersistCand" style="display:none;"></textarea>
+      <textarea name="jsonDocsCand" id="jsonDocsCand" style="display:none;"></textarea>
+      <textarea name="jsonAssCand" id="jsonAssCand" style="display:none;"></textarea>
+      <textarea name="jsonResumoCand" id="jsonResumoCand" style="display:none;"></textarea>
 
       <div class="row" id="divReenviarEmailCandidato" style="display: none;">
         <div class="col-md-12 alert alert-warning" style="text-align: center;">
@@ -113,6 +128,95 @@
           <button type="button" class="btn btn-primary" onclick="reenviarLinkCandidato()">
             <span class="fluigicon fluigicon-envelope"></span> Reenviar Link para o Candidato
           </button>
+        </div>
+      </div>
+
+      <!-- ============================================================
+     PAINEL RH - MONITORAMENTO DA PÁGINA DO CANDIDATO
+     Será exibido na atividade 122 junto ao botão de reenviar link.
+============================================================= -->
+
+      <div class="panel panel-default" id="painelMonitoramentoCandidato" style="display:none; margin-top: 16px;">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <span class="fluigicon fluigicon-user fluigicon-lg"></span>
+            &nbsp;Monitoramento da Página do Candidato
+          </h3>
+        </div>
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-3">
+              <label>Status geral</label>
+              <div id="monCandStatus" class="well well-sm" style="margin-bottom: 10px;">
+                Não iniciado
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <label>Passo atual</label>
+              <div id="monCandPasso" class="well well-sm" style="margin-bottom: 10px;">
+                -
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <label>Progresso</label>
+              <div class="progress" style="margin-top: 6px; margin-bottom: 10px;">
+                <div id="monCandBarraProgresso" class="progress-bar progress-bar-info" role="progressbar"
+                  aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                  0%
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <label>Última atualização</label>
+              <div id="monCandUltimaAtualizacao" class="well well-sm" style="margin-bottom: 10px;">
+                -
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="row">
+            <div class="col-md-6">
+              <h4 style="margin-top: 0; color: #1eaad9;">
+                Dados preenchidos
+              </h4>
+
+              <div id="monCandResumoDados">
+                <p class="text-muted">Nenhuma informação registrada ainda.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <h4 style="margin-top: 0; color: #1eaad9;">
+                Assinaturas
+              </h4>
+
+              <div id="monCandAssinaturas">
+                <p class="text-muted">Nenhuma assinatura registrada ainda.</p>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="row">
+            <div class="col-md-12">
+              <h4 style="margin-top: 0; color: #1eaad9;">
+                Documentos enviados
+              </h4>
+
+              <div id="monCandDocumentos">
+                <p class="text-muted">Nenhum documento enviado ainda.</p>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -2158,13 +2262,15 @@
             <div class="col-md-4">
               <div class="form-group">
                 <label>Opção do Candidato</label>
-                <input type="text" name="TxtIncPlanoSaudeOpcao" id="TxtIncPlanoSaudeOpcao" class="form-control" readonly />
+                <input type="text" name="TxtIncPlanoSaudeOpcao" id="TxtIncPlanoSaudeOpcao" class="form-control"
+                  readonly />
               </div>
             </div>
             <div class="col-md-8">
               <div class="form-group">
                 <label>Tipo do Plano de Saúde</label>
-                <input type="text" name="TxtIncPlanoSaudeTipo" id="TxtIncPlanoSaudeTipo" class="form-control" readonly />
+                <input type="text" name="TxtIncPlanoSaudeTipo" id="TxtIncPlanoSaudeTipo" class="form-control"
+                  readonly />
               </div>
             </div>
           </div>
@@ -2178,18 +2284,21 @@
             </div>
           </div>
 
-          <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 20px;">Plano Odontológico</h4>
+          <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 20px;">Plano
+            Odontológico</h4>
           <div class="row">
             <div class="col-md-4">
               <div class="form-group">
                 <label>Opção do Candidato</label>
-                <input type="text" name="TxtIncPlanoOdontoOpcao" id="TxtIncPlanoOdontoOpcao" class="form-control" readonly />
+                <input type="text" name="TxtIncPlanoOdontoOpcao" id="TxtIncPlanoOdontoOpcao" class="form-control"
+                  readonly />
               </div>
             </div>
             <div class="col-md-8">
               <div class="form-group">
                 <label>Tipo do Plano Odontológico</label>
-                <input type="text" name="TxtIncPlanoOdontoTipo" id="TxtIncPlanoOdontoTipo" class="form-control" readonly />
+                <input type="text" name="TxtIncPlanoOdontoTipo" id="TxtIncPlanoOdontoTipo" class="form-control"
+                  readonly />
               </div>
             </div>
           </div>
@@ -4224,8 +4333,8 @@
             <textarea name="FUN_TURNO_JORNADA" id="FUN_TURNO_JORNADA" class="form-control"></textarea>
           </div>
           <input type="hidden" name="json_ids_primeiro_link" id="json_ids_primeiro_link">
-          <input type="hidden" id="json_ids_segundo_link" name="json_ids_segundo_link"">
-          <input type=" hidden" name="json_ids_kit_admissao" id="json_ids_kit_admissao">
+          <input type="hidden" id="json_ids_segundo_link" name="json_ids_segundo_link">
+          <input type="hidden" name="json_ids_kit_admissao" id="json_ids_kit_admissao">
 
         </div>
 
