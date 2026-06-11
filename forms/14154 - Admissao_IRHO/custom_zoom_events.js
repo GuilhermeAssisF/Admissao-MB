@@ -55,7 +55,9 @@ window.setSelectedZoomItem = function (selectedItem) {
                 // ====================================================================
                 if (empresa && filial) {
                     try {
-                        aplicarParametrosPorFilial(empresa, filial);
+                        if (typeof aplicarParametrosPorFilial === "function") {
+                            aplicarParametrosPorFilial(empresa, filial);
+                        }
                     } catch (e) {
                         console.error(">>> [Admissão] Erro ao aplicar parâmetros da filial:", e);
                     }
@@ -66,6 +68,14 @@ window.setSelectedZoomItem = function (selectedItem) {
                 // ====================================================================
                 if (typeof reloadZoomFilial === "function") {
                     try { reloadZoomFilial(empresa, filial); } catch (e) { }
+                }
+
+                if (typeof popularJornadasAdmissaoPorColigada === "function") {
+                    popularJornadasAdmissaoPorColigada(empresa || $("#FUN_EMPRESA").val());
+                }
+
+                if (typeof aplicarBloqueioDadosContratacaoPorJornada === "function") {
+                    aplicarBloqueioDadosContratacaoPorJornada();
                 }
 
                 if (empresa && typeof reloadZoomFilterValues === "function") {
@@ -253,6 +263,7 @@ window.removedZoomItem = function (removedItem) {
 
         if (inputId == "IDDESC_EMPRESAFILIAL") {
             // === LIMPA TODOS OS CAMPOS OCULTOS SE O RH APAGAR A FILIAL ===
+            $("#FUN_EMPRESA, #FUN_FILIAL").val("");
             $("#FUN_NOMECOMERCIAL_FILIAL, #FUN_CNPJ_FILIAL, #FUN_LOGRADOURO_FILIAL, #FUN_NUMERO_FILIAL, #FUN_COMPLEMENTO_FILIAL, #FUN_BAIRRO_FILIAL, #FUN_CIDADE_FILIAL, #FUN_ESTADO_FILIAL, #FUN_CEP_FILIAL").val("");
 
             if (window["FUN_IDDESCTURN"] !== undefined) window["FUN_IDDESCTURN"].clear();
@@ -269,6 +280,13 @@ window.removedZoomItem = function (removedItem) {
 
             // Como removemos o banco da filial, precisamos resetar a Agência também
             $("#num_agencia").val("");
+            $("#cpJornadaAdmissao").val("").removeAttr("data-jornada-pendente");
+            if (typeof popularJornadasAdmissaoPorColigada === "function") {
+                popularJornadasAdmissaoPorColigada("");
+            }
+            if (typeof aplicarBloqueioDadosContratacaoPorJornada === "function") {
+                aplicarBloqueioDadosContratacaoPorJornada();
+            }
             if (window['zoom_agencia'] !== undefined) {
                 window['zoom_agencia'].clear();
             }

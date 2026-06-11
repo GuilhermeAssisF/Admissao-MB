@@ -1811,28 +1811,7 @@
         </div>
         <div class="panel-body">
 
-          <div class="row">
-            <div class="form-group col-md-4">
-              <label for="cpJornadaAdmissao" class="control-label">Jornada de Admiss&atilde;o:</label>
-              <select class="form-control" name="cpJornadaAdmissao" id="cpJornadaAdmissao">
-                <option value=""></option>
-                <option value="CLT">CLT</option>
-                <option value="Estagio">Est&aacute;gio</option>
-              </select>
-            </div>
-          </div>
-
-          <div id="containerDadosContratacaoDependentes">
-
-          <div class="row">
-            <div class="col-md-12">
-              <h4 style="margin-top: 5px; border-bottom: 1px solid #eee; padding-bottom: 5px; color: #1eaad9;">
-                Informações Principais
-              </h4>
-            </div>
-          </div>
-
-          <div class="row">
+          <div class="row" id="linhaChavesContratacao">
             <div class="form-group col-md-4">
               <label for="IDDESC_EMPRESAFILIAL" class="control-label">Empresa - Filial:</label>
               <input type="zoom" id="IDDESC_EMPRESAFILIAL" name="IDDESC_EMPRESAFILIAL" data-zoom="{
@@ -1868,8 +1847,71 @@
             </div>
 
             <div class="form-group col-md-4">
+              <label for="cpJornadaAdmissao" class="control-label">Jornada de Admiss&atilde;o:</label>
+              <select class="form-control" name="cpJornadaAdmissao" id="cpJornadaAdmissao">
+                <option value=""></option>
+              </select>
+            </div>
+
+            
+              <div class="form-group col-md-4">
+                <label for="cpEmailCandidato" class="control-label">E-mail Candidato:</label>
+                <input type="email" name="cpEmailCandidato" id="cpEmailCandidato" class="form-control">
+              </div>
+          </div>
+
+          <div id="containerDadosContratacaoDependentes">
+
+            <div class="row">
+              <div class="col-md-12">
+                <h4 style="margin-top: 5px; border-bottom: 1px solid #eee; padding-bottom: 5px; color: #1eaad9;">
+                  Informações Principais
+                </h4>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Empresa/Filial movida para a linha de chaves da contratacao.
+            <div class="form-group col-md-4">
+              <label for="IDDESC_EMPRESAFILIAL" class="control-label">Empresa - Filial:</label>
+              <input type="zoom" id="IDDESC_EMPRESAFILIAL_MOVIDO" name="IDDESC_EMPRESAFILIAL_MOVIDO" data-zoom="{
+                  'maximumSelectionLength':'1',
+                  'placeholder':'Escolha a filial',
+                  'displayKey':'IDDESC_EMPFILIALCOM',
+                  'datasetId':'ds_irho_empresaFilial',
+                  'fields':[
+                      {'field':'IDDESC_EMPFILIALCOM','label':'Id - Descrição Comercial','search':'true'},
+                      {'field':'IDDESC_EMPRESAFILIAL','label':'Id - Descrição','visible':'false'},
+                      {'field':'ID_EMPRESA','label':'ID Empresa','visible':'false'},
+                      {'field':'NOMECOMERCIAL','label':'Empresa Nome Comercial','visible':'false'},
+                      {'field':'EMPRESA','label':'Empresa','visible':'false'},
+                      {'field':'ID_FILIAL','label':'ID Filial','visible':'false'},
+                      {'field':'NOMECOMERCIAL_FILIAL','label':'Filial Nome Comercial','visible':'false'},
+                      {'field':'FILIAL','label':'Filial','visible':'false'},
+                      {'field':'LOGRADOURO_FILIAL','label':'Logradouro Filial','visible':'false'},
+                      {'field':'BAIRRO_FILIAL','label':'Bairro Filial','visible':'false'},
+                      {'field':'CIDADE_FILIAL','label':'Cidade Filial','visible':'false'},
+                      {'field':'ESTADO_FILIAL','label':'Estado Filial','visible':'false'},
+                      {'field':'CEP_FILIAL','label':'CEP Filial','visible':'false'},
+                      {'field':'NUMERO_FILIAL','label':'Nr. Filial','visible':'false'},
+                      {'field':'COMPLEMENTO_FILIAL','label':'Complemento Filial','visible':'false'},
+                      {'field':'PAIS_FILIAL','label':'País Filial','visible':'false'},
+                      {'field':'CNPJ_FILIAL','label':'CNPJ Filial','visible':'false'},
+                      {'field':'CNPJ','label':'Cnpj','visible':'false'},
+                      {'field':'LOGRADOURO','label':'LOGRADOURO','visible':'false'},
+                      {'field':'BAIRRO','label':'BAIRRO','visible':'false'},
+                      {'field':'CIDADE','label':'CIDADE','visible':'false'},
+                      {'field':'ESTADO','label':'ESTADO','visible':'false'},
+                      {'field':'CEP','label':'CEP','visible':'false'}
+                  ]}" />
+            </div>
+
+            <div class="form-group col-md-4">
               <label for="FUN_SECAO_IDDESC_AD" class="control-label">Seção:</label>
-              <input type="zoom" id="FUN_SECAO_IDDESC_AD" name="FUN_SECAO_IDDESC_AD" data-zoom="{
+            -->
+              <div class="form-group col-md-4">
+                <label for="FUN_SECAO_IDDESC_AD" class="control-label">Seção:</label>
+                <input type="zoom" id="FUN_SECAO_IDDESC_AD" name="FUN_SECAO_IDDESC_AD" data-zoom="{
                   'maximumSelectionLength':'1',
                   'placeholder':'Escolha a Seção',
                   'displayKey':'IDDESC_SECAO',
@@ -1881,11 +1923,11 @@
                       {'field':'NROCENCUSTOCONT','label':'Centro de Custo Contábil','visible':'false'}
                   ]
               }" />
-            </div>
+              </div>
 
-            <div class="form-group col-md-4">
-              <label for="FUN_TPADMISSAO_IDDESC_AD" class="control-label">Tipo de Admissão:</label>
-              <input type="zoom" id="FUN_TPADMISSAO_IDDESC_AD" name="FUN_TPADMISSAO_IDDESC_AD" data-zoom="{
+              <div class="form-group col-md-4">
+                <label for="FUN_TPADMISSAO_IDDESC_AD" class="control-label">Tipo de Admissão:</label>
+                <input type="zoom" id="FUN_TPADMISSAO_IDDESC_AD" name="FUN_TPADMISSAO_IDDESC_AD" data-zoom="{
                   'maximumSelectionLength':'1',
                   'placeholder':'Escolha o tipo admissão',
                   'displayKey':'IDDESC_TIPOADMISSAO',
@@ -1896,72 +1938,67 @@
                       {'field':'DESCRICAO','label':'Descrição','visible':'false'}
                   ]
               }" />
-            </div>
-          </div>
+              </div>
 
-          <div class="row">
-            <div class="form-group col-md-4">
-              <label for="cpTipoContrato" class="control-label">Tipo de Contrato:</label>
-              <select class="form-control" name="cpTipoContrato" id="cpTipoContrato">
-                <option value=""></option>
-                <option value="Individual">Contrato individual de trabalho</option>
-                <option value="TCE">Tce - termo de compromisso de estágio</option>
-              </select>
-            </div>
-
-            <div class="form-group col-md-4">
-              <label for="cpEmailCandidato" class="control-label">E-mail Candidato:</label>
-              <input type="email" name="cpEmailCandidato" id="cpEmailCandidato" class="form-control">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-4">
-              <label for="FUN_ADMISSAO" class="control-label">Data de Admissão:</label>
-              <div class="input-group">
-                <input type="text" name="FUN_ADMISSAO" id="FUN_ADMISSAO" class="form-control" mask="00/00/0000">
-                <span class="input-group-addon">
-                  <span class="fluigicon fluigicon-calendar"></span>
-                </span>
+              <div class="form-group col-md-4">
+                <label for="cpTipoContrato" class="control-label">Tipo de Contrato:</label>
+                <select class="form-control" name="cpTipoContrato" id="cpTipoContrato">
+                  <option value=""></option>
+                  <option value="Individual">Contrato individual de trabalho</option>
+                  <option value="TCE">Tce - termo de compromisso de estágio</option>
+                </select>
               </div>
             </div>
 
-            <div class="col-md-8">
-              <label for="FUN_NOMECOMERCIAL_FILIAL">Filial</label>
-              <input type="text" class="form-control" name="FUN_NOMECOMERCIAL_FILIAL" id="FUN_NOMECOMERCIAL_FILIAL"
-                readonly style="background-color: #f3f4f6; color: #4b5563; border-color: #e5e7eb; pointer-events: none;"
-                placeholder="Preenchimento automático...">
-            </div>
-          </div>
+            <div class="row">
 
-          <div class="row">
-            <div class="form-group col-md-4">
-              <label for="FUN_APOSENTADO" class="control-label">Aposentado:</label>
-              <select name="FUN_APOSENTADO" id="FUN_APOSENTADO" class="form-control">
-                <option value="2">Não</option>
-                <option value="1">Sim</option>
-              </select>
+              <div class="form-group col-md-4">
+                <label for="FUN_ADMISSAO" class="control-label">Data de Admissão:</label>
+                <div class="input-group">
+                  <input type="text" name="FUN_ADMISSAO" id="FUN_ADMISSAO" class="form-control" mask="00/00/0000">
+                  <span class="input-group-addon">
+                    <span class="fluigicon fluigicon-calendar"></span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="col-md-8">
+                <label for="FUN_NOMECOMERCIAL_FILIAL">Filial</label>
+                <input type="text" class="form-control" name="FUN_NOMECOMERCIAL_FILIAL" id="FUN_NOMECOMERCIAL_FILIAL"
+                  readonly
+                  style="background-color: #f3f4f6; color: #4b5563; border-color: #e5e7eb; pointer-events: none;"
+                  placeholder="Preenchimento automático...">
+              </div>
             </div>
 
-            <div class="form-group col-md-8">
-              <label for="FUN_EMAIL_CORPORATIVO" class="control-label">Email Corporativo:</label>
-              <input type="text" name="FUN_EMAIL_CORPORATIVO" id="FUN_EMAIL_CORPORATIVO" class="form-control"
-                placeholder="Ex: email@dominio.com.br">
-            </div>
-          </div>
+            <div class="row">
+              <div class="form-group col-md-4">
+                <label for="FUN_APOSENTADO" class="control-label">Aposentado:</label>
+                <select name="FUN_APOSENTADO" id="FUN_APOSENTADO" class="form-control">
+                  <option value="2">Não</option>
+                  <option value="1">Sim</option>
+                </select>
+              </div>
 
-          <div class="row">
-            <div class="col-md-12">
-              <h4 style="margin-top: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; color: #1eaad9;">
-                Cargo e Salário
-              </h4>
+              <div class="form-group col-md-8">
+                <label for="FUN_EMAIL_CORPORATIVO" class="control-label">Email Corporativo:</label>
+                <input type="text" name="FUN_EMAIL_CORPORATIVO" id="FUN_EMAIL_CORPORATIVO" class="form-control"
+                  placeholder="Ex: email@dominio.com.br">
+              </div>
             </div>
-          </div>
 
-          <div class="row">
-            <div class="form-group col-md-4">
-              <label for="FUN_IDDESCFUN" class="control-label">Função:</label>
-              <input type="zoom" id="FUN_IDDESCFUN" name="FUN_IDDESCFUN" data-zoom="{
+            <div class="row">
+              <div class="col-md-12">
+                <h4 style="margin-top: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; color: #1eaad9;">
+                  Cargo e Salário
+                </h4>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-md-4">
+                <label for="FUN_IDDESCFUN" class="control-label">Função:</label>
+                <input type="zoom" id="FUN_IDDESCFUN" name="FUN_IDDESCFUN" data-zoom="{
                   'maximumSelectionLength':'1',
                   'placeholder':'Escolha a Função',
                   'displayKey':'IDDESC_FUNCAO',
@@ -1976,11 +2013,11 @@
                       {'field':'CODCARGO','label':'Código do Cargo','visible':'false'}
                   ]
               }" />
-            </div>
+              </div>
 
-            <div class="form-group col-md-4">
-              <label for="zoomTipoFuncionario" class="control-label">Tipo Funcionário:</label>
-              <input type="zoom" id="zoomTipoFuncionario" name="zoomTipoFuncionario" data-zoom="{
+              <div class="form-group col-md-4">
+                <label for="zoomTipoFuncionario" class="control-label">Tipo Funcionário:</label>
+                <input type="zoom" id="zoomTipoFuncionario" name="zoomTipoFuncionario" data-zoom="{
                   'maximumSelectionLength':'1',
                   'placeholder':'Escolha o Tipo',
                   'displayKey':'TIPO_FUNCIONARIO',
@@ -1990,12 +2027,12 @@
                       {'field':'TIPO_FUNCIONARIO','label':'Descrição','standard':'true','search':'true'}
                   ]
               }" />
-              <input type="hidden" id="codTipoFuncionario" name="codTipoFuncionario">
-            </div>
+                <input type="hidden" id="codTipoFuncionario" name="codTipoFuncionario">
+              </div>
 
-            <div class="form-group col-md-4">
-              <label for="FUN_IDDESCTURN" class="control-label">Turno de Trabalho:</label>
-              <input type="zoom" id="FUN_IDDESCTURN" name="FUN_IDDESCTURN" data-zoom="{
+              <div class="form-group col-md-4">
+                <label for="FUN_IDDESCTURN" class="control-label">Turno de Trabalho:</label>
+                <input type="zoom" id="FUN_IDDESCTURN" name="FUN_IDDESCTURN" data-zoom="{
                   'maximumSelectionLength':'1',
                   'placeholder':'Escolha o Turno',
                   'displayKey':'IDDESC_HORARIO',
@@ -2007,85 +2044,85 @@
                       {'field':'CODCOLIGADA','label':'Coligada','visible':'false'}
                   ]
               }" />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-3">
-              <label for="FUN_CBO2002" class="control-label">CBO:</label>
-              <input type="text" id="FUN_CBO2002" name="FUN_CBO2002" class="form-control" readonly />
+              </div>
             </div>
 
-            <div class="form-group col-md-4">
-              <label for="FUN_CARGO" class="control-label">Cargo:</label>
-              <input type="text" id="FUN_CARGO" name="FUN_CARGO" class="form-control" readonly />
+            <div class="row">
+              <div class="form-group col-md-3">
+                <label for="FUN_CBO2002" class="control-label">CBO:</label>
+                <input type="text" id="FUN_CBO2002" name="FUN_CBO2002" class="form-control" readonly />
+              </div>
+
+              <div class="form-group col-md-4">
+                <label for="FUN_CARGO" class="control-label">Cargo:</label>
+                <input type="text" id="FUN_CARGO" name="FUN_CARGO" class="form-control" readonly />
+              </div>
+
+              <div class="form-group col-md-2">
+                <label for="FUN_NIVELFUNCAO" class="control-label">Nível da Função:</label>
+                <input type="text" name="FUN_NIVELFUNCAO" id="FUN_NIVELFUNCAO" class="form-control">
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="FUN_FAIXASALARIAL" class="control-label">Faixa Salarial:</label>
+                <input type="text" name="FUN_FAIXASALARIAL" id="FUN_FAIXASALARIAL" class="form-control">
+              </div>
             </div>
 
-            <div class="form-group col-md-2">
-              <label for="FUN_NIVELFUNCAO" class="control-label">Nível da Função:</label>
-              <input type="text" name="FUN_NIVELFUNCAO" id="FUN_NIVELFUNCAO" class="form-control">
+            <div class="row">
+              <div class="form-group col-md-3">
+                <label for="selectTemRemuneracao" class="control-label">Remuneração:</label>
+                <select name="selectTemRemuneracao" id="selectTemRemuneracao" class="form-control">
+                  <option value="sim">Sim</option>
+                  <option value="nao">Não</option>
+                </select>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="FUN_VLRSALARIO" class="control-label">Salário (R$):</label>
+                <input type="text" name="FUN_VLRSALARIO" id="FUN_VLRSALARIO" class="form-control"
+                  mask="#00.000.000.000.000,00">
+              </div>
+
+              <div class="form-group col-md-3" id="div_valor_hora" style="display: none;">
+                <label for="FUN_VALORHORA" class="control-label">Valor Hora (R$):</label>
+                <input type="text" name="FUN_VALORHORA" id="FUN_VALORHORA" class="form-control" readonly>
+              </div>
+
             </div>
 
-            <div class="form-group col-md-3">
-              <label for="FUN_FAIXASALARIAL" class="control-label">Faixa Salarial:</label>
-              <input type="text" name="FUN_FAIXASALARIAL" id="FUN_FAIXASALARIAL" class="form-control">
+            <div class="hide">
+              <div class="form-group">
+                <label>Data Base</label>
+                <input type="text" name="FUN_DATABASE" id="FUN_DATABASE" class="form-control" mask="00/00/0000">
+              </div>
+
+              <div class="form-group">
+                <label>Categoria Funcionário</label>
+                <input type="text" name="FUN_CATEGORIA_IDDESC_AD" id="FUN_CATEGORIA_IDDESC_AD" class="form-control">
+              </div>
+
+              <div class="form-group">
+                <label>Cargo (Descrição Oculta)</label>
+                <input type="text" name="FUN_CARGO_DESC_AD" id="FUN_CARGO_DESC_AD" class="form-control">
+              </div>
+
+              <div class="form-group">
+                <label>Processo menor de 14</label>
+                <input type="text" name="FUN_PROCMENOR" id="FUN_PROCMENOR" class="form-control">
+              </div>
+
+              <div class="form-group">
+                <label>Dias úteis do mês</label>
+                <input type="number" name="FUN_DIASUTEISMES" id="FUN_DIASUTEISMES" class="form-control">
+              </div>
+
+              <div class="form-group">
+                <label>Dias Úteis do Prôx. Mês</label>
+                <input type="number" name="FUN_DIASUTPROXMES" id="FUN_DIASUTPROXMES" class="form-control">
+              </div>
+
             </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-3">
-              <label for="selectTemRemuneracao" class="control-label">Remuneração:</label>
-              <select name="selectTemRemuneracao" id="selectTemRemuneracao" class="form-control">
-                <option value="sim">Sim</option>
-                <option value="nao">Não</option>
-              </select>
-            </div>
-
-            <div class="form-group col-md-3">
-              <label for="FUN_VLRSALARIO" class="control-label">Salário (R$):</label>
-              <input type="text" name="FUN_VLRSALARIO" id="FUN_VLRSALARIO" class="form-control"
-                mask="#00.000.000.000.000,00">
-            </div>
-
-            <div class="form-group col-md-3" id="div_valor_hora" style="display: none;">
-              <label for="FUN_VALORHORA" class="control-label">Valor Hora (R$):</label>
-              <input type="text" name="FUN_VALORHORA" id="FUN_VALORHORA" class="form-control" readonly>
-            </div>
-
-          </div>
-
-          <div class="hide">
-            <div class="form-group">
-              <label>Data Base</label>
-              <input type="text" name="FUN_DATABASE" id="FUN_DATABASE" class="form-control" mask="00/00/0000">
-            </div>
-
-            <div class="form-group">
-              <label>Categoria Funcionário</label>
-              <input type="text" name="FUN_CATEGORIA_IDDESC_AD" id="FUN_CATEGORIA_IDDESC_AD" class="form-control">
-            </div>
-
-            <div class="form-group">
-              <label>Cargo (Descrição Oculta)</label>
-              <input type="text" name="FUN_CARGO_DESC_AD" id="FUN_CARGO_DESC_AD" class="form-control">
-            </div>
-
-            <div class="form-group">
-              <label>Processo menor de 14</label>
-              <input type="text" name="FUN_PROCMENOR" id="FUN_PROCMENOR" class="form-control">
-            </div>
-
-            <div class="form-group">
-              <label>Dias úteis do mês</label>
-              <input type="number" name="FUN_DIASUTEISMES" id="FUN_DIASUTEISMES" class="form-control">
-            </div>
-
-            <div class="form-group">
-              <label>Dias Úteis do Prôx. Mês</label>
-              <input type="number" name="FUN_DIASUTPROXMES" id="FUN_DIASUTPROXMES" class="form-control">
-            </div>
-
-          </div>
 
           </div>
         </div>
@@ -4597,4 +4634,3 @@
 </body>
 
 </html>
-
