@@ -90,7 +90,11 @@ window.setSelectedZoomItem = function (selectedItem) {
                 }
 
                 try {
-                    if (window["FUN_IDDESCTURN"] !== undefined) window["FUN_IDDESCTURN"].clear();
+                    if (typeof limparCampoAplicadoPorJornada === "function") {
+                        limparCampoAplicadoPorJornada("FUN_IDDESCTURN");
+                    } else if (window["FUN_IDDESCTURN"] !== undefined) {
+                        window["FUN_IDDESCTURN"].clear();
+                    }
                 } catch (e) { }
 
             }, 300);
@@ -123,7 +127,9 @@ window.setSelectedZoomItem = function (selectedItem) {
                 }
 
                 // Limpa a sequência antiga que estava preenchida
-                if (window["FUN_SEQTURN_IDDESC_AD"] && typeof window["FUN_SEQTURN_IDDESC_AD"].clear === "function") {
+                if (typeof limparCampoAplicadoPorJornada === "function") {
+                    limparCampoAplicadoPorJornada("FUN_SEQTURN_IDDESC_AD");
+                } else if (window["FUN_SEQTURN_IDDESC_AD"] && typeof window["FUN_SEQTURN_IDDESC_AD"].clear === "function") {
                     window["FUN_SEQTURN_IDDESC_AD"].clear();
                 } else {
                     $("#FUN_SEQTURN_IDDESC_AD").val(null).trigger("change");
@@ -168,6 +174,15 @@ window.setSelectedZoomItem = function (selectedItem) {
         if (inputId == "zoom_banco_pis") $("#FUN_CODBANCOPIS").val(selectedItem.CODIGO);
         if (inputId == "zoom_agencia_fgts") $("#cpAgenciaFGTS").val(selectedItem.NUMAGENCIA);
         if (inputId == "zoom_sindicato_filiacao") $("#FUN_CODDESCSINDICATOFILIACAO").val(selectedItem.CODIGO);
+        if (inputId == "FUN_TIPOPGTO_IDDESC_AD") {
+            $("#FUN_TIPOPGTO").val(selectedItem.CODCLIENTE || selectedItem.CODIGO || "");
+            $("#FUN_TIPOPGTO_DESC_AD").val(selectedItem.DESCRICAO || selectedItem.IDDESC_TIPORECEBIMENTO || selectedItem.CODCLIENTE || selectedItem.CODIGO || "");
+        }
+        if (inputId == "FUN_SEQTURN_IDDESC_AD") {
+            var seqTurno = selectedItem.INDINICIOHOR || selectedItem.CODIGO || "";
+            $("#FUN_SEQTURN").val(seqTurno);
+            $("#FUN_SEQTURN_DESC_AD").val(seqTurno);
+        }
         if (inputId == "zoom_contribuicao_sindical") {
             $("#FUN_PGCTSIN").val(selectedItem.CODCLIENTE);
             $("#FUN_PGCTSIN_IDDESC_AD").val(selectedItem.IDDESC_CONTRIBUICAO);
@@ -260,11 +275,16 @@ window.removedZoomItem = function (removedItem) {
     try {
         var inputId = removedItem ? removedItem.inputId : null;
         if (!inputId) return;
+        var aplicandoJornadaAgora = (typeof window.aplicandoParametrosJornada === "boolean" && window.aplicandoParametrosJornada);
 
         if (inputId == "IDDESC_EMPRESAFILIAL") {
             // === LIMPA TODOS OS CAMPOS OCULTOS SE O RH APAGAR A FILIAL ===
             $("#FUN_EMPRESA, #FUN_FILIAL").val("");
             $("#FUN_NOMECOMERCIAL_FILIAL, #FUN_CNPJ_FILIAL, #FUN_LOGRADOURO_FILIAL, #FUN_NUMERO_FILIAL, #FUN_COMPLEMENTO_FILIAL, #FUN_BAIRRO_FILIAL, #FUN_CIDADE_FILIAL, #FUN_ESTADO_FILIAL, #FUN_CEP_FILIAL").val("");
+
+            if (typeof limparCamposJornadaAnterior === "function") {
+                limparCamposJornadaAnterior();
+            }
 
             if (window["FUN_IDDESCTURN"] !== undefined) window["FUN_IDDESCTURN"].clear();
             if (window["zoom_quiosque"] != undefined) window["zoom_quiosque"].clear();
@@ -295,9 +315,18 @@ window.removedZoomItem = function (removedItem) {
 
         if (inputId == "FUN_IDDESCTURN") {
             $("#FUN_CODTURN").val("");
+            if (aplicandoJornadaAgora) {
+                if (typeof limparCampoAplicadoPorJornada === "function") {
+                    limparCampoAplicadoPorJornada("FUN_SEQTURN_IDDESC_AD");
+                }
+                return;
+            }
             // Chama o Motor Central que já vai cuidar de bloquear a Sequência automaticamente
             if (typeof window.liberarSequenciaTurno === "function") {
                 window.liberarSequenciaTurno();
+            }
+            if (typeof limparCampoAplicadoPorJornada === "function") {
+                limparCampoAplicadoPorJornada("FUN_SEQTURN_IDDESC_AD");
             }
         }
 
@@ -325,6 +354,8 @@ window.removedZoomItem = function (removedItem) {
         if (inputId == "zoom_banco_pis") $("#FUN_CODBANCOPIS").val("");
         if (inputId == "zoom_agencia_fgts") $("#cpAgenciaFGTS").val("");
         if (inputId == "zoom_sindicato_filiacao") $("#FUN_CODDESCSINDICATOFILIACAO").val("");
+        if (inputId == "FUN_TIPOPGTO_IDDESC_AD") $("#FUN_TIPOPGTO, #FUN_TIPOPGTO_DESC_AD").val("");
+        if (inputId == "FUN_SEQTURN_IDDESC_AD") $("#FUN_SEQTURN, #FUN_SEQTURN_DESC_AD").val("");
         if (inputId == "zoom_municipio") $("#txtCODMUNICIPIO, #txtNOMEMUNICIPIO").val("");
         if (inputId == "zoom_estado_natal") $("#ESTADONatalCod, #ESTADO").val("");
         if (inputId == "zoom_contribuicao_sindical") $("#FUN_PGCTSIN, #FUN_PGCTSIN_IDDESC_AD").val("");
@@ -399,11 +430,13 @@ $(document).ready(function () {
                 var tentativas = 0;
                 var intervalDesbloqueio = setInterval(function () {
                     tentativas++;
-                    changeZoomState("FUN_SEQTURN_IDDESC_AD", false);
-                    if ($("#FUN_SEQTURN_IDDESC_AD").hasClass("select2-offscreen")) {
-                        $("#FUN_SEQTURN_IDDESC_AD").select2("enable", true);
+                    if (typeof campoFoiAplicadoPorJornada !== "function" || !campoFoiAplicadoPorJornada("FUN_SEQTURN_IDDESC_AD")) {
+                        changeZoomState("FUN_SEQTURN_IDDESC_AD", false);
+                        if ($("#FUN_SEQTURN_IDDESC_AD").hasClass("select2-offscreen")) {
+                            $("#FUN_SEQTURN_IDDESC_AD").select2("enable", true);
+                        }
+                        $("#FUN_SEQTURN_IDDESC_AD").prop("disabled", false).removeAttr("disabled");
                     }
-                    $("#FUN_SEQTURN_IDDESC_AD").prop("disabled", false).removeAttr("disabled");
 
                     if (tentativas >= 10) clearInterval(intervalDesbloqueio);
                 }, 500);
