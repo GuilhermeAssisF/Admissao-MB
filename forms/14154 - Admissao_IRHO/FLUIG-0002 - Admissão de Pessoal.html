@@ -1853,11 +1853,11 @@
               </select>
             </div>
 
-            
-              <div class="form-group col-md-4">
-                <label for="cpEmailCandidato" class="control-label">E-mail Candidato:</label>
-                <input type="email" name="cpEmailCandidato" id="cpEmailCandidato" class="form-control">
-              </div>
+
+            <div class="form-group col-md-4">
+              <label for="cpEmailCandidato" class="control-label">E-mail Candidato:</label>
+              <input type="email" name="cpEmailCandidato" id="cpEmailCandidato" class="form-control">
+            </div>
           </div>
 
           <div id="containerDadosContratacaoDependentes">
@@ -3032,6 +3032,7 @@
             'maximumSelectionLength': '1',
             'placeholder': 'Digite o nome ou código...',
             'fields': [
+                {'field': 'CODIGO', 'label': 'Código', 'search': 'true'},
                 {'field': 'IDDESC_SINDICATO', 'label': 'Sindicato', 'standard': 'true', 'search': 'true'}
             ]
         }">
@@ -3242,8 +3243,9 @@
             'maximumSelectionLength': '1', 
             'placeholder': 'Digite o nome ou código...',
             'fields': [ 
+                {'field': 'CODIGO', 'label': 'Código', 'search': 'true'},
                 {'field': 'IDDESC_SINDICATO', 'label': 'Sindicato', 'standard': 'true', 'search': 'true'} 
-            ] 
+            ]
         }">
               <input type="hidden" id="FUN_CODDESCSINDICATOFILIACAO" name="FUN_CODDESCSINDICATOFILIACAO">
             </div>

@@ -18,6 +18,56 @@ function changeZoomState(zoomId, disabledState) {
     }
 }
 
+function montarTextoCodigoDescricaoZoom(selectedItem, campoCodigo, campoDescricao) {
+    var codigo = $.trim(String(selectedItem && selectedItem[campoCodigo] ? selectedItem[campoCodigo] : ""));
+    var descricao = $.trim(String(selectedItem && selectedItem[campoDescricao] ? selectedItem[campoDescricao] : ""));
+
+    if (!codigo && !descricao) {
+        return "";
+    }
+
+    if (!codigo) {
+        return descricao;
+    }
+
+    if (!descricao) {
+        return codigo;
+    }
+
+    // Evita duplicar quando o dataset já retorna "001 - Descrição"
+    if (descricao === codigo || descricao.indexOf(codigo + " - ") === 0 || descricao.indexOf(codigo + " — ") === 0) {
+        return descricao;
+    }
+
+    return codigo + " - " + descricao;
+}
+
+function atualizarTextoVisualZoomSelecionado(campoId, textoVisual) {
+    if (!campoId || !textoVisual) {
+        return;
+    }
+
+    setTimeout(function () {
+        try {
+            var $select2 = $("#s2id_" + campoId);
+
+            if ($select2.length) {
+                var $chosen = $select2.find(".select2-chosen").first();
+
+                if (!$chosen.length) {
+                    $chosen = $select2.find(".select2-choice span").first();
+                }
+
+                if ($chosen.length) {
+                    $chosen.text(textoVisual);
+                }
+            }
+        } catch (e) {
+            console.warn("[Zoom] Não foi possível atualizar o texto visual do zoom:", campoId, e);
+        }
+    }, 100);
+}
+
 // =========================================================================
 // GATILHO: SELECIONOU UM ITEM
 // =========================================================================
@@ -161,7 +211,14 @@ window.setSelectedZoomItem = function (selectedItem) {
         }
 
         if (inputId == "zoom_agencia") $("#num_agencia").val(selectedItem.NUMAGENCIA);
-        if (inputId == "zoom_sindicato") $("#cod_sindicato").val(selectedItem.CODIGO);
+
+        if (inputId == "zoom_sindicato") {
+            var textoSindicato = montarTextoCodigoDescricaoZoom(selectedItem, "CODIGO", "IDDESC_SINDICATO");
+
+            $("#cod_sindicato").val(selectedItem.CODIGO);
+            atualizarTextoVisualZoomSelecionado("zoom_sindicato", textoSindicato);
+        }
+
         if (inputId == "zoom_categoriaEsocial") $("#FUN_CATESOCIAL").val(selectedItem.CODCLIENTE);
         if (inputId == "zoomTipoFuncionario") $("#codTipoFuncionario").val(selectedItem.CODIGO);
         if (inputId == "zoom_banco_fgts") {
@@ -173,7 +230,14 @@ window.setSelectedZoomItem = function (selectedItem) {
         }
         if (inputId == "zoom_banco_pis") $("#FUN_CODBANCOPIS").val(selectedItem.CODIGO);
         if (inputId == "zoom_agencia_fgts") $("#cpAgenciaFGTS").val(selectedItem.NUMAGENCIA);
-        if (inputId == "zoom_sindicato_filiacao") $("#FUN_CODDESCSINDICATOFILIACAO").val(selectedItem.CODIGO);
+
+        if (inputId == "zoom_sindicato_filiacao") {
+            var textoSindicatoFiliacao = montarTextoCodigoDescricaoZoom(selectedItem, "CODIGO", "IDDESC_SINDICATO");
+
+            $("#FUN_CODDESCSINDICATOFILIACAO").val(selectedItem.CODIGO);
+            atualizarTextoVisualZoomSelecionado("zoom_sindicato_filiacao", textoSindicatoFiliacao);
+        }
+
         if (inputId == "FUN_TIPOPGTO_IDDESC_AD") {
             $("#FUN_TIPOPGTO").val(selectedItem.CODCLIENTE || selectedItem.CODIGO || "");
             $("#FUN_TIPOPGTO_DESC_AD").val(selectedItem.DESCRICAO || selectedItem.IDDESC_TIPORECEBIMENTO || selectedItem.CODCLIENTE || selectedItem.CODIGO || "");

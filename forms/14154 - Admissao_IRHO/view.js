@@ -878,73 +878,73 @@ $(document).ready(function () {
     $("#cpJornadaAdmissao")
       .off("change.contratoJornada")
       .on("change.contratoJornada", function () {
-      if (typeof aplicarBloqueioDadosContratacaoPorJornada === "function") {
-        aplicarBloqueioDadosContratacaoPorJornada();
-      }
-
-      if ($("#FUN_EMPRESA").val()) {
-        if (typeof reloadZoomFilial === "function") {
-          reloadZoomFilial($("#FUN_EMPRESA").val(), $("#FUN_FILIAL").val());
+        if (typeof aplicarBloqueioDadosContratacaoPorJornada === "function") {
+          aplicarBloqueioDadosContratacaoPorJornada();
         }
 
-        if (typeof window.liberarSequenciaTurno === "function") {
-          window.liberarSequenciaTurno();
+        if ($("#FUN_EMPRESA").val()) {
+          if (typeof reloadZoomFilial === "function") {
+            reloadZoomFilial($("#FUN_EMPRESA").val(), $("#FUN_FILIAL").val());
+          }
+
+          if (typeof window.liberarSequenciaTurno === "function") {
+            window.liberarSequenciaTurno();
+          }
         }
-      }
 
-      if (window.aplicandoParametrosJornada) {
-        console.log("[Jornada][Contrato] Change ignorado durante aplicacao automatica:", {
-          campo: this.id,
-          valor: $(this).val()
-        });
+        if (window.aplicandoParametrosJornada) {
+          console.log("[Jornada][Contrato] Change ignorado durante aplicacao automatica:", {
+            campo: this.id,
+            valor: $(this).val()
+          });
 
-        agendarRecalculoExperienciaPorJornada("change ignorado durante aplicacao automatica - " + this.id);
-      } else if (typeof gerenciarPainelContrato === "function") {
-        gerenciarPainelContrato(true);
-      }
+          agendarRecalculoExperienciaPorJornada("change ignorado durante aplicacao automatica - " + this.id);
+        } else if (typeof gerenciarPainelContrato === "function") {
+          gerenciarPainelContrato(true);
+        }
 
-      if (!window.aplicandoParametrosJornada && typeof exibeDocumentosPorJornadaKit === "function") {
-        exibeDocumentosPorJornadaKit();
-      }
+        if (!window.aplicandoParametrosJornada && typeof exibeDocumentosPorJornadaKit === "function") {
+          exibeDocumentosPorJornadaKit();
+        }
 
-      var jornada = $("#cpJornadaAdmissao").val();
-      if (jornada) {
-        aplicarParametrosJornadaAdmissao(jornada);
-      }
+        var jornada = $("#cpJornadaAdmissao").val();
+        if (jornada) {
+          aplicarParametrosJornadaAdmissao(jornada);
+        }
 
-      if (typeof aplicarObrigatoriedadeFrontEnd === "function") {
-        aplicarObrigatoriedadeFrontEnd(getWKNumState());
-      }
+        if (typeof aplicarObrigatoriedadeFrontEnd === "function") {
+          aplicarObrigatoriedadeFrontEnd(getWKNumState());
+        }
 
-      if (typeof validarLiberacaoGED === "function") {
-        validarLiberacaoGED();
-      }
-    });
+        if (typeof validarLiberacaoGED === "function") {
+          validarLiberacaoGED();
+        }
+      });
 
     $("#cpContratoPrazo")
       .off("change.contratoJornada")
       .on("change.contratoJornada", function () {
-      if (window.aplicandoParametrosJornada) {
-        console.log("[Jornada][Contrato] Change ignorado durante aplicacao automatica:", {
-          campo: this.id,
-          valor: $(this).val()
-        });
+        if (window.aplicandoParametrosJornada) {
+          console.log("[Jornada][Contrato] Change ignorado durante aplicacao automatica:", {
+            campo: this.id,
+            valor: $(this).val()
+          });
 
-        agendarRecalculoExperienciaPorJornada("change ignorado durante aplicacao automatica - " + this.id);
-        return;
-      }
+          agendarRecalculoExperienciaPorJornada("change ignorado durante aplicacao automatica - " + this.id);
+          return;
+        }
 
-      gerenciarPainelContrato(true);
-      exibeDocumentosPorJornadaKit();
+        gerenciarPainelContrato(true);
+        exibeDocumentosPorJornadaKit();
 
-      if (typeof aplicarObrigatoriedadeFrontEnd === "function") {
-        aplicarObrigatoriedadeFrontEnd(getWKNumState());
-      }
+        if (typeof aplicarObrigatoriedadeFrontEnd === "function") {
+          aplicarObrigatoriedadeFrontEnd(getWKNumState());
+        }
 
-      if (typeof validarLiberacaoGED === "function") {
-        validarLiberacaoGED();
-      }
-    });
+        if (typeof validarLiberacaoGED === "function") {
+          validarLiberacaoGED();
+        }
+      });
 
     // Roda a função assim que a tela abre SEM limpar dados
     setTimeout(function () {
@@ -1536,6 +1536,12 @@ $(document).ready(function () {
     }
 
     aplicarBloqueioDadosContratacaoPorJornada();
+
+    // Reaplica a parametrização visual da jornada quando a atividade é recarregada.
+    // Isso corrige os zooms que o Fluig reidrata apenas com o código, ex.: U, 0002, 1001.
+    if (typeof reaplicarJornadaSalvaAoCarregar === "function") {
+      reaplicarJornadaSalvaAoCarregar();
+    }
   }, 2500);
 
   // Quando a filial é alterada, revalida os documentos do Kit
@@ -1769,51 +1775,51 @@ function carregarParametrosJornadaAdmissao(callback) {
   jornadasAdmissaoConfig = [];
   camposJornadaAdmissaoConfig = [];
 
-    try {
-      var constraints = [
-        DatasetFactory.createConstraint("metadata#active", "true", "true", ConstraintType.MUST)
-      ];
+  try {
+    var constraints = [
+      DatasetFactory.createConstraint("metadata#active", "true", "true", ConstraintType.MUST)
+    ];
 
-      logJornadaGrupo("Iniciando carregamento da configuracao de jornada", {
-        dataset: "Form_Configuracoes_Admissao",
-        constraints: [
-          { field: "metadata#active", value: "true" }
-        ]
-      });
+    logJornadaGrupo("Iniciando carregamento da configuracao de jornada", {
+      dataset: "Form_Configuracoes_Admissao",
+      constraints: [
+        { field: "metadata#active", value: "true" }
+      ]
+    });
 
-      DatasetFactory.getDataset("Form_Configuracoes_Admissao", null, constraints, null, {
-        success: function (datasetConfig) {
-          try {
-            var valoresConfig = obterValoresDatasetParamJornada(datasetConfig);
-            logJornadaTabela("Registro(s) ativos de configuracao encontrados", valoresConfig.map(function (item, idx) {
-              return {
-                indice: idx + 1,
-                documentid: item.documentid || item["metadata#id"] || "",
-                titulo: item["documentDescription"] || item["descricao"] || ""
-              };
-            }));
+    DatasetFactory.getDataset("Form_Configuracoes_Admissao", null, constraints, null, {
+      success: function (datasetConfig) {
+        try {
+          var valoresConfig = obterValoresDatasetParamJornada(datasetConfig);
+          logJornadaTabela("Registro(s) ativos de configuracao encontrados", valoresConfig.map(function (item, idx) {
+            return {
+              indice: idx + 1,
+              documentid: item.documentid || item["metadata#id"] || "",
+              titulo: item["documentDescription"] || item["descricao"] || ""
+            };
+          }));
 
-            if (!valoresConfig.length) {
-              console.warn("[Param Jornada] Nenhuma configuracao ativa encontrada.");
-              finalizarCarregamentoParametrosJornada();
-              return;
+          if (!valoresConfig.length) {
+            console.warn("[Param Jornada] Nenhuma configuracao ativa encontrada.");
+            finalizarCarregamentoParametrosJornada();
+            return;
           }
 
           var docId = valoresConfig[0]["documentid"] || valoresConfig[0]["metadata#id"];
 
-            if (!docId) {
-              console.warn("[Param Jornada] Configuracao ativa sem documentid.");
-              finalizarCarregamentoParametrosJornada();
-              return;
-            }
+          if (!docId) {
+            console.warn("[Param Jornada] Configuracao ativa sem documentid.");
+            finalizarCarregamentoParametrosJornada();
+            return;
+          }
 
-            logJornadaGrupo("Configuracao ativa selecionada", {
-              documentId: docId,
-              totalRegistros: valoresConfig.length
-            });
+          logJornadaGrupo("Configuracao ativa selecionada", {
+            documentId: docId,
+            totalRegistros: valoresConfig.length
+          });
 
-            buscarTabelaFilhaParamJornada(docId, "tbJornadasAdmissao", function (jornadas) {
-              jornadasAdmissaoConfig = [];
+          buscarTabelaFilhaParamJornada(docId, "tbJornadasAdmissao", function (jornadas) {
+            jornadasAdmissaoConfig = [];
 
             for (var i = 0; i < jornadas.length; i++) {
               var jornada = jornadas[i] || {};
@@ -1824,22 +1830,22 @@ function carregarParametrosJornadaAdmissao(callback) {
                 coligadas: jornada.JORNADA_COLIGADAS || "*",
                 ativo: jornada.JORNADA_ATIVO || "S",
                 ordem: jornada.JORNADA_ORDEM || ""
-                });
-              }
+              });
+            }
 
-              logJornadaTabela("tbJornadasAdmissao carregada", jornadasAdmissaoConfig.map(function (item, idx) {
-                return {
-                  indice: idx + 1,
-                  codigo: item.codigo || "",
-                  descricao: item.descricao || "",
-                  coligadas: item.coligadas || "",
-                  ativo: item.ativo || "",
-                  ordem: item.ordem || ""
-                };
-              }));
+            logJornadaTabela("tbJornadasAdmissao carregada", jornadasAdmissaoConfig.map(function (item, idx) {
+              return {
+                indice: idx + 1,
+                codigo: item.codigo || "",
+                descricao: item.descricao || "",
+                coligadas: item.coligadas || "",
+                ativo: item.ativo || "",
+                ordem: item.ordem || ""
+              };
+            }));
 
-              buscarTabelaFilhaParamJornada(docId, "tbCamposJornadaAdmissao", function (campos) {
-                camposJornadaAdmissaoConfig = [];
+            buscarTabelaFilhaParamJornada(docId, "tbCamposJornadaAdmissao", function (campos) {
+              camposJornadaAdmissaoConfig = [];
 
               for (var c = 0; c < campos.length; c++) {
                 var campo = campos[c] || {};
@@ -1854,25 +1860,25 @@ function carregarParametrosJornadaAdmissao(callback) {
                   descricao: campo.CJ_DESCRICAO || "",
                   ativo: campo.CJ_ATIVO || "S",
                   ordem: campo.CJ_ORDEM || ""
-                  });
-                }
+                });
+              }
 
-                logJornadaTabela("tbCamposJornadaAdmissao carregada", camposJornadaAdmissaoConfig.map(function (item, idx) {
-                  return {
-                    indice: idx + 1,
-                    jornadaCodigo: item.jornadaCodigo || "",
-                    campoId: item.campoId || "",
-                    campoTipo: item.campoTipo || "",
-                    valor: item.valor || "",
-                    descricao: item.descricao || "",
-                    ativo: item.ativo || "",
-                    ordem: item.ordem || ""
-                  };
-                }));
+              logJornadaTabela("tbCamposJornadaAdmissao carregada", camposJornadaAdmissaoConfig.map(function (item, idx) {
+                return {
+                  indice: idx + 1,
+                  jornadaCodigo: item.jornadaCodigo || "",
+                  campoId: item.campoId || "",
+                  campoTipo: item.campoTipo || "",
+                  valor: item.valor || "",
+                  descricao: item.descricao || "",
+                  ativo: item.ativo || "",
+                  ordem: item.ordem || ""
+                };
+              }));
 
-                finalizarCarregamentoParametrosJornada();
-              });
+              finalizarCarregamentoParametrosJornada();
             });
+          });
         } catch (e) {
           console.warn("[Param Jornada] Erro ao processar configuracao.", e);
           finalizarCarregamentoParametrosJornada();
@@ -2007,6 +2013,137 @@ function obterValorItemParamJornada(item, campo) {
   return "";
 }
 
+function formatarTextoCodigoDescricaoJornada(codigo, descricao) {
+  var cod = $.trim(String(codigo || ""));
+  var desc = $.trim(String(descricao || ""));
+
+  if (!cod && !desc) {
+    return "";
+  }
+
+  if (!cod) {
+    return desc;
+  }
+
+  if (!desc) {
+    return cod;
+  }
+
+  // Evita duplicar quando o dataset já retorna "0105 - Descrição"
+  if (desc === cod || desc.indexOf(cod + " - ") === 0 || desc.indexOf(cod + " — ") === 0) {
+    return desc;
+  }
+
+  return cod + " - " + desc;
+}
+
+function obterDescricaoItemDatasetParamJornada(itemDataset, extra, valorTecnico) {
+  if (!itemDataset) {
+    return "";
+  }
+
+  var camposPossiveis = [];
+  var textField = extra && extra.textField ? extra.textField : "";
+
+  if (textField) {
+    camposPossiveis.push(textField);
+  }
+
+  camposPossiveis = camposPossiveis.concat([
+    "IDDESC_SINDICATO",
+    "IDDESC_FUNCAO",
+    "IDDESC_HORARIO",
+    "IDDESC_TIPORECEBIMENTO",
+    "IDDESC_OCORRENCIA",
+    "IDDESC_CATSEFIP",
+    "IDDESC_SITUACAO",
+    "IDDESC_VINCULO",
+    "IDDESC_CATEGORIAESOCIAL",
+    "TIPO_FUNCIONARIO",
+    "DESCRICAO",
+    "DESCRIÇÃO",
+    "NOME",
+    "NOME_FUNCIONARIO",
+    "FUNCAO",
+    "HORARIO"
+  ]);
+
+  var usados = {};
+  var valorNorm = normalizarValorComparacao(valorTecnico);
+
+  for (var i = 0; i < camposPossiveis.length; i++) {
+    var campo = camposPossiveis[i];
+
+    if (!campo || usados[campo]) {
+      continue;
+    }
+
+    usados[campo] = true;
+
+    var texto = obterValorItemParamJornada(itemDataset, campo);
+    var textoNorm = normalizarValorComparacao(texto);
+
+    if (texto && textoNorm && textoNorm !== valorNorm) {
+      return String(texto);
+    }
+
+    // Se o próprio campo já vier como "0105 - Descrição", aceita.
+    if (texto && valorTecnico && String(texto).indexOf(String(valorTecnico) + " - ") === 0) {
+      return String(texto);
+    }
+  }
+
+  return "";
+}
+
+function obterCampoColigadaPadraoDatasetJornada(datasetId, campoId) {
+  var ds = String(datasetId || "").toLowerCase();
+
+  if (
+    ds.indexOf("secao") >= 0 ||
+    ds.indexOf("centrocusto") >= 0 ||
+    ds.indexOf("quiosque") >= 0
+  ) {
+    return "CODCOLIGADA";
+  }
+
+  return "ID_EMPRESA";
+}
+
+function montarConstraintsBuscaDatasetParamJornada(extra, valorTecnico, campoId) {
+  var constraints = [];
+
+  if (!extra || !extra.valueField || !valorTecnico || typeof DatasetFactory === "undefined") {
+    return constraints;
+  }
+
+  constraints.push(
+    DatasetFactory.createConstraint(extra.valueField, valorTecnico, valorTecnico, ConstraintType.MUST)
+  );
+
+  var datasetId = extra.datasetId || "";
+  var camposComColigada = {
+    FUN_IDDESCFUN: true,
+    FUN_IDDESCTURN: true,
+    FUN_SEQTURN_IDDESC_AD: true,
+    zoom_sindicato: true,
+    zoom_sindicato_filiacao: true
+  };
+
+  var deveFiltrarColigada = !!extra.usaColigadaJornada || !!camposComColigada[campoId];
+  var empresa = $("#FUN_EMPRESA").val() || $("#txtCodcoligada").val();
+
+  if (deveFiltrarColigada && empresa) {
+    var campoColigada = extra.coligadaConstraintField || obterCampoColigadaPadraoDatasetJornada(datasetId, campoId);
+
+    constraints.push(
+      DatasetFactory.createConstraint(campoColigada, empresa, empresa, ConstraintType.MUST)
+    );
+  }
+
+  return constraints;
+}
+
 function escolherItemDatasetPorValor(ds, extra, valorTecnico, campoId) {
   var valores = obterValoresDatasetParamJornada(ds);
   var campoBusca = $.trim(String(extra && extra.valueField ? extra.valueField : ""));
@@ -2057,23 +2194,62 @@ function escolherItemDatasetPorValor(ds, extra, valorTecnico, campoId) {
   return null;
 }
 
-function obterTextoVisualJornada(itemCampo, itemDataset, extra) {
-  if (itemDataset && extra && extra.textField) {
-    var textoDataset = itemDataset[extra.textField];
-    if (textoDataset !== undefined && textoDataset !== null && $.trim(String(textoDataset)) !== "") {
-      return String(textoDataset);
-    }
+function formatarTextoCodigoDescricaoJornada(codigo, descricao) {
+  var cod = $.trim(String(codigo || ""));
+  var desc = $.trim(String(descricao || ""));
+
+  if (!cod && !desc) {
+    return "";
   }
 
-  if (itemCampo && itemCampo.descricao !== undefined && itemCampo.descricao !== null && $.trim(String(itemCampo.descricao)) !== "") {
-    return String(itemCampo.descricao);
+  if (!cod) {
+    return desc;
   }
+
+  if (!desc) {
+    return cod;
+  }
+
+  // Evita duplicar quando o dataset já retorna "001 - Descrição"
+  if (desc === cod || desc.indexOf(cod + " - ") === 0 || desc.indexOf(cod + " — ") === 0) {
+    return desc;
+  }
+
+  return cod + " - " + desc;
+}
+
+function obterTextoVisualJornada(itemCampo, itemDataset, extra) {
+  var codigo = "";
+  var descricao = "";
 
   if (itemCampo && itemCampo.valor !== undefined && itemCampo.valor !== null) {
-    return String(itemCampo.valor);
+    codigo = String(itemCampo.valor);
   }
 
-  return "";
+  if (itemDataset && extra) {
+    if (extra.valueField) {
+      var valorDataset = obterValorItemParamJornada(itemDataset, extra.valueField);
+
+      if (valorDataset !== undefined && valorDataset !== null && $.trim(String(valorDataset)) !== "") {
+        codigo = String(valorDataset);
+      }
+    }
+
+    descricao = obterDescricaoItemDatasetParamJornada(itemDataset, extra, codigo);
+  }
+
+  if (
+    !descricao &&
+    itemCampo &&
+    itemCampo.descricao !== undefined &&
+    itemCampo.descricao !== null &&
+    $.trim(String(itemCampo.descricao)) !== "" &&
+    normalizarValorComparacao(itemCampo.descricao) !== normalizarValorComparacao(codigo)
+  ) {
+    descricao = String(itemCampo.descricao);
+  }
+
+  return formatarTextoCodigoDescricaoJornada(codigo, descricao);
 }
 
 function obterTextoCampoParamJornada(campo) {
@@ -2480,9 +2656,18 @@ function aplicarCampoZoomJornada(itemCampo) {
 
   try {
     if (extra.datasetId && extra.valueField && valorTecnico && typeof DatasetFactory !== "undefined") {
-      var constraint = DatasetFactory.createConstraint(extra.valueField, valorTecnico, valorTecnico, ConstraintType.MUST);
-      var dataset = DatasetFactory.getDataset(extra.datasetId, null, [constraint], null);
+      var constraintsBusca = montarConstraintsBuscaDatasetParamJornada(extra, valorTecnico, campoId);
+      var dataset = DatasetFactory.getDataset(extra.datasetId, null, constraintsBusca, null);
+
       itemDataset = escolherItemDatasetPorValor(dataset, extra, valorTecnico, campoId);
+
+      // Fallback: se não encontrou com coligada/dependências, tenta só pelo código.
+      if (!itemDataset) {
+        var constraintSimples = DatasetFactory.createConstraint(extra.valueField, valorTecnico, valorTecnico, ConstraintType.MUST);
+        var datasetSimples = DatasetFactory.getDataset(extra.datasetId, null, [constraintSimples], null);
+
+        itemDataset = escolherItemDatasetPorValor(datasetSimples, extra, valorTecnico, campoId);
+      }
     }
   } catch (e) {
     console.warn("[Jornada] Erro opcional ao consultar dataset para", campoId, e);
@@ -2680,10 +2865,15 @@ function popularJornadasAdmissaoPorColigada(codColigada) {
   if (valorAtual && manteveValorAtual) {
     $select.val(valorAtual);
     $select.removeAttr("data-jornada-pendente");
-    if (valorPendente && typeof aplicarParametrosJornadaAdmissao === "function") {
+
+    if (typeof aplicarParametrosJornadaAdmissao === "function") {
       aplicarBloqueioDadosContratacaoPorJornada();
-      aplicarParametrosJornadaAdmissao(valorAtual);
+
+      setTimeout(function () {
+        aplicarParametrosJornadaAdmissao(valorAtual);
+      }, 200);
     }
+
     return;
   }
 
@@ -2800,9 +2990,54 @@ function aplicarParametrosDaJornadaSelecionada() {
   aplicarParametrosJornadaAdmissao(jornada);
 }
 
+function reaplicarJornadaSalvaAoCarregar() {
+  var jornadaAtual = $.trim(String($("#cpJornadaAdmissao").val() || ""));
+  var empresaAtual = $.trim(String($("#FUN_EMPRESA").val() || $("#txtCodcoligada").val() || ""));
+
+  if (!jornadaAtual || !empresaAtual) {
+    return;
+  }
+
+  if (window.reaplicandoJornadaSalvaAoCarregar) {
+    return;
+  }
+
+  window.reaplicandoJornadaSalvaAoCarregar = true;
+
+  console.log("[Jornada][Reload] Reaplicando jornada salva ao carregar a atividade:", {
+    jornada: jornadaAtual,
+    empresa: empresaAtual
+  });
+
+  carregarParametrosJornadaAdmissao(function () {
+    try {
+      // Força o fluxo existente a tratar essa jornada como pendente de reaplicação.
+      $("#cpJornadaAdmissao").attr("data-jornada-pendente", jornadaAtual);
+
+      if (typeof popularJornadasAdmissaoPorColigada === "function") {
+        popularJornadasAdmissaoPorColigada(empresaAtual);
+      }
+
+      setTimeout(function () {
+        var jornadaDepois = $.trim(String($("#cpJornadaAdmissao").val() || jornadaAtual || ""));
+
+        if (jornadaDepois) {
+          aplicarParametrosJornadaAdmissao(jornadaDepois);
+        }
+
+        window.reaplicandoJornadaSalvaAoCarregar = false;
+      }, 500);
+    } catch (e) {
+      window.reaplicandoJornadaSalvaAoCarregar = false;
+      console.warn("[Jornada][Reload] Erro ao reaplicar jornada salva.", e);
+    }
+  });
+}
+
 window.aplicarParametrosDaJornadaSelecionada = aplicarParametrosDaJornadaSelecionada;
 window.limparCamposJornadaAnterior = limparCamposJornadaAnterior;
 window.limparCampoAplicadoPorJornada = limparCampoAplicadoPorJornada;
+window.reaplicarJornadaSalvaAoCarregar = reaplicarJornadaSalvaAoCarregar;
 
 var Conta = function (indice) {
   var a = indice.name;
