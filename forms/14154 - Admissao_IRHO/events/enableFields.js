@@ -33,8 +33,6 @@ function enableFields(form) {
     // ==========================================
     // PAINEL: COMPLEMENTOS E EMERGÊNCIA
     // ==========================================
-    { campo: "txtTamanhoCamisa", atividade: "0,1,41" },
-    { campo: "txtTamanhoCalcado", atividade: "0,1,41" },
     { campo: "txtNomeEmergencia", atividade: "0,1,41" },
     { campo: "txtParentescoEmergencia", atividade: "0,1,41" },
     { campo: "txtTelefoneEmergencia", atividade: "0,1,41" },
@@ -185,22 +183,13 @@ function enableFields(form) {
     { campo: "PlanoSaude", atividade: "0,1,41,97" },
     { campo: "txtInteresseSaude", atividade: "0,1,41,97" },
     { campo: "txtInteresseOdonto", atividade: "0,1,41,97" },
-    { campo: "cpUpFront", atividade: "0,1,41" },
-    { campo: "cpUpFrontTipo", atividade: "0,1,41" },
-    { campo: "cpHiringBonus", atividade: "0,1,41" },
-    { campo: "cpHiringBonusTipo", atividade: "0,1,41" },
-    { campo: "cpBonusValor", atividade: "0,1,41" },
-    { campo: "cpBonusTipo", atividade: "0,1,41" },
-    { campo: "cpAcordoNegociacao", atividade: "0,1,41" },
     { campo: "cpDataHoraExame", atividade: "0,1,41" },
     { campo: "cpEnderecoClinica", atividade: "0,1,41" },
     { campo: "cpNomeClinica", atividade: "0,1,41" },
     { campo: "cpEmailCandidatoInicio", atividade: "0,1,41" },
     { campo: "cpTpRecrutamento", atividade: "0,1,41" },
     { campo: "cpTpContratacao", atividade: "0,1,41" },
-    { campo: "MarcaPonto", atividade: "0,1,41" },
     { campo: "ContSalBrad", atividade: "0,1,41" },
-    { campo: "CatPonto", atividade: "0,1,41" },
     { campo: "Substituicao", atividade: "0,1,41" },
     { campo: "TreinRH", atividade: "0,1,41" },
     { campo: "cpNecTreinamento", atividade: "0,1,41" },
@@ -254,6 +243,71 @@ function enableFields(form) {
     { campo: "zoom_centroCusto", atividade: "97" },
     { campo: "FUN_INTEGRCONTABIL_IDDESC", atividade: "97" },
     { campo: "FUN_INTEGRGERENCIAL_IDDESC", atividade: "97" },
+
+    // Campos Complementares RH - Controle de Ponto e Portal
+    { campo: "MarcaPonto", atividade: "97" },
+    { campo: "cpHabilitaPortalRM", atividade: "97" },
+    { campo: "cpCodigoUsuarioPortalPonto", atividade: "97" },
+    { campo: "cpNomeUsuarioPortalPonto", atividade: "97" },
+    { campo: "CatPonto", atividade: "97" },
+
+    // Campos Complementares RH - Valores Associados
+    { campo: "cpUpFront", atividade: "97" },
+    { campo: "cpUpFrontTipo", atividade: "97" },
+    { campo: "cpHiringBonus", atividade: "97" },
+    { campo: "cpHiringBonusTipo", atividade: "97" },
+    { campo: "cpBonusValor", atividade: "97" },
+    { campo: "cpBonusTipo", atividade: "97" },
+    { campo: "cpPrazoClawback", atividade: "97" },
+    { campo: "cpValorPLR", atividade: "97" },
+    { campo: "cpObservacaoPLR", atividade: "97" },
+
+    // Campos Complementares RH - FGTS
+    { campo: "cpDataOpcaoFGTS", atividade: "97" },
+    { campo: "cpValorSaldoFGTS", atividade: "97" },
+    { campo: "cpSaldoFGTSFinsRescisorios", atividade: "97" },
+
+    // Campos Complementares RH - Benefícios Integráveis
+    { campo: "cpDataInclusaoAM", atividade: "97" },
+    { campo: "cpPlanoAM", atividade: "97" },
+    { campo: "cpDataInclusaoAO", atividade: "97" },
+    { campo: "cpPlanoAO", atividade: "97" },
+
+    // Campos Complementares RH - Estágio / Aprendiz
+    { campo: "cpEstagioDataInicio", atividade: "97" },
+    { campo: "cpEstagioDataFim", atividade: "97" },
+    { campo: "cpEstagioTipoContrato", atividade: "97" },
+    { campo: "cpEstagioTipo", atividade: "97" },
+    { campo: "cpEstagioInstituicaoEnsino", atividade: "97" },
+    { campo: "cpEstagioGestor", atividade: "97" },
+    { campo: "cpEstagioModalidadeContratacao", atividade: "97" },
+    { campo: "cpEstagioCnpjAtivPrat", atividade: "97" },
+
+    // Campos Complementares RH - Anotações RM
+    { campo: "cpAnotacoesPessoaisRM", atividade: "97" },
+
+        // PAINEL: INFORMAÇÕES ADICIONAIS (Atividade 97)
+    { campo: "cpNomeGestorImediato", atividade: "97" },
+    { campo: "cpPlantaUnidade", atividade: "97" },
+    { campo: "cpModeloTrabalho", atividade: "97" },
+    { campo: "cpFormacaoFuncionario", atividade: "97" },
+    { campo: "cpNivelIngles", atividade: "97" },
+    { campo: "cpPracaAtuacao", atividade: "97" },
+    { campo: "cpDescricaoAtividades", atividade: "97" },
+    { campo: "cpNecessitaNotebook", atividade: "97" },
+    { campo: "cpNecessitaEPI", atividade: "97" },
+    { campo: "cpFirstName", atividade: "97" },
+    { campo: "cpLastName", atividade: "97" },
+    { campo: "cpWorkOnPlant", atividade: "97" },
+    { campo: "cpJobTitle", atividade: "97" },
+    { campo: "cpDepartment", atividade: "97" },
+    { campo: "cpEmailDirectManager", atividade: "97" },
+    { campo: "cpUserStatus", atividade: "97" },
+    { campo: "cpNetzeroInternalGroup", atividade: "97" },
+    { campo: "cpCadastroHierarquia", atividade: "97" },
+    { campo: "cpRequisitosAcesso", atividade: "97" },
+    { campo: "cpLocalExameAdmissional", atividade: "97" },
+    { campo: "cpDataExameAdmissional", atividade: "97" },
 
     // PAINEL: APROVAÇÕES RH (Somente Atividade 97)
     { campo: "cpAprovacaoAdmissao", atividade: "97" },

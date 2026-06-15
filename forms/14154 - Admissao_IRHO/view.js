@@ -405,6 +405,10 @@ $(document).ready(function () {
   toggleHiringBonusTipo();
   toggleBonusTipo();
 
+  $("#cpUpFront").off("change.valoresAssociados").on("change.valoresAssociados", toggleUpFrontTipo);
+  $("#cpHiringBonus").off("change.valoresAssociados").on("change.valoresAssociados", toggleHiringBonusTipo);
+  $("#cpBonusValor").off("blur.valoresAssociados change.valoresAssociados").on("blur.valoresAssociados change.valoresAssociados", toggleBonusTipo);
+
   // 1. Cria uma regra onde o primeiro dígito da hora é opcional (permitindo HH:MM ou HHH:MM)
   var maskBehavior = function (val) {
     return val.replace(/\D/g, '').length === 5 ? '000:00' : '00:009';
@@ -610,7 +614,7 @@ $(document).ready(function () {
     $("#txtEscolaridade").closest(".col-md-6").hide();
 
     // Oculta "Tipo Sanguíneo"
-    $("#TipoSanguineo").closest(".col-md-6").hide();
+    $("#TipoSanguineo").closest("div[class*='col-']").hide();
 
     // Oculta o painel inteiro de "Dependentes" e "Filiação"
     $('a[href="#dados_pessoais"]').closest('.panel.panel-default').hide();
@@ -628,7 +632,7 @@ $(document).ready(function () {
     // Oculta o painel "Endereço"
     $('.fluigicon-home').closest('.panel.panel-default').hide();
 
-    // 1. Oculta a linha de "Complementos e Emergência" (Camisa, Calçado, Contato, Telefone)
+    // 1. Oculta a linha de "Complementos e Emergência"
     // Busca pelo título H4 específico e esconde a linha inteira que o contém
     $("h4:contains('Complementos e Emergência')").closest(".row").hide();
 
@@ -756,6 +760,8 @@ $(document).ready(function () {
     '#DtEmRIC', '#DtChegBras', '#DTRNE', '#DTEMISSAOIDENT',
     '#txtAdmissao', '#FUN_ADMISSAO', '#FUN_DATABASE', '#cpTerminoContrato',
     '#cpVencPrimeiraExp', '#cpVencSegundaExp', '#cpDataHoraExame', '#cpDataUltimoSaldoFGTS',
+    '#cpDataOpcaoFGTS', '#cpDataInclusaoAM', '#cpDataInclusaoAO',
+    '#cpEstagioDataInicio', '#cpEstagioDataFim',
     '#Reg_Prof_Emissao', '#Passaporte_Emissao', '#Passaporte_Validade', '#cpDataExameAdmissional'
   ];
 
@@ -779,11 +785,6 @@ $(document).ready(function () {
     $("#cpfcnpj").change(function () {
       CarregaCPF();
     });
-
-    $("#cpUpFront").on("change", toggleUpFrontTipo);
-    $("#cpHiringBonus").on("change", toggleHiringBonusTipo);
-    // Usamos 'blur' para campos de valor, que é disparado quando o usuário sai do campo
-    $("#cpBonusValor").on("blur", toggleBonusTipo);
 
     //data de nascimento dependente
     $(document).on("click", ".openPicker", function () {
@@ -1518,6 +1519,12 @@ $(document).ready(function () {
 
     // Bloqueia Dados do Solicitante
     $('#cpNumeroSolicitacao, #cpDataAbertura, #cpNomeSolicitante, #cpFuncaoSolicitante, #cpEmpresaSolicitante, #cpDepartamentoObraSolicitante, #cpEmailSolicitante, #cpEstadoSolicitante').prop('readonly', true).css('pointer-events', 'none');
+  }
+
+  // Reaplica cedo a jornada salva para evitar que os zooms fiquem visíveis apenas com o código
+  // após avançar atividade e recarregar o formulário.
+  if (typeof agendarReaplicacaoJornadaSalvaAoCarregar === "function") {
+    agendarReaplicacaoJornadaSalvaAoCarregar();
   }
 
   // Disparos atrasados para garantir que a tela carregou
@@ -2289,7 +2296,16 @@ function criarOuAtualizarCampoTextoParametrizado(campoId, texto) {
   var $campoOriginal = $("#" + campoId);
 
   if (!$campoOriginal.length) {
-    console.warn("[Jornada] Campo original nao encontrado para mirror:", campoId);
+    console.warn("[Jornada] Campo original não encontrado para mirror:", campoId);
+    return;
+  }
+
+  var valor = $.trim(String(texto == null ? "" : texto));
+
+  // Se não existe texto visual, não cria campo cinza vazio.
+  // Isso evita o caso da Função aparecer com uma caixa vazia abaixo.
+  if (!valor) {
+    removerCampoTextoParametrizado(campoId);
     return;
   }
 
@@ -2297,11 +2313,18 @@ function criarOuAtualizarCampoTextoParametrizado(campoId, texto) {
 
   var mirrorId = campoId + "_PARAM_JORNADA_TEXT";
   var $mirror = $("#" + mirrorId);
-  var valor = texto == null ? "" : String(texto);
-  var $select2 = $("#s2id_" + campoId);
+  var $containersSelect2 = $();
 
-  if (!$select2.length) {
-    $select2 = $campoOriginal.next(".select2-container");
+  // Select2 antigo do Fluig.
+  var $select2Antigo = $("#s2id_" + campoId);
+  if ($select2Antigo.length) {
+    $containersSelect2 = $containersSelect2.add($select2Antigo);
+  }
+
+  // Select2 novo, normalmente renderizado logo após o select original.
+  var $select2Novo = $campoOriginal.nextAll(".select2-container").first();
+  if ($select2Novo.length) {
+    $containersSelect2 = $containersSelect2.add($select2Novo);
   }
 
   if (!$mirror.length) {
@@ -2314,38 +2337,76 @@ function criarOuAtualizarCampoTextoParametrizado(campoId, texto) {
 
     $mirror.attr("data-campo-original", campoId);
 
-    if ($select2.length) {
-      $select2.hide();
-      $mirror.insertAfter($select2);
+    if ($containersSelect2.length) {
+      $mirror.insertAfter($containersSelect2.last());
     } else {
-      $campoOriginal.hide();
       $mirror.insertAfter($campoOriginal);
     }
   }
 
   $campoOriginal.attr("data-param-jornada-oculto", "S");
-  $mirror.val(valor || "").prop("readonly", true);
+  $mirror.val(valor).prop("readonly", true).show();
+
+  function ocultarCampoOriginalEZoom() {
+    var $containersAtualizados = $();
+
+    var $select2AntigoAtual = $("#s2id_" + campoId);
+    if ($select2AntigoAtual.length) {
+      $containersAtualizados = $containersAtualizados.add($select2AntigoAtual);
+    }
+
+    var $select2NovoAtual = $campoOriginal.nextAll(".select2-container").first();
+    if ($select2NovoAtual.length) {
+      $containersAtualizados = $containersAtualizados.add($select2NovoAtual);
+    }
+
+    $campoOriginal.hide();
+
+    if ($containersAtualizados.length) {
+      $containersAtualizados
+        .attr("data-param-jornada-container-oculto", "S")
+        .hide();
+    }
+  }
+
+  // Executa agora e depois novamente, porque o Fluig/Select2 pode redesenhar o componente após o change.
+  ocultarCampoOriginalEZoom();
+
+  setTimeout(ocultarCampoOriginalEZoom, 50);
+  setTimeout(ocultarCampoOriginalEZoom, 200);
+  setTimeout(ocultarCampoOriginalEZoom, 600);
 }
 
 function removerCampoTextoParametrizado(campoId) {
   var $campoOriginal = $("#" + campoId);
   var mirrorId = campoId + "_PARAM_JORNADA_TEXT";
+
   $("#" + mirrorId).remove();
 
-  if ($campoOriginal.length) {
-    var $select2 = $("#s2id_" + campoId);
+  if (!$campoOriginal.length) {
+    return;
+  }
 
-    if (!$select2.length) {
-      $select2 = $campoOriginal.next(".select2-container");
-    }
+  var $containersSelect2 = $();
 
-    if ($select2.length) {
-      $select2.show();
-    } else {
-      $campoOriginal.show();
-    }
+  var $select2Antigo = $("#s2id_" + campoId);
+  if ($select2Antigo.length) {
+    $containersSelect2 = $containersSelect2.add($select2Antigo);
+  }
 
-    $campoOriginal.removeAttr("data-param-jornada-oculto");
+  var $select2Novo = $campoOriginal.nextAll(".select2-container").first();
+  if ($select2Novo.length) {
+    $containersSelect2 = $containersSelect2.add($select2Novo);
+  }
+
+  $campoOriginal.removeAttr("data-param-jornada-oculto");
+
+  if ($containersSelect2.length) {
+    $containersSelect2
+      .removeAttr("data-param-jornada-container-oculto")
+      .show();
+  } else {
+    $campoOriginal.show();
   }
 }
 
@@ -2363,9 +2424,14 @@ function preencherCampoRealJornada(campoId, valor, options) {
   try {
     if ($campo.is("select")) {
       var encontrou = false;
+      var textoOpcao = $.trim(String(options.textoOpcao || ""));
 
       $campo.find("option").each(function () {
         if (String($(this).val()) === valorFinal || String($(this).text()) === valorFinal) {
+          if (textoOpcao) {
+            $(this).text(textoOpcao);
+          }
+
           $campo.val($(this).val());
           encontrou = true;
           return false;
@@ -2373,7 +2439,7 @@ function preencherCampoRealJornada(campoId, valor, options) {
       });
 
       if (!encontrou && valorFinal !== "") {
-        $campo.append(new Option(valorFinal, valorFinal, true, true));
+        $campo.append(new Option(textoOpcao || valorFinal, valorFinal, true, true));
         $campo.val(valorFinal);
       }
     } else {
@@ -2677,8 +2743,10 @@ function aplicarCampoZoomJornada(itemCampo) {
 
   // Mantém o valor técnico no campo real e o texto no mirror para evitar quebra de lógica do formulário.
   preencherCampoRealJornada(campoId, valorOriginal || textoVisual, {
-    silencioso: !!window.aplicandoParametrosJornada
+    silencioso: !!window.aplicandoParametrosJornada,
+    textoOpcao: textoVisual
   });
+
   criarOuAtualizarCampoTextoParametrizado(campoId, textoVisual);
 
   var hiddenFields = extra.hiddenFields || [];
@@ -2998,7 +3066,7 @@ function reaplicarJornadaSalvaAoCarregar() {
     return;
   }
 
-  if (window.reaplicandoJornadaSalvaAoCarregar) {
+  if (window.reaplicandoJornadaSalvaAoCarregar || window.jornadaSalvaReaplicadaAoCarregar) {
     return;
   }
 
@@ -3011,22 +3079,34 @@ function reaplicarJornadaSalvaAoCarregar() {
 
   carregarParametrosJornadaAdmissao(function () {
     try {
-      // Força o fluxo existente a tratar essa jornada como pendente de reaplicação.
-      $("#cpJornadaAdmissao").attr("data-jornada-pendente", jornadaAtual);
+      var $selectJornada = $("#cpJornadaAdmissao");
 
-      if (typeof popularJornadasAdmissaoPorColigada === "function") {
-        popularJornadasAdmissaoPorColigada(empresaAtual);
-      }
+      if ($selectJornada.length) {
+        var existeOpcao = false;
 
-      setTimeout(function () {
-        var jornadaDepois = $.trim(String($("#cpJornadaAdmissao").val() || jornadaAtual || ""));
+        $selectJornada.find("option").each(function () {
+          if (String($(this).val()) === String(jornadaAtual)) {
+            existeOpcao = true;
+            return false;
+          }
+        });
 
-        if (jornadaDepois) {
-          aplicarParametrosJornadaAdmissao(jornadaDepois);
+        if (!existeOpcao) {
+          $selectJornada.append($("<option>", {
+            value: jornadaAtual,
+            text: jornadaAtual
+          }));
         }
 
-        window.reaplicandoJornadaSalvaAoCarregar = false;
-      }, 500);
+        $selectJornada.val(jornadaAtual);
+      }
+
+      // Aplica diretamente a jornada salva, sem esperar o fluxo de popular o select.
+      // Isso reduz o tempo em que os zooms aparecem apenas com o código após avançar atividade.
+      aplicarParametrosJornadaAdmissao(jornadaAtual);
+
+      window.jornadaSalvaReaplicadaAoCarregar = true;
+      window.reaplicandoJornadaSalvaAoCarregar = false;
     } catch (e) {
       window.reaplicandoJornadaSalvaAoCarregar = false;
       console.warn("[Jornada][Reload] Erro ao reaplicar jornada salva.", e);
@@ -3034,10 +3114,29 @@ function reaplicarJornadaSalvaAoCarregar() {
   });
 }
 
+function agendarReaplicacaoJornadaSalvaAoCarregar() {
+  var tempos = [150, 700, 1500];
+
+  for (var i = 0; i < tempos.length; i++) {
+    (function (tempo) {
+      setTimeout(function () {
+        if (window.jornadaSalvaReaplicadaAoCarregar) {
+          return;
+        }
+
+        if (typeof reaplicarJornadaSalvaAoCarregar === "function") {
+          reaplicarJornadaSalvaAoCarregar();
+        }
+      }, tempo);
+    })(tempos[i]);
+  }
+}
+
 window.aplicarParametrosDaJornadaSelecionada = aplicarParametrosDaJornadaSelecionada;
 window.limparCamposJornadaAnterior = limparCamposJornadaAnterior;
 window.limparCampoAplicadoPorJornada = limparCampoAplicadoPorJornada;
 window.reaplicarJornadaSalvaAoCarregar = reaplicarJornadaSalvaAoCarregar;
+window.agendarReaplicacaoJornadaSalvaAoCarregar = agendarReaplicacaoJornadaSalvaAoCarregar;
 
 var Conta = function (indice) {
   var a = indice.name;
@@ -4018,7 +4117,69 @@ $(document).ready(function () {
     let dataAdmissao = event.target.value;
     $("#FUN_DATABASE").val(dataAdmissao);
     $("#FUN_ADMISSAO_EXTENSO_AD").val(dataAdmissaoPorExtenso(dataAdmissao));
+    if (dataAdmissao) {
+      if (!$("#cpDataOpcaoFGTS").val()) {
+        $("#cpDataOpcaoFGTS").val(dataAdmissao);
+      }
+
+      if (!$("#cpDataUltimoSaldoFGTS").val()) {
+        $("#cpDataUltimoSaldoFGTS").val(dataAdmissao);
+      }
+    }
+
+    if (!$("#cpValorSaldoFGTS").val()) {
+      $("#cpValorSaldoFGTS").val("0,00");
+    }
+
+    if (!$("#cpSaldoFGTSFinsRescisorios").val()) {
+      $("#cpSaldoFGTSFinsRescisorios").val("0,00");
+    }
   });
+
+  function somenteNumerosComplementar(valor) {
+    return String(valor || "").replace(/\D/g, "");
+  }
+
+  function preencherCodigoUsuarioPortalPonto() {
+    var cpf = somenteNumerosComplementar($("#cpfcnpj").val());
+
+    if (cpf && !$("#cpCodigoUsuarioPortalPonto").val()) {
+      $("#cpCodigoUsuarioPortalPonto").val(cpf);
+    }
+  }
+
+  function preencherNomeUsuarioPortalPonto() {
+    var nomeAtual = $.trim(String($("#cpNomeUsuarioPortalPonto").val() || ""));
+
+    if (nomeAtual) {
+      return;
+    }
+
+    var nome = $.trim(String($("#txtNomeColaborador").val() || $("#txtNomeSocial").val() || ""));
+
+    if (nome) {
+      $("#cpNomeUsuarioPortalPonto").val(nome);
+    }
+  }
+
+  $("#cpfcnpj").on("change blur", function () {
+    preencherCodigoUsuarioPortalPonto();
+  });
+
+  $("#txtNomeColaborador, #txtNomeSocial").on("change blur", function () {
+    preencherNomeUsuarioPortalPonto();
+  });
+
+  preencherCodigoUsuarioPortalPonto();
+  preencherNomeUsuarioPortalPonto();
+
+  if (!$("#cpValorSaldoFGTS").val()) {
+    $("#cpValorSaldoFGTS").val("0,00");
+  }
+
+  if (!$("#cpSaldoFGTSFinsRescisorios").val()) {
+    $("#cpSaldoFGTSFinsRescisorios").val("0,00");
+  }
 
   $('#FUN_HRMENSAIS').on('blur', function () {
     var horasMes = Number($(this).val());

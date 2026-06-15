@@ -51,15 +51,12 @@ function servicetask139(attempt, message) {
 
         var RM_CONTEXTO = "CODCOLIGADA=" + COLIGADA + ";CODSISTEMA=" + SISTEMA + ";CODUSUARIO=" + RM_USER;
 
-        var tamanhoCamisa = getStr("txtTamanhoCamisa");
-        var tamanhoCalcado = getStr("txtTamanhoCalcado");
-        
         var nomeEmergencia = getStr("txtNomeEmergencia");
         var parentescoEmergencia = getStr("txtParentescoEmergencia");
         var telefoneEmergencia = getStr("txtTelefoneEmergencia");
 
         // Se todos os campos estiverem vazios, não há necessidade de chamar o RM
-        if (tamanhoCamisa === "" && tamanhoCalcado === "" && nomeEmergencia === "" && parentescoEmergencia === "" && telefoneEmergencia === "") {
+        if (nomeEmergencia === "" && parentescoEmergencia === "" && telefoneEmergencia === "") {
             log.info("### NENHUM DADO COMPLEMENTAR PARA INTEGRAR. IGNORANDO TASK 139...");
             return true;
         }
@@ -69,36 +66,31 @@ function servicetask139(attempt, message) {
         // =========================================================================
         var xmlCompl = "";
         xmlCompl += "<FopFunc>\n";
-        
+
+        var possuiBlocoComplementar = false;
+
         // A tag PFunc é enviada apenas com as chaves para que o RM saiba qual funcionário atualizar
         xmlCompl += "  <PFunc>\n";
         xmlCompl += tag("CODCOLIGADA", COLIGADA);
         xmlCompl += tag("CHAPA", CHAPA);
         xmlCompl += "  </PFunc>\n";
 
-        // Tabela PFCOMPL (Tamanhos e Fardamento) - Ligação por Coligada e Chapa
-        if (tamanhoCamisa !== "" || tamanhoCalcado !== "") {
-            xmlCompl += "  <PFCOMPL>\n";
-            xmlCompl += tag("CODCOLIGADA", COLIGADA);
-            xmlCompl += tag("CHAPA", CHAPA);
-            
-            if (tamanhoCamisa !== "") xmlCompl += tag("TAMANHO_CAMISA", tamanhoCamisa);
-            if (tamanhoCalcado !== "") xmlCompl += tag("CALCADO", tamanhoCalcado);
-            
-            xmlCompl += "  </PFCOMPL>\n";
-        }
-
         // // Tabela VPCOMPL (Emergência) - Ligação EXCLUSIVA por CODPESSOA (conforme documentação do RM)
         // if (nomeEmergencia !== "" || parentescoEmergencia !== "" || telefoneEmergencia !== "") {
         //     xmlCompl += "  <VPCOMPL>\n";
         //     xmlCompl += tag("CODPESSOA", CODPESSOA); 
-            
+
         //     if (nomeEmergencia !== "") xmlCompl += tag("CONTATO_EMERGENCIA", nomeEmergencia);
         //     if (parentescoEmergencia !== "") xmlCompl += tag("GRAU_PAR_EMER", parentescoEmergencia);
         //     if (telefoneEmergencia !== "") xmlCompl += tag("TELEFONE_EMERGENCIA", telefoneEmergencia);
-            
+
         //     xmlCompl += "  </VPCOMPL>\n";
         // }
+
+        if (!possuiBlocoComplementar) {
+            log.info("### TASK 139 SEM BLOCOS COMPLEMENTARES ATIVOS. INTEGRAÇÃO IGNORADA.");
+            return true;
+        }
 
         xmlCompl += "</FopFunc>";
 
