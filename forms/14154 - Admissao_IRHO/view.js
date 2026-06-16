@@ -361,27 +361,95 @@ $(document).ready(function () {
 
   // Função para UP Front
   function toggleUpFrontTipo() {
-    if ($("#cpUpFront").val() == "sim") {
-      $("#divUpFrontTipo").show();
+    var isSim = $("#cpUpFront").val() == "sim";
+    var $radiosTipo = $("input[name='cpUpFrontTipo']");
+    var $campoInfo = $("#cpUpFrontInfoEventos");
+
+    // O tipo agora fica sempre visível
+    $("#divUpFrontTipo").show();
+
+    if (isSim) {
+      $radiosTipo
+        .prop("disabled", false)
+        .css("cursor", "pointer");
+
+      $("#divUpFrontInfoEventos").show();
+
+      $campoInfo
+        .prop("readonly", false)
+        .prop("disabled", false)
+        .css({
+          "pointer-events": "auto",
+          "background-color": "#fff",
+          "cursor": "auto"
+        });
     } else {
-      $("#divUpFrontTipo").hide();
-      // Limpa seleção apenas em modo de edição
       if (atividade == 0 || atividade == 1 || atividade == 41) {
-        $("input[name='cpUpFrontTipo']").prop("checked", false);
+        $radiosTipo.prop("checked", false);
+        $campoInfo.val("");
       }
+
+      $radiosTipo
+        .prop("disabled", true)
+        .css("cursor", "not-allowed");
+
+      $("#divUpFrontInfoEventos").hide();
+
+      $campoInfo
+        .prop("readonly", true)
+        .prop("disabled", false)
+        .css({
+          "pointer-events": "none",
+          "background-color": "#f3f4f6",
+          "cursor": "not-allowed"
+        });
     }
   }
 
   // Função para Hiring Bonus
   function toggleHiringBonusTipo() {
-    if ($("#cpHiringBonus").val() == "sim") {
-      $("#divHiringBonusTipo").show();
+    var isSim = $("#cpHiringBonus").val() == "sim";
+    var $radiosTipo = $("input[name='cpHiringBonusTipo']");
+    var $campoInfo = $("#cpHiringBonusInfoEventos");
+
+    // O tipo agora fica sempre visível
+    $("#divHiringBonusTipo").show();
+
+    if (isSim) {
+      $radiosTipo
+        .prop("disabled", false)
+        .css("cursor", "pointer");
+
+      $("#divHiringBonusInfoEventos").show();
+
+      $campoInfo
+        .prop("readonly", false)
+        .prop("disabled", false)
+        .css({
+          "pointer-events": "auto",
+          "background-color": "#fff",
+          "cursor": "auto"
+        });
     } else {
-      $("#divHiringBonusTipo").hide();
-      // Limpa seleção apenas em modo de edição
       if (atividade == 0 || atividade == 1 || atividade == 41) {
-        $("input[name='cpHiringBonusTipo']").prop("checked", false);
+        $radiosTipo.prop("checked", false);
+        $campoInfo.val("");
       }
+
+      $radiosTipo
+        .prop("disabled", true)
+        .css("cursor", "not-allowed");
+
+      $("#divHiringBonusInfoEventos").hide();
+
+      $campoInfo
+        .prop("readonly", true)
+        .prop("disabled", false)
+        .css({
+          "pointer-events": "none",
+          "background-color": "#f3f4f6",
+          "cursor": "not-allowed"
+        });
     }
   }
 
@@ -1309,6 +1377,188 @@ $(document).ready(function () {
     $container.html(html);
   }
 
+  function normalizarPlanoBeneficio(valor) {
+    return String(valor || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function preencherSelectPorValorOuTexto($campo, valor) {
+    var valorPlano = String(valor || "").trim();
+
+    if (!valorPlano || !$campo.length) {
+      return;
+    }
+
+    $campo.val(valorPlano);
+
+    if ($campo.val()) {
+      return;
+    }
+
+    var valorNormalizado = normalizarPlanoBeneficio(valorPlano);
+
+    $campo.find("option").each(function () {
+      var $option = $(this);
+      var textoNormalizado = normalizarPlanoBeneficio($option.text());
+      var valueNormalizado = normalizarPlanoBeneficio($option.val());
+
+      if (textoNormalizado === valorNormalizado || valueNormalizado === valorNormalizado) {
+        $campo.val($option.val());
+        return false;
+      }
+    });
+  }
+
+  function bloquearCampoPlanoCandidato($campo) {
+    if (!$campo.length) {
+      return;
+    }
+
+    $campo
+      .attr("readonly", "readonly")
+      .css({
+        "background-color": "#F0F2F2",
+        "pointer-events": "none"
+      });
+
+    $campo.closest(".form-group").find(".help-block.plano-candidato-lock").remove();
+    $campo.closest(".form-group").append(
+      '<span class="help-block plano-candidato-lock">Preenchido automaticamente pela escolha do candidato.</span>'
+    );
+  }
+
+  function aplicarPlanosCandidatoNoPainelBeneficios() {
+    var opcaoSaude = ($("#TxtIncPlanoSaudeOpcao").val() || "").trim();
+    var planoSaude = ($("#TxtIncPlanoSaudeTipoCod").val() || $("#TxtIncPlanoSaudeTipo").val() || "").trim();
+
+    var opcaoOdonto = ($("#TxtIncPlanoOdontoOpcao").val() || "").trim();
+    var planoOdonto = ($("#TxtIncPlanoOdontoTipoCod").val() || $("#TxtIncPlanoOdontoTipo").val() || "").trim();
+
+    var candidatoOptouSaude = opcaoSaude.indexOf("Opto") !== -1;
+    var candidatoOptouOdonto = opcaoOdonto.toLowerCase() === "sim";
+
+    if (candidatoOptouSaude && planoSaude) {
+      var $campoPlanoSaudeRH = $("#cpPlanoAM");
+
+      if ($campoPlanoSaudeRH.is("select")) {
+        preencherSelectPorValorOuTexto($campoPlanoSaudeRH, planoSaude);
+      } else {
+        $campoPlanoSaudeRH.val($("#TxtIncPlanoSaudeTipo").val());
+      }
+
+      bloquearCampoPlanoCandidato($campoPlanoSaudeRH);
+    }
+
+    if (candidatoOptouOdonto && planoOdonto) {
+      var $campoPlanoOdontoRH = $("#cpPlanoAO");
+
+      if ($campoPlanoOdontoRH.is("select")) {
+        preencherSelectPorValorOuTexto($campoPlanoOdontoRH, planoOdonto);
+      } else {
+        $campoPlanoOdontoRH.val($("#TxtIncPlanoOdontoTipo").val());
+      }
+
+      bloquearCampoPlanoCandidato($campoPlanoOdontoRH);
+    }
+  }
+
+  function normalizarJornadaContratoEstagio(valor) {
+    return String(valor || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function jornadaPermiteContratoEstagioAprendiz() {
+    var jornada = normalizarJornadaContratoEstagio($("#cpJornadaAdmissao").val());
+
+    return (
+      jornada === "estagio" ||
+      jornada === "estagiario" ||
+      jornada === "jovem aprendiz"
+    );
+  }
+
+  function aplicarBloqueioContratoEstagioAprendizRH() {
+    var permiteEditar = jornadaPermiteContratoEstagioAprendiz();
+
+    var $blocos = $(".bloco-estagio-aprendiz-rh");
+    var $campos = $blocos.find("input, select, textarea, button");
+
+    if (!$blocos.length) {
+      return;
+    }
+
+    $("#tituloContratoEstagioAprendizRH")
+      .find(".help-block.bloqueio-estagio-aprendiz")
+      .remove();
+
+    if (permiteEditar) {
+      $campos.each(function () {
+        var $campo = $(this);
+
+        if ($campo.is("[type='hidden']")) {
+          return true;
+        }
+
+        $campo
+          .removeAttr("readonly")
+          .prop("disabled", false)
+          .css({
+            "pointer-events": "auto",
+            "background-color": "#ffffff",
+            "cursor": "auto"
+          });
+
+        $campo.closest(".input-group").find(".input-group-addon").css({
+          "pointer-events": "auto",
+          "background-color": "",
+          "cursor": "auto"
+        });
+      });
+
+      return;
+    }
+
+    $campos.each(function () {
+      var $campo = $(this);
+
+      if ($campo.is("[type='hidden']")) {
+        return true;
+      }
+
+      if ($campo.is("select, button")) {
+        $campo.prop("disabled", true).attr("disabled", "disabled");
+      } else {
+        $campo.prop("readonly", true).attr("readonly", "readonly");
+      }
+
+      $campo.css({
+        "pointer-events": "none",
+        "background-color": "#f3f4f6",
+        "cursor": "not-allowed"
+      });
+
+      $campo.closest(".input-group").find(".input-group-addon").css({
+        "pointer-events": "none",
+        "background-color": "#f3f4f6",
+        "cursor": "not-allowed"
+      });
+    });
+
+    $("#tituloContratoEstagioAprendizRH .col-md-12").append(
+      '<span class="help-block bloqueio-estagio-aprendiz" style="margin-top: 4px; color: #777;">' +
+      'Campos bloqueados. Liberado apenas para jornada Estagiário ou Jovem Aprendiz.' +
+      '</span>'
+    );
+  }
+
   function renderizarResumoDadosMonitor(resumo, persistencia) {
     var $container = $("#monCandResumoDados");
 
@@ -1652,6 +1902,15 @@ $(document).ready(function () {
       console.error("Erro ao processar os dados do ATS:", e);
     }
   }
+
+  aplicarPlanosCandidatoNoPainelBeneficios();
+  aplicarBloqueioContratoEstagioAprendizRH();
+
+  $("#cpJornadaAdmissao")
+    .off("change.bloqueioEstagioAprendiz")
+    .on("change.bloqueioEstagioAprendiz", function () {
+      aplicarBloqueioContratoEstagioAprendizRH();
+    });
 });
 
 function obterValoresDatasetParamJornada(dataset) {
