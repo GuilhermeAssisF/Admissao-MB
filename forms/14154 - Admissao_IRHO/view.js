@@ -5144,16 +5144,19 @@ $(document).ready(function () {
 $(document).ready(function () {
   var atividadeAtual = window.parent.ECM.workflowView ? window.parent.ECM.workflowView.sequence : 0;
 
-  // Dispara na atividade do Kit (135) E nas atividades iniciais (0, 4, 41)
+  // Valida a liberação do botão nas atividades em que o GED pode ser preparado.
+  // Não cria a pasta automaticamente; apenas libera o botão quando os campos obrigatórios estiverem preenchidos.
   if (atividadeAtual == 0 || atividadeAtual == 4 || atividadeAtual == 41 || atividadeAtual == 135) {
 
-    // Tenta criar logo que a tela abre (útil se estiver a reabrir a ficha)
-    setTimeout(gerenciarPastaCandidato, 2000);
+    setTimeout(function () {
+      validarLiberacaoGED();
+    }, 1000);
 
-    // Se estiver na etapa inicial, cria/atualiza as pastas assim que o RH preencher o CPF
-    $("#cpfcnpj").on("blur change", function () {
-      setTimeout(gerenciarPastaCandidato, 1000);
-    });
+    $(document)
+      .off("change.validacaoGed blur.validacaoGed keyup.validacaoGed", "input, select, textarea")
+      .on("change.validacaoGed blur.validacaoGed keyup.validacaoGed", "input, select, textarea", function () {
+        validarLiberacaoGED();
+      });
   }
 });
 
@@ -5292,12 +5295,135 @@ function criarBalaoResumoATS(dados) {
 
   $('body').append(html);
 }
+
+function deveValidarObrigatoriedadePrimeiroLink(numState, nextState) {
+  var atividadeAtual = String(numState || (typeof getWKNumState !== "undefined" ? getWKNumState() : ""));
+
+  // Etapas em que LGPD e Carta Proposta são preparados no primeiro link
+  var atividadesObrigatorias = {
+    "0": true,
+    "1": true,
+    "4": true,
+    "41": true
+  };
+
+  // Se o Fluig informar nextState igual ao estado atual, entende como salvar sem avançar
+  var proximaAtividade = nextState === undefined || nextState === null ? "" : String(nextState);
+  var salvandoSemAvancar = proximaAtividade && proximaAtividade === atividadeAtual;
+
+  return !!atividadesObrigatorias[atividadeAtual] && !salvandoSemAvancar;
+}
+
+function obterIdDocumentoPrimeiroLink(prefix) {
+  var idCampoDinamico = $.trim($("#id_pdf_" + prefix).val() || "");
+
+  if (idCampoDinamico) {
+    return idCampoDinamico;
+  }
+
+  var jsonStr = $("#json_ids_primeiro_link").val() || "{}";
+  var obj = {};
+
+  try {
+    obj = JSON.parse(jsonStr);
+  } catch (e) {
+    obj = {};
+  }
+
+  var registro = obj[prefix];
+
+  if (!registro) {
+    return "";
+  }
+
+  if (typeof registro === "object") {
+    return $.trim(String(registro.id || ""));
+  }
+
+  return $.trim(String(registro || ""));
+}
+
+function obterPendenciasPrimeiroLinkObrigatorio() {
+  var pendentes = [];
+
+  if (!obterIdDocumentoPrimeiroLink("kit_lgpd_admissao")) {
+    pendentes.push("Termo LGPD");
+  }
+
+  if (!obterIdDocumentoPrimeiroLink("kit_proposta_admissao")) {
+    pendentes.push("Carta Proposta");
+  }
+
+  return pendentes;
+}
+
+function destacarPendenciasPrimeiroLinkObrigatorio(pendentes) {
+  $("#container_lgpd, #container_carta_proposta").css({
+    "border": "",
+    "border-radius": "",
+    "padding": "",
+    "background-color": ""
+  });
+
+  if (pendentes.indexOf("Termo LGPD") > -1) {
+    $("#container_lgpd").css({
+      "border": "1px solid #d9534f",
+      "border-radius": "6px",
+      "padding": "10px",
+      "background-color": "#fff5f5"
+    });
+  }
+
+  if (pendentes.indexOf("Carta Proposta") > -1) {
+    $("#container_carta_proposta").css({
+      "border": "1px solid #d9534f",
+      "border-radius": "6px",
+      "padding": "10px",
+      "background-color": "#fff5f5"
+    });
+  }
+}
+
+function validarPrimeiroLinkObrigatorioAntesAvancar(numState, nextState) {
+  if (!deveValidarObrigatoriedadePrimeiroLink(numState, nextState)) {
+    return true;
+  }
+
+  var pendentes = obterPendenciasPrimeiroLinkObrigatorio();
+
+  if (!pendentes.length) {
+    destacarPendenciasPrimeiroLinkObrigatorio([]);
+    return true;
+  }
+
+  destacarPendenciasPrimeiroLinkObrigatorio(pendentes);
+
+  FLUIGC.toast({
+    title: "Atenção:",
+    message: "Para avançar, é obrigatório vincular: " + pendentes.join(" e ") + ".",
+    type: "warning"
+  });
+
+  if ($("#panelDocumentosAssinatura").length) {
+    $("html, body").animate({
+      scrollTop: $("#panelDocumentosAssinatura").offset().top - 80
+    }, 400);
+  }
+
+  return false;
+}
+
 // ========================================================================
 // EVENTO NATIVO FLUIG: Dispara imediatamente antes de salvar ou avançar
 // ========================================================================
 var beforeSendValidate = function (numState, nextState) {
+  if (!validarPrimeiroLinkObrigatorioAntesAvancar(numState, nextState)) {
+    return false;
+  }
+
   // Libera TODOS os campos bloqueados 1 milissegundo antes de enviar para o Fluig salvar tudo
   $("select, input, textarea").prop("disabled", false).prop("readonly", false);
+
   return true;
 }
 
@@ -5344,63 +5470,495 @@ function estadoZoomAssinatura(idCampo, bloquear) {
   }
 }
 
+function obterValorObrigatorioGED(idCampo) {
+  var $campo = $("#" + idCampo);
+
+  if (!$campo.length) {
+    return "";
+  }
+
+  // Zoom/select2 do Fluig pode ter valor no próprio campo, no hidden ou no texto renderizado.
+  var valor = $.trim(String($campo.val() || ""));
+
+  if (valor) {
+    return valor;
+  }
+
+  var textoSelect2 = "";
+
+  if ($("#s2id_" + idCampo).length) {
+    textoSelect2 = $.trim($("#s2id_" + idCampo).find(".select2-chosen").text() || "");
+  }
+
+  if (
+    textoSelect2 &&
+    textoSelect2 !== "Selecione" &&
+    textoSelect2 !== "Selecione..." &&
+    textoSelect2 !== "-"
+  ) {
+    return textoSelect2;
+  }
+
+  return "";
+}
+
+function campoObrigatorioGEDPreenchido(item) {
+  if (typeof item === "string") {
+    return obterValorObrigatorioGED(item) !== "";
+  }
+
+  if (item && item.tipo === "qualquer") {
+    for (var i = 0; i < item.campos.length; i++) {
+      if (obterValorObrigatorioGED(item.campos[i]) !== "") {
+        return true;
+      }
+    }
+  }
+
+  if (item && item.tipo === "todos") {
+    for (var j = 0; j < item.campos.length; j++) {
+      if (obterValorObrigatorioGED(item.campos[j]) === "") {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+function obterCamposObrigatoriosParaLiberarGED() {
+  return [
+    // Dados do Colaborador
+    { label: "CPF", campos: ["cpfcnpj", "cpfcnpjValue"], tipo: "qualquer" },
+    "txtNomeColaborador",
+    "dtDataNascColaborador",
+
+    // Contato
+    "txtNomeSocial",
+    "txtEmail",
+    "txtCELULAR",
+    "txtTELEFONE",
+
+    // Dados da Contratação
+    { label: "Empresa - Filial", campos: ["IDDESC_EMPRESAFILIAL", "FUN_EMPRESA", "FUN_FILIAL"], tipo: "qualquer" },
+    "cpJornadaAdmissao",
+    "cpEmailCandidato",
+    "FUN_SECAO_IDDESC_AD",
+    "FUN_TPADMISSAO_IDDESC_AD",
+    "FUN_ADMISSAO",
+    "FUN_IDDESCFUN",
+    "zoomTipoFuncionario",
+    "FUN_IDDESCTURN",
+    "selectTemRemuneracao",
+    "FUN_VLRSALARIO",
+
+    // Contrato de Trabalho
+    "cpContratoPrazo"
+  ];
+}
+
+function obterCamposPendentesParaLiberarGED() {
+  var campos = obterCamposObrigatoriosParaLiberarGED();
+  var pendentes = [];
+
+  var labels = {
+    cpfcnpj: "CPF",
+    cpfcnpjValue: "CPF",
+    txtNomeColaborador: "Nome Completo",
+    dtDataNascColaborador: "Data de Nascimento",
+    txtNomeSocial: "Nome Social",
+    txtEmail: "E-mail",
+    txtCELULAR: "Celular 1",
+    txtTELEFONE: "Telefone 2",
+    IDDESC_EMPRESAFILIAL: "Empresa - Filial",
+    FUN_EMPRESA: "Empresa - Filial",
+    FUN_FILIAL: "Empresa - Filial",
+    cpJornadaAdmissao: "Jornada de Admissão",
+    cpEmailCandidato: "E-mail Candidato",
+    FUN_SECAO_IDDESC_AD: "Seção",
+    FUN_TPADMISSAO_IDDESC_AD: "Tipo de Admissão",
+    FUN_ADMISSAO: "Data de Admissão",
+    FUN_IDDESCFUN: "Função",
+    zoomTipoFuncionario: "Tipo Funcionário",
+    FUN_IDDESCTURN: "Turno de Trabalho",
+    selectTemRemuneracao: "Remuneração",
+    FUN_VLRSALARIO: "Salário",
+    cpContratoPrazo: "Contrato com Prazo"
+  };
+
+  for (var i = 0; i < campos.length; i++) {
+    var item = campos[i];
+
+    if (!campoObrigatorioGEDPreenchido(item)) {
+      if (typeof item === "string") {
+        pendentes.push(labels[item] || item);
+      } else {
+        pendentes.push(item.label || item.campos[0]);
+      }
+    }
+  }
+
+  return pendentes;
+}
+
+function dadosMinimosParaCriarPastaGEDPreenchidos() {
+  return obterCamposPendentesParaLiberarGED().length === 0;
+}
+
+function normalizarTextoChaveGed(valor) {
+  var texto = String(valor || "").trim();
+
+  try {
+    texto = texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  } catch (e) { }
+
+  return texto
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function obterCpfAtualChaveGed() {
+  return String($("#cpfcnpj").val() || $("#cpfcnpjValue").val() || "").replace(/\D/g, "");
+}
+
+function obterJornadaAtualChaveGed() {
+  var $jornada = $("#cpJornadaAdmissao");
+
+  if (!$jornada.length) {
+    return "";
+  }
+
+  var textoSelecionado = $.trim($jornada.find("option:selected").text() || "");
+  var valorSelecionado = $.trim($jornada.val() || "");
+
+  var jornada = textoSelecionado && textoSelecionado !== valorSelecionado
+    ? textoSelecionado
+    : valorSelecionado;
+
+  return normalizarTextoChaveGed(jornada);
+}
+
+function registrarChavesAtuaisDaPastaGed() {
+  $("#cpCpfPastaGedRef").val(obterCpfAtualChaveGed());
+  $("#cpJornadaPastaGedRef").val(obterJornadaAtualChaveGed());
+}
+
 // Lógica Principal de Liberação (Atualizada para Flags Dinâmicas)
 function validarLiberacaoGED() {
-  var nome = $("#txtNomeColaborador").val();
-  var cpf = $("#cpfcnpj").val() || $("#cpfcnpjValue").val();
   var pastaCriada = $("#cpIdPastaGedCandidato").val() !== "";
+  var tudoPreenchido = dadosMinimosParaCriarPastaGEDPreenchidos();
+  var pendentes = obterCamposPendentesParaLiberarGED();
 
   // 1. REGRA DO BOTÃO DA PASTA
   if (pastaCriada) {
     transformarBotaoGedAberto($("#cpIdPastaGedCandidato").val());
-  } else if (nome && String(nome).trim() !== "" && cpf && String(cpf).trim() !== "") {
-    $("#btnGedCandidato").prop("disabled", false);
+  } else if (tudoPreenchido) {
+    $("#btnGedCandidato")
+      .prop("disabled", false)
+      .attr("title", "Criar/Vincular Pasta do Candidato");
   } else {
-    $("#btnGedCandidato").prop("disabled", true);
+    $("#btnGedCandidato")
+      .prop("disabled", true)
+      .attr("title", "Preencha os campos obrigatórios iniciais para liberar a criação da pasta.");
   }
 
   // 2. REGRA DE DESBLOQUEIO DAS FLAGS E UPLOADS
-  var camposObrigatorios = [
-    "txtNomeColaborador", "cpfcnpj",
-    "txtEmail", "txtCELULAR",
-    "FUN_EMPRESA", "cpJornadaAdmissao",
-    "FUN_IDDESCFUN", "FUN_VLRSALARIO", "cpTipoContrato"
-  ];
-
-  var tudoPreenchido = true;
-  for (var i = 0; i < camposObrigatorios.length; i++) {
-    var valor = $("#" + camposObrigatorios[i]).val();
-    if (!valor || String(valor).trim() === "") {
-      tudoPreenchido = false;
-      break;
-    }
-  }
-
-  // Se tudo estiver preenchido e a pasta existir, liberta o Kit Dinâmico
   if (tudoPreenchido && pastaCriada) {
-    // CHAMA O NOVO MOTOR DE TRAVAS DAS FLAGS
     if (typeof aplicarTravasDocumentosKit === "function") {
       aplicarTravasDocumentosKit();
     }
+
     $("#aviso_bloqueio_ged").hide();
   } else {
-    // Caso contrário, garante que tudo continua bloqueado
     if (typeof aplicarTravasDocumentosKit === "function") {
       aplicarTravasDocumentosKit();
     }
 
     $("#aviso_bloqueio_ged").show();
-    if (!pastaCriada && tudoPreenchido) {
-      $("#aviso_bloqueio_ged").html('<span class="fluigicon fluigicon-warning-sign icon-sm"></span> <strong>Ação Necessária:</strong> Clique no botão para criar a pasta do candidato e liberar os modelos de documento.');
-    } else {
-      $("#aviso_bloqueio_ged").html('<span class="fluigicon fluigicon-warning-sign icon-sm"></span> <strong>Ação Necessária:</strong> Preencha todos os campos obrigatórios e crie a pasta para liberar a geração de documentos.');
+
+    if (!tudoPreenchido) {
+      $("#aviso_bloqueio_ged").html(
+        '<span class="fluigicon fluigicon-warning-sign icon-sm"></span> ' +
+        '<strong>Ação Necessária:</strong> Preencha os campos obrigatórios iniciais para liberar a criação da pasta. ' +
+        '<br><small><strong>Pendentes:</strong> ' + pendentes.join(", ") + '</small>'
+      );
+    } else if (!pastaCriada) {
+      $("#aviso_bloqueio_ged").html(
+        '<span class="fluigicon fluigicon-warning-sign icon-sm"></span> ' +
+        '<strong>Ação Necessária:</strong> Clique no botão para criar a pasta do candidato e liberar os modelos de documento.'
+      );
     }
   }
 }
 
+function consultarOuCriarPastaGed(nomePasta, idPastaPai, callback) {
+  var c1 = DatasetFactory.createConstraint("parentDocumentId", idPastaPai, idPastaPai, ConstraintType.MUST);
+  var c2 = DatasetFactory.createConstraint("documentDescription", nomePasta, nomePasta, ConstraintType.MUST);
+  var c3 = DatasetFactory.createConstraint("deleted", "false", "false", ConstraintType.MUST);
+
+  DatasetFactory.getDataset("document", null, [c1, c2, c3], null, {
+    success: function (ds) {
+      if (ds && ds.values && ds.values.length > 0) {
+        var idPastaExistente = ds.values[0]["documentPK.documentId"];
+        callback(idPastaExistente, false);
+        return;
+      }
+
+      $.ajax({
+        url: "/api/public/ecm/document/createFolder",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+          description: nomePasta,
+          parentId: idPastaPai
+        }),
+        success: function (res) {
+          var idPastaCriada = res.content.id;
+          callback(idPastaCriada, true);
+        },
+        error: function () {
+          FLUIGC.toast({
+            title: "Erro:",
+            message: "Falha ao criar a pasta '" + nomePasta + "' no GED.",
+            type: "danger"
+          });
+
+          $("#btnGedCandidato")
+            .prop("disabled", false)
+            .html('<i class="flaticon flaticon-folder-create icon-sm"></i> Criar/Vincular Pasta do Candidato');
+        }
+      });
+    },
+    error: function () {
+      FLUIGC.toast({
+        title: "Erro:",
+        message: "Falha ao consultar a pasta '" + nomePasta + "' no GED.",
+        type: "danger"
+      });
+
+      $("#btnGedCandidato")
+        .prop("disabled", false)
+        .html('<i class="flaticon flaticon-folder-create icon-sm"></i> Criar/Vincular Pasta do Candidato');
+    }
+  });
+}
+
+function obterNomeJornadaParaPastaGed() {
+  var $jornada = $("#cpJornadaAdmissao");
+
+  if (!$jornada.length) {
+    return "";
+  }
+
+  var textoSelecionado = $.trim($jornada.find("option:selected").text() || "");
+  var valorSelecionado = $.trim($jornada.val() || "");
+
+  var nomeJornada = textoSelecionado && textoSelecionado !== valorSelecionado
+    ? textoSelecionado
+    : valorSelecionado;
+
+  nomeJornada = $.trim(nomeJornada || "");
+
+  // Remove valores vazios ou placeholder
+  if (
+    !nomeJornada ||
+    nomeJornada === "-" ||
+    nomeJornada.toLowerCase() === "selecione" ||
+    nomeJornada.toLowerCase() === "selecione..."
+  ) {
+    return "";
+  }
+
+  return nomeJornada;
+}
+
+function obterNomeJornadaParaPastaGed() {
+  var $jornada = $("#cpJornadaAdmissao");
+
+  if (!$jornada.length) {
+    return "";
+  }
+
+  var textoSelecionado = $.trim($jornada.find("option:selected").text() || "");
+  var valorSelecionado = $.trim($jornada.val() || "");
+
+  var nomeJornada = textoSelecionado && textoSelecionado !== valorSelecionado
+    ? textoSelecionado
+    : valorSelecionado;
+
+  nomeJornada = $.trim(nomeJornada || "");
+
+  if (
+    !nomeJornada ||
+    nomeJornada === "-" ||
+    nomeJornada.toLowerCase() === "selecione" ||
+    nomeJornada.toLowerCase() === "selecione..."
+  ) {
+    return "";
+  }
+
+  return nomeJornada;
+}
+
+function consultarOuCriarPastaGed(nomePasta, idPastaPai, callback) {
+  var c1 = DatasetFactory.createConstraint("parentDocumentId", idPastaPai, idPastaPai, ConstraintType.MUST);
+  var c2 = DatasetFactory.createConstraint("documentDescription", nomePasta, nomePasta, ConstraintType.MUST);
+  var c3 = DatasetFactory.createConstraint("deleted", "false", "false", ConstraintType.MUST);
+
+  DatasetFactory.getDataset("document", null, [c1, c2, c3], null, {
+    success: function (ds) {
+      if (ds && ds.values && ds.values.length > 0) {
+        var idPastaExistente = ds.values[0]["documentPK.documentId"];
+        callback(idPastaExistente, false);
+        return;
+      }
+
+      $.ajax({
+        url: "/api/public/ecm/document/createFolder",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+          description: nomePasta,
+          parentId: idPastaPai
+        }),
+        success: function (res) {
+          var idPastaCriada = res.content.id;
+          callback(idPastaCriada, true);
+        },
+        error: function () {
+          FLUIGC.toast({
+            title: "Erro:",
+            message: "Falha ao criar a pasta '" + nomePasta + "' no GED.",
+            type: "danger"
+          });
+
+          $("#btnGedCandidato")
+            .prop("disabled", false)
+            .html('<i class="flaticon flaticon-folder-create icon-sm"></i> Criar/Vincular Pasta do Candidato');
+        }
+      });
+    },
+    error: function () {
+      FLUIGC.toast({
+        title: "Erro:",
+        message: "Falha ao consultar a pasta '" + nomePasta + "' no GED.",
+        type: "danger"
+      });
+
+      $("#btnGedCandidato")
+        .prop("disabled", false)
+        .html('<i class="flaticon flaticon-folder-create icon-sm"></i> Criar/Vincular Pasta do Candidato');
+    }
+  });
+}
+
+function criarSubpastasCandidatoGed(idPrincipal) {
+  Promise.all([
+    criarSubpastaAjax("1. Documentos do Candidato", idPrincipal),
+    criarSubpastaAjax("2. Documentos Gerados", idPrincipal),
+    criarSubpastaAjax("3. Documentos Assinados", idPrincipal)
+  ]).then(function (resultados) {
+    $("#cpIdPastaDocsCandidato").val(resultados[0]);
+    $("#cpIdPastaDocsGerados").val(resultados[1]);
+    $("#cpIdPastaDocsAssinados").val(resultados[2]);
+
+    FLUIGC.toast({
+      title: "Sucesso:",
+      message: "Pasta criada e vinculada!",
+      type: "success"
+    });
+
+    transformarBotaoGedAberto(idPrincipal);
+    validarLiberacaoGED();
+  }).catch(function () {
+    FLUIGC.toast({
+      title: "Erro:",
+      message: "Falha ao criar as subpastas do candidato no GED.",
+      type: "danger"
+    });
+
+    $("#btnGedCandidato")
+      .prop("disabled", false)
+      .html('<i class="flaticon flaticon-folder-create icon-sm"></i> Criar/Vincular Pasta do Candidato');
+  });
+}
+
+function consultarOuCriarPastaGed(nomePasta, idPastaPai, callback) {
+  var c1 = DatasetFactory.createConstraint("parentDocumentId", idPastaPai, idPastaPai, ConstraintType.MUST);
+  var c2 = DatasetFactory.createConstraint("documentDescription", nomePasta, nomePasta, ConstraintType.MUST);
+  var c3 = DatasetFactory.createConstraint("deleted", "false", "false", ConstraintType.MUST);
+
+  DatasetFactory.getDataset("document", null, [c1, c2, c3], null, {
+    success: function (ds) {
+      if (ds && ds.values && ds.values.length > 0) {
+        var idPastaExistente = ds.values[0]["documentPK.documentId"];
+        callback(idPastaExistente, false);
+        return;
+      }
+
+      $.ajax({
+        url: "/api/public/ecm/document/createFolder",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+          description: nomePasta,
+          parentId: idPastaPai
+        }),
+        success: function (res) {
+          var idPastaCriada = res.content.id;
+          callback(idPastaCriada, true);
+        },
+        error: function () {
+          FLUIGC.toast({
+            title: "Erro:",
+            message: "Falha ao criar a pasta '" + nomePasta + "' no GED.",
+            type: "danger"
+          });
+
+          $("#btnGedCandidato")
+            .prop("disabled", false)
+            .html('<i class="flaticon flaticon-folder-create icon-sm"></i> Criar/Vincular Pasta do Candidato');
+        }
+      });
+    },
+    error: function () {
+      FLUIGC.toast({
+        title: "Erro:",
+        message: "Falha ao consultar a pasta '" + nomePasta + "' no GED.",
+        type: "danger"
+      });
+
+      $("#btnGedCandidato")
+        .prop("disabled", false)
+        .html('<i class="flaticon flaticon-folder-create icon-sm"></i> Criar/Vincular Pasta do Candidato');
+    }
+  });
+}
+
 function gerenciarPastaCandidato() {
-  // 1. Busca o ID da pasta raiz nas configurações globais
-  var pastaRaiz = 3479; // Valor padrão de fallback
+  if (
+    typeof dadosMinimosParaCriarPastaGEDPreenchidos === "function" &&
+    !dadosMinimosParaCriarPastaGEDPreenchidos()
+  ) {
+    var pendentes = typeof obterCamposPendentesParaLiberarGED === "function"
+      ? obterCamposPendentesParaLiberarGED()
+      : [];
+
+    FLUIGC.toast({
+      title: "Atenção:",
+      message: "Preencha os campos obrigatórios iniciais antes de criar a pasta: " + pendentes.join(", "),
+      type: "warning"
+    });
+
+    validarLiberacaoGED();
+    return;
+  }
+
+  var pastaRaiz = 3479;
+
   var dsConfig = DatasetFactory.getDataset("Form_Configuracoes_Admissao", null, [
     DatasetFactory.createConstraint("metadata#active", "true", "true", ConstraintType.MUST)
   ], null);
@@ -5409,69 +5967,86 @@ function gerenciarPastaCandidato() {
     pastaRaiz = parseInt(dsConfig.values[0].ID_PASTA_RAIZ_CANDIDATOS || "3479");
   }
 
-  var nomeCand = $("#txtNomeColaborador").val();
+  var nomeCand = $.trim($("#txtNomeColaborador").val() || "");
   var cpfCand = $("#cpfcnpj").val() || $("#cpfcnpjValue").val();
+  var cpfLimpo = String(cpfCand || "").replace(/\D/g, "");
 
-  var cpfLimpo = String(cpfCand).replace(/\D/g, '');
-  var nomePastaDestino = nomeCand.trim() + " - " + cpfLimpo;
+  var nomeJornada = obterNomeJornadaParaPastaGed();
+  var nomePastaDestino = nomeCand + " - " + cpfLimpo;
 
-  // Feedback visual
-  $("#btnGedCandidato").prop("disabled", true).html('<i class="flaticon flaticon-refresh icon-spin"></i> Processando...');
+  if (!nomeJornada) {
+    FLUIGC.toast({
+      title: "Atenção:",
+      message: "Selecione a Jornada de Admissão antes de criar a pasta do candidato.",
+      type: "warning"
+    });
 
-  // 1. Consulta o Dataset "document" para ver se a pasta já existe
-  var c1 = DatasetFactory.createConstraint("parentDocumentId", pastaRaiz, pastaRaiz, ConstraintType.MUST);
-  var c2 = DatasetFactory.createConstraint("documentDescription", nomePastaDestino, nomePastaDestino, ConstraintType.MUST);
-  var c3 = DatasetFactory.createConstraint("deleted", "false", "false", ConstraintType.MUST);
+    validarLiberacaoGED();
+    return;
+  }
 
-  DatasetFactory.getDataset("document", null, [c1, c2, c3], null, {
-    success: function (ds) {
-      if (ds && ds.values && ds.values.length > 0) {
-        // A PASTA JÁ EXISTE NO GED!
-        var idPastaExistente = ds.values[0]["documentPK.documentId"];
-        $("#cpIdPastaGedCandidato").val(idPastaExistente);
+  if (!nomeCand || !cpfLimpo) {
+    FLUIGC.toast({
+      title: "Atenção:",
+      message: "Informe o nome e CPF do candidato antes de criar a pasta no GED.",
+      type: "warning"
+    });
 
-        // Mapeia as subpastas dela (para não recriá-las)
-        mapearSubpastasExistentes(idPastaExistente);
-      } else {
-        // A PASTA NÃO EXISTE! Vamos criar a estrutura completa
-        criarEstruturaGedFrontEnd(pastaRaiz, nomePastaDestino);
+    validarLiberacaoGED();
+    return;
+  }
+
+  $("#btnGedCandidato")
+    .prop("disabled", true)
+    .html('<i class="flaticon flaticon-refresh icon-spin"></i> Processando...');
+
+  consultarOuCriarPastaGed(nomeJornada, pastaRaiz, function (idPastaJornada) {
+    $("#cpIdPastaGedJornada").val(idPastaJornada);
+
+    consultarOuCriarPastaGed(nomePastaDestino, idPastaJornada, function (idPastaCandidato, pastaFoiCriada) {
+      $("#cpIdPastaGedCandidato").val(idPastaCandidato);
+
+      if (typeof registrarChavesAtuaisDaPastaGed === "function") {
+        registrarChavesAtuaisDaPastaGed();
       }
-    },
-    error: function (err) {
-      FLUIGC.toast({ title: 'Erro:', message: 'Falha ao consultar GED.', type: 'danger' });
-      // Aqui garantimos que o nome volte correto se der erro
-      $("#btnGedCandidato").prop("disabled", false).html('<i class="flaticon flaticon-folder-create icon-sm"></i> Criar/Vincular Pasta do Candidato');
-    }
+
+      if (pastaFoiCriada) {
+        criarSubpastasCandidatoGed(idPastaCandidato);
+      } else {
+        mapearSubpastasExistentes(idPastaCandidato);
+      }
+    });
   });
 }
 
-function criarEstruturaGedFrontEnd(idRaiz, nomePasta) {
-  // Cria Pasta Principal
-  $.ajax({
-    url: '/api/public/ecm/document/createFolder',
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({ "description": nomePasta, "parentId": idRaiz }),
-    success: function (dataRoot) {
-      var idPrincipal = dataRoot.content.id;
-      $("#cpIdPastaGedCandidato").val(idPrincipal);
+function criarSubpastasCandidatoGed(idPrincipal) {
+  Promise.all([
+    criarSubpastaAjax("1. Documentos do Candidato", idPrincipal),
+    criarSubpastaAjax("2. Documentos Gerados", idPrincipal),
+    criarSubpastaAjax("3. Documentos Assinados", idPrincipal)
+  ]).then(function (resultados) {
+    $("#cpIdPastaDocsCandidato").val(resultados[0]);
+    $("#cpIdPastaDocsGerados").val(resultados[1]);
+    $("#cpIdPastaDocsAssinados").val(resultados[2]);
 
-      // Cria as 3 subpastas simultaneamente via Promise.all (rápido e seguro)
-      Promise.all([
-        criarSubpastaAjax("1. Documentos do Candidato", idPrincipal),
-        criarSubpastaAjax("2. Documentos Gerados", idPrincipal),
-        criarSubpastaAjax("3. Documentos Assinados", idPrincipal)
-      ]).then(function (resultados) {
-        $("#cpIdPastaDocsCandidato").val(resultados[0]);
-        $("#cpIdPastaDocsGerados").val(resultados[1]);
-        $("#cpIdPastaDocsAssinados").val(resultados[2]);
+    FLUIGC.toast({
+      title: "Sucesso:",
+      message: "Pasta criada e vinculada!",
+      type: "success"
+    });
 
-        FLUIGC.toast({ title: 'Sucesso:', message: 'Pasta criada e vinculada!', type: 'success' });
-        transformarBotaoGedAberto(idPrincipal);
+    transformarBotaoGedAberto(idPrincipal);
+    validarLiberacaoGED();
+  }).catch(function () {
+    FLUIGC.toast({
+      title: "Erro:",
+      message: "Falha ao criar as subpastas do candidato no GED.",
+      type: "danger"
+    });
 
-        validarLiberacaoGED();
-      });
-    }
+    $("#btnGedCandidato")
+      .prop("disabled", false)
+      .html('<i class="flaticon flaticon-folder-create icon-sm"></i> Criar/Vincular Pasta do Candidato');
   });
 }
 

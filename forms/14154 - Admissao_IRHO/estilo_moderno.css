@@ -834,3 +834,10 @@ body,
 .disabled-upload input[type="file"] {
     cursor: not-allowed;
 }
+
+#btnGedCandidato::before,
+#btnGedCandidato::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+}
