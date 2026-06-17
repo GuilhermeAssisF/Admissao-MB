@@ -275,10 +275,10 @@ function servicetask138(attempt, message) {
         xmlFunc += tag("DTMUDANCAHORARIO", dtAdmissaoXML);
         xmlFunc += tag("HSTSIT_DATAMUDANCA", dtAdmissaoXML);
         xmlFunc += tag("HSTSIT_MOTIVO", cleanId(getStr("zoom_motivoMudancaSituacao")) || "01");
-        
+
         // O RM exige a data de SEFIP na inclusão para todos, não podemos bloquear
         xmlFunc += tag("HSTSEFIP_DTMUDANCA", dtAdmissaoXML);
-        
+
         // MANTÉM A PROTEÇÃO APENAS NO SINDICATO (Que era o erro original)
         if (codSindicato && codSindicato !== "") {
             xmlFunc += tag("DTMUDANCACONTRIBSINDICAL", dtAdmissaoXML);
@@ -577,11 +577,12 @@ function servicetask138(attempt, message) {
                     xmlDepend += tag("NUMEROCARTAOSUS", limparPontuacao(getStr("TxtCartaoSusDep___" + idx)));
                     xmlDepend += tag("OBSERVACAO", getStr("TxtObsDep___" + idx));
 
-
                     xmlDepend += tag("INCIRRF", getStr("TxtIncIRRF___" + idx) || "0");
                     xmlDepend += tag("INCINSS", getStr("TxtIncINSS___" + idx) || "0");
                     xmlDepend += tag("INCASSISTMEDICA", getStr("TxtIncMedica___" + idx) || "0");
+                    xmlDepend += tag("INCASSISTODONTO", getStr("TxtIncOdonto___" + idx) || "0");
                     xmlDepend += tag("INCPENSAO", getStr("TxtIncPensao___" + idx) || "0");
+
                     if (grauParentesco !== "") xmlDepend += tag("GRAUPARENTESCO", grauParentesco);
 
                     xmlDepend += tag("PERCENTUAL", "0.00");
@@ -599,6 +600,36 @@ function servicetask138(attempt, message) {
                     if (folha !== "") xmlDepend += tag("NROFOLHA", folha);
 
                     xmlDepend += "  </PFDepend>\n";
+
+                    var incMedicaDep = getStr("TxtIncMedica___" + idx) || "0";
+                    var incOdontoDep = getStr("TxtIncOdonto___" + idx) || "0";
+
+                    var dataAMDep = formatarDataRM(
+                        getStr("cpDataInclusaoAMDep___" + idx) ||
+                        getStr("cpDataInclusaoAM")
+                    );
+
+                    var dataAODep = formatarDataRM(
+                        getStr("cpDataInclusaoAODep___" + idx) ||
+                        getStr("cpDataInclusaoAO")
+                    );
+
+                    if (incMedicaDep === "1" || incOdontoDep === "1") {
+                        xmlDepend += "  <PFDEPENDCOMPL>\n";
+                        xmlDepend += tag("CODCOLIGADA", COLIGADA);
+                        xmlDepend += tag("CHAPA", chapaFinal);
+                        xmlDepend += tag("NRODEPEND", nroDepend.toString());
+
+                        if (incMedicaDep === "1" && dataAMDep !== "") {
+                            xmlDepend += tag("DTASSMED", dataAMDep);
+                        }
+
+                        if (incOdontoDep === "1" && dataAODep !== "") {
+                            xmlDepend += tag("DTASSODO", dataAODep);
+                        }
+
+                        xmlDepend += "  </PFDEPENDCOMPL>\n";
+                    }
                 }
             }
 

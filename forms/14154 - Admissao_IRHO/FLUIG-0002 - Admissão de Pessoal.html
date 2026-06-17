@@ -804,16 +804,72 @@
                           </div>
                         </div>
 
+                        <div class="row bloco-beneficios-dependente">
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label>Assistência Médica?</label>
+                              <select class="form-control input-sm Tabela" name="TxtIncMedica" id="TxtIncMedica"
+                                style="pointer-events: none; background-color: #eee;" tabindex="-1" readonly>
+                                <option value="0">Não</option>
+                                <option value="1">Sim</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label>Data Inclusão AM</label>
+                              <input type="text" name="cpDataInclusaoAMDep" id="cpDataInclusaoAMDep"
+                                class="form-control input-sm Tabela" readonly />
+                            </div>
+                          </div>
+
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Plano AM</label>
+                              <input type="text" name="cpPlanoAMDep" id="cpPlanoAMDep"
+                                class="form-control input-sm Tabela" readonly />
+                              <input type="hidden" name="cpPlanoAMDepCod" id="cpPlanoAMDepCod" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row bloco-beneficios-dependente">
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label>Assistência Odontológica?</label>
+                              <select class="form-control input-sm Tabela" name="TxtIncOdonto" id="TxtIncOdonto"
+                                style="pointer-events: none; background-color: #eee;" tabindex="-1" readonly>
+                                <option value="0">Não</option>
+                                <option value="1">Sim</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label>Data Inclusão AO</label>
+                              <input type="text" name="cpDataInclusaoAODep" id="cpDataInclusaoAODep"
+                                class="form-control input-sm Tabela" readonly />
+                            </div>
+                          </div>
+
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Plano AO</label>
+                              <input type="text" name="cpPlanoAODep" id="cpPlanoAODep"
+                                class="form-control input-sm Tabela" readonly />
+                              <input type="hidden" name="cpPlanoAODepCod" id="cpPlanoAODepCod" />
+                            </div>
+                          </div>
+                        </div>
+
                         <div class="hide">
                           <select class="form-control input-sm Tabela" name="TxtIncIRRF" id="TxtIncIRRF">
                             <option value="0">Não</option>
                             <option value="1">Sim</option>
                           </select>
                           <select class="form-control input-sm Tabela" name="TxtIncINSS" id="TxtIncINSS">
-                            <option value="0">Não</option>
-                            <option value="1">Sim</option>
-                          </select>
-                          <select class="form-control input-sm Tabela" name="TxtIncMedica" id="TxtIncMedica">
                             <option value="0">Não</option>
                             <option value="1">Sim</option>
                           </select>
@@ -2260,11 +2316,26 @@
                   readonly />
               </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-5">
               <div class="form-group">
                 <label>Tipo do Plano de Saúde</label>
                 <input type="text" name="TxtIncPlanoSaudeTipo" id="TxtIncPlanoSaudeTipo" class="form-control"
                   readonly />
+                <input type="hidden" name="TxtIncPlanoSaudeTipoCod" id="TxtIncPlanoSaudeTipoCod" />
+                <input type="hidden" name="cpPlanoAM" id="cpPlanoAM" />
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="cpDataInclusaoAM">Data de Inclusão AM</label>
+                <div class="input-group">
+                  <input type="text" name="cpDataInclusaoAM" id="cpDataInclusaoAM" class="form-control"
+                    mask="00/00/0000">
+                  <span class="input-group-addon">
+                    <span class="fluigicon fluigicon-calendar"></span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -2288,11 +2359,26 @@
                   readonly />
               </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-5">
               <div class="form-group">
                 <label>Tipo do Plano Odontológico</label>
                 <input type="text" name="TxtIncPlanoOdontoTipo" id="TxtIncPlanoOdontoTipo" class="form-control"
                   readonly />
+                <input type="hidden" name="TxtIncPlanoOdontoTipoCod" id="TxtIncPlanoOdontoTipoCod" />
+                <input type="hidden" name="cpPlanoAO" id="cpPlanoAO" />
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="cpDataInclusaoAO">Data de Inclusão AO</label>
+                <div class="input-group">
+                  <input type="text" name="cpDataInclusaoAO" id="cpDataInclusaoAO" class="form-control"
+                    mask="00/00/0000">
+                  <span class="input-group-addon">
+                    <span class="fluigicon fluigicon-calendar"></span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -3414,47 +3500,7 @@
               <label>Integração Gerencial</label>
               <input type="text" name="FUN_INTEGRGERENCIAL_IDDESC" id="FUN_INTEGRGERENCIAL_IDDESC" class="form-control">
             </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">
-              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
-                6. Benefícios Integráveis
-              </h4>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-3">
-              <label for="cpDataInclusaoAM">Data de Inclusão AM</label>
-              <div class="input-group">
-                <input type="text" name="cpDataInclusaoAM" id="cpDataInclusaoAM" class="form-control" mask="00/00/0000">
-                <span class="input-group-addon">
-                  <span class="fluigicon fluigicon-calendar"></span>
-                </span>
-              </div>
-            </div>
-
-            <div class="form-group col-md-3">
-              <label for="cpPlanoAM">Plano AM</label>
-              <input type="text" name="cpPlanoAM" id="cpPlanoAM" class="form-control">
-            </div>
-
-            <div class="form-group col-md-3">
-              <label for="cpDataInclusaoAO">Data de Inclusão AO</label>
-              <div class="input-group">
-                <input type="text" name="cpDataInclusaoAO" id="cpDataInclusaoAO" class="form-control" mask="00/00/0000">
-                <span class="input-group-addon">
-                  <span class="fluigicon fluigicon-calendar"></span>
-                </span>
-              </div>
-            </div>
-
-            <div class="form-group col-md-3">
-              <label for="cpPlanoAO">Plano AO</label>
-              <input type="text" name="cpPlanoAO" id="cpPlanoAO" class="form-control">
-            </div>
-          </div>
+          </div>          
 
           <div class="row" id="tituloContratoEstagioAprendizRH">
             <div class="col-md-12">

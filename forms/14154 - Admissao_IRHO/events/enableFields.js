@@ -269,9 +269,7 @@ function enableFields(form) {
 
     // Campos Complementares RH - Benefícios Integráveis
     { campo: "cpDataInclusaoAM", atividade: "97" },
-    { campo: "cpPlanoAM", atividade: "97" },
     { campo: "cpDataInclusaoAO", atividade: "97" },
-    { campo: "cpPlanoAO", atividade: "97" },
 
     // Campos Complementares RH - Estágio / Aprendiz
     { campo: "cpEstagioDataInicio", atividade: "97" },

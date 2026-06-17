@@ -1431,39 +1431,186 @@ $(document).ready(function () {
     );
   }
 
+  function extrairCodigoPlanoBeneficio(valor) {
+    var texto = String(valor || "").trim();
+
+    if (!texto) return "";
+
+    if (texto.indexOf(" - ") > -1) {
+      return texto.split(" - ")[0].trim();
+    }
+
+    return texto;
+  }
+
+  function candidatoOptouBeneficio(valorOpcao, codigoPlano) {
+    var opcao = normalizarPlanoBeneficio(valorOpcao);
+    var codigo = String(codigoPlano || "").trim();
+
+    if (!opcao) return false;
+    if (opcao.indexOf("nao") > -1) return false;
+    if (codigo === "000000") return false;
+
+    return opcao.indexOf("opto") > -1 ||
+      opcao.indexOf("optante") > -1 ||
+      opcao === "sim";
+  }
+
+  function garantirDataInclusaoBeneficio($campoData) {
+    if (!$campoData.length) return;
+
+    var dataAtual = String($campoData.val() || "").trim();
+    var dataAdmissao = String($("#FUN_ADMISSAO").val() || "").trim();
+
+    if (!dataAtual && dataAdmissao) {
+      $campoData.val(dataAdmissao);
+    }
+
+    $campoData
+      .removeAttr("readonly")
+      .prop("disabled", false)
+      .css({
+        "background-color": "#ffffff",
+        "pointer-events": "auto",
+        "cursor": "auto"
+      });
+  }
+
+  function listarNomesDependentesBeneficio(valor) {
+    var mapa = {};
+    var texto = String(valor || "").trim();
+
+    if (!texto) return mapa;
+
+    var partes = texto.split(/[,;\n]+/);
+
+    for (var i = 0; i < partes.length; i++) {
+      var item = partes[i] || "";
+
+      item = item
+        .replace(/^-/, "")
+        .replace(/\(.*?\)/g, "")
+        .trim();
+
+      if (item) {
+        mapa[normalizarPlanoBeneficio(item)] = true;
+      }
+    }
+
+    return mapa;
+  }
+
+  function sincronizarBeneficiosDependentes() {
+    var planoSaudeDesc = String($("#TxtIncPlanoSaudeTipo").val() || "").trim();
+    var planoSaudeCod = String($("#TxtIncPlanoSaudeTipoCod").val() || "").trim() ||
+      extrairCodigoPlanoBeneficio(planoSaudeDesc);
+
+    var planoOdontoDesc = String($("#TxtIncPlanoOdontoTipo").val() || "").trim();
+    var planoOdontoCod = String($("#TxtIncPlanoOdontoTipoCod").val() || "").trim() ||
+      extrairCodigoPlanoBeneficio(planoOdontoDesc);
+
+    var dataAM = String($("#cpDataInclusaoAM").val() || "").trim();
+    var dataAO = String($("#cpDataInclusaoAO").val() || "").trim();
+
+    var mapaSaude = listarNomesDependentesBeneficio($("#TxtDepsPlanoSaude").val());
+    var mapaOdonto = listarNomesDependentesBeneficio($("#TxtDepsPlanoOdonto").val());
+
+    $("input[id^='txtNomDepen___']").each(function () {
+      var $nome = $(this);
+      var indice = this.id.split("___")[1];
+      var nomeDep = normalizarPlanoBeneficio($nome.val());
+
+      var temSaude = !!mapaSaude[nomeDep];
+      var temOdonto = !!mapaOdonto[nomeDep];
+
+      $("#TxtIncMedica___" + indice).val(temSaude ? "1" : "0");
+      $("#cpDataInclusaoAMDep___" + indice).val(temSaude ? dataAM : "");
+      $("#cpPlanoAMDep___" + indice).val(temSaude ? planoSaudeDesc : "");
+      $("#cpPlanoAMDepCod___" + indice).val(temSaude ? planoSaudeCod : "");
+
+      $("#TxtIncOdonto___" + indice).val(temOdonto ? "1" : "0");
+      $("#cpDataInclusaoAODep___" + indice).val(temOdonto ? dataAO : "");
+      $("#cpPlanoAODep___" + indice).val(temOdonto ? planoOdontoDesc : "");
+      $("#cpPlanoAODepCod___" + indice).val(temOdonto ? planoOdontoCod : "");
+
+      $("#TxtIncMedica___" + indice + ", #TxtIncOdonto___" + indice)
+        .prop("disabled", false)
+        .attr("readonly", "readonly")
+        .css({
+          "pointer-events": "none",
+          "background-color": "#eee",
+          "cursor": "not-allowed"
+        });
+
+      $(
+        "#cpDataInclusaoAMDep___" + indice +
+        ", #cpPlanoAMDep___" + indice +
+        ", #cpDataInclusaoAODep___" + indice +
+        ", #cpPlanoAODep___" + indice
+      )
+        .prop("readonly", true)
+        .css({
+          "pointer-events": "none",
+          "background-color": "#eee",
+          "cursor": "not-allowed"
+        });
+    });
+  }
+
+  function bloquearCamposBeneficiosVindosDoCandidato() {
+    $(
+      "#TxtIncPlanoSaudeOpcao, #TxtIncPlanoSaudeTipo, #TxtDepsPlanoSaude, " +
+      "#TxtIncPlanoOdontoOpcao, #TxtIncPlanoOdontoTipo, #TxtDepsPlanoOdonto"
+    )
+      .prop("readonly", true)
+      .css({
+        "pointer-events": "none",
+        "background-color": "#f3f4f6",
+        "cursor": "not-allowed"
+      });
+
+    $("#cpDataInclusaoAM, #cpDataInclusaoAO")
+      .removeAttr("readonly")
+      .prop("disabled", false)
+      .css({
+        "pointer-events": "auto",
+        "background-color": "#ffffff",
+        "cursor": "auto"
+      });
+  }
+
   function aplicarPlanosCandidatoNoPainelBeneficios() {
     var opcaoSaude = ($("#TxtIncPlanoSaudeOpcao").val() || "").trim();
-    var planoSaude = ($("#TxtIncPlanoSaudeTipoCod").val() || $("#TxtIncPlanoSaudeTipo").val() || "").trim();
+    var planoSaudeDesc = ($("#TxtIncPlanoSaudeTipo").val() || "").trim();
+    var planoSaudeCod = ($("#TxtIncPlanoSaudeTipoCod").val() || "").trim() ||
+      extrairCodigoPlanoBeneficio(planoSaudeDesc);
 
     var opcaoOdonto = ($("#TxtIncPlanoOdontoOpcao").val() || "").trim();
-    var planoOdonto = ($("#TxtIncPlanoOdontoTipoCod").val() || $("#TxtIncPlanoOdontoTipo").val() || "").trim();
+    var planoOdontoDesc = ($("#TxtIncPlanoOdontoTipo").val() || "").trim();
+    var planoOdontoCod = ($("#TxtIncPlanoOdontoTipoCod").val() || "").trim() ||
+      extrairCodigoPlanoBeneficio(planoOdontoDesc);
 
-    var candidatoOptouSaude = opcaoSaude.indexOf("Opto") !== -1;
-    var candidatoOptouOdonto = opcaoOdonto.toLowerCase() === "sim";
+    var candidatoOptouSaude = candidatoOptouBeneficio(opcaoSaude, planoSaudeCod);
+    var candidatoOptouOdonto = candidatoOptouBeneficio(opcaoOdonto, planoOdontoCod);
 
-    if (candidatoOptouSaude && planoSaude) {
-      var $campoPlanoSaudeRH = $("#cpPlanoAM");
-
-      if ($campoPlanoSaudeRH.is("select")) {
-        preencherSelectPorValorOuTexto($campoPlanoSaudeRH, planoSaude);
-      } else {
-        $campoPlanoSaudeRH.val($("#TxtIncPlanoSaudeTipo").val());
-      }
-
-      bloquearCampoPlanoCandidato($campoPlanoSaudeRH);
+    if (candidatoOptouSaude) {
+      $("#cpPlanoAM").val(planoSaudeCod);
+      garantirDataInclusaoBeneficio($("#cpDataInclusaoAM"));
+    } else {
+      $("#cpPlanoAM").val("000000");
+      $("#cpDataInclusaoAM").val("");
     }
 
-    if (candidatoOptouOdonto && planoOdonto) {
-      var $campoPlanoOdontoRH = $("#cpPlanoAO");
-
-      if ($campoPlanoOdontoRH.is("select")) {
-        preencherSelectPorValorOuTexto($campoPlanoOdontoRH, planoOdonto);
-      } else {
-        $campoPlanoOdontoRH.val($("#TxtIncPlanoOdontoTipo").val());
-      }
-
-      bloquearCampoPlanoCandidato($campoPlanoOdontoRH);
+    if (candidatoOptouOdonto) {
+      $("#cpPlanoAO").val(planoOdontoCod);
+      garantirDataInclusaoBeneficio($("#cpDataInclusaoAO"));
+    } else {
+      $("#cpPlanoAO").val("000000");
+      $("#cpDataInclusaoAO").val("");
     }
+
+    sincronizarBeneficiosDependentes();
+    bloquearCamposBeneficiosVindosDoCandidato();
   }
 
   function normalizarJornadaContratoEstagio(valor) {
@@ -1904,6 +2051,13 @@ $(document).ready(function () {
   }
 
   aplicarPlanosCandidatoNoPainelBeneficios();
+
+  $("#FUN_ADMISSAO, #cpDataInclusaoAM, #cpDataInclusaoAO, #TxtDepsPlanoSaude, #TxtDepsPlanoOdonto")
+    .off("change.beneficiosIntegraveis blur.beneficiosIntegraveis")
+    .on("change.beneficiosIntegraveis blur.beneficiosIntegraveis", function () {
+      aplicarPlanosCandidatoNoPainelBeneficios();
+    });
+
   aplicarBloqueioContratoEstagioAprendizRH();
 
   $("#cpJornadaAdmissao")

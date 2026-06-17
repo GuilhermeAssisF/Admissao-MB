@@ -47,8 +47,6 @@ function servicetask139(attempt, message) {
 
         if (!COLIGADA || COLIGADA === "") throw "Coligada não informada.";
         if (!CHAPA || CHAPA === "") throw "Chapa não informada. A integração principal (138) falhou ou não gerou a chapa.";
-        if (!CODPESSOA || CODPESSOA === "") throw "Código da Pessoa (CODPESSOA) não foi gravado pela etapa 138. É obrigatório para atualizar a tabela de emergência (VPCOMPL).";
-
         var RM_CONTEXTO = "CODCOLIGADA=" + COLIGADA + ";CODSISTEMA=" + SISTEMA + ";CODUSUARIO=" + RM_USER;
 
         var nomeEmergencia = getStr("txtNomeEmergencia");
@@ -56,7 +54,38 @@ function servicetask139(attempt, message) {
         var telefoneEmergencia = getStr("txtTelefoneEmergencia");
 
         // Se todos os campos estiverem vazios, não há necessidade de chamar o RM
-        if (nomeEmergencia === "" && parentescoEmergencia === "" && telefoneEmergencia === "") {
+        function extrairCodigoPlano(valor) {
+            var texto = String(valor || "").trim();
+
+            if (!texto) return "";
+
+            if (texto.indexOf(" - ") > -1) {
+                return texto.split(" - ")[0].trim();
+            }
+
+            return texto;
+        }
+
+        var planoAM = extrairCodigoPlano(
+            getStr("cpPlanoAM") ||
+            getStr("TxtIncPlanoSaudeTipoCod") ||
+            getStr("TxtIncPlanoSaudeTipo")
+        );
+
+        var planoAO = extrairCodigoPlano(
+            getStr("cpPlanoAO") ||
+            getStr("TxtIncPlanoOdontoTipoCod") ||
+            getStr("TxtIncPlanoOdontoTipo")
+        );
+
+        // Se todos os campos estiverem vazios, não há necessidade de chamar o RM
+        if (
+            nomeEmergencia === "" &&
+            parentescoEmergencia === "" &&
+            telefoneEmergencia === "" &&
+            planoAM === "" &&
+            planoAO === ""
+        ) {
             log.info("### NENHUM DADO COMPLEMENTAR PARA INTEGRAR. IGNORANDO TASK 139...");
             return true;
         }
@@ -74,6 +103,24 @@ function servicetask139(attempt, message) {
         xmlCompl += tag("CODCOLIGADA", COLIGADA);
         xmlCompl += tag("CHAPA", CHAPA);
         xmlCompl += "  </PFunc>\n";
+
+        if (planoAM !== "" || planoAO !== "") {
+            xmlCompl += "  <PFCOMPL>\n";
+            xmlCompl += tag("CODCOLIGADA", COLIGADA);
+            xmlCompl += tag("CHAPA", CHAPA);
+
+            if (planoAM !== "") {
+                xmlCompl += tag("ASSMEDICA", planoAM);
+            }
+
+            if (planoAO !== "") {
+                xmlCompl += tag("ASSODONTO", planoAO);
+            }
+
+            xmlCompl += "  </PFCOMPL>\n";
+
+            possuiBlocoComplementar = true;
+        }
 
         // // Tabela VPCOMPL (Emergência) - Ligação EXCLUSIVA por CODPESSOA (conforme documentação do RM)
         // if (nomeEmergencia !== "" || parentescoEmergencia !== "" || telefoneEmergencia !== "") {
