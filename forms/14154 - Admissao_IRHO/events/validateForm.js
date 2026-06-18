@@ -20,7 +20,7 @@ function validateForm(form) {
     // Isso evita erro 500 pois os campos estarão vazios nesse momento.
     var usuarioLogado = getValue("WKUser");
     if (usuarioLogado == "widgetpublicadeadmissao") { // Use o login exato do seu usuário integrador
-        return; 
+        return;
     }
 
     // ... Restante das suas validações normais para o RH ...
@@ -40,7 +40,7 @@ function validateForm(form) {
 
     // Bypass para a atividade 97 (Admissão RH) - Caso a opção 4 esteja neste painel
     if (atividade == 97 && getSafeValue("cpAprovacaoAdmissao") == "4") {
-        return; 
+        return;
     }
 
     // =========================================================================
@@ -102,7 +102,7 @@ function validateForm(form) {
             { id: "cpRegimePrevidenciario", nome: "Tipo Regime Previdenciário" }
         ],
 
-        "128": [ 
+        "128": [
             { id: "cpAprovacaoKit", nome: "Aprovação do Kit Admissão" }
         ]
     };
@@ -131,7 +131,7 @@ function validateForm(form) {
 
                 // Se NÃO for CLT e o campo estiver na lista acima, pula a validação
                 if (jornadaAdmissao != "CLT" && camposExclusivosCLT.indexOf(campoID) > -1) {
-                    continue; 
+                    continue;
                 }
                 // --- FIM DA NOVA REGRA ---
 
@@ -160,9 +160,48 @@ function validateForm(form) {
     // =========================================================================
     if (atividade == 97) {
         var decisaoRH = getSafeValue("cpAprovacaoAdmissao");
+
         if (decisaoRH == "3" || decisaoRH == "Corrigir") {
             if (getSafeValue("cpParecerAprovaAdmissao") == "") {
                 msg += "O campo <b>Parecer</b> é obrigatório quando a decisão for 'Solicitar Correção'.<br/>";
+            }
+        }
+
+        if (getSafeValue("cpUpFront") == "sim") {
+            if (getSafeValue("cpUpFrontValor") == "") {
+                msg += "O campo <b>Valor do UP Front</b> é obrigatório quando UP Front for Sim.<br/>";
+            }
+
+            if (getSafeValue("cpUpFrontDataInicio") == "") {
+                msg += "O campo <b>Data Início do UP Front</b> é obrigatório quando UP Front for Sim.<br/>";
+            }
+
+            if (getSafeValue("cpUpFrontObservacao") == "") {
+                msg += "O campo <b>Observação do UP Front</b> é obrigatório quando UP Front for Sim.<br/>";
+            }
+        }
+
+        if (getSafeValue("cpHiringBonus") == "sim") {
+            if (getSafeValue("cpHiringBonusValor") == "") {
+                msg += "O campo <b>Valor do Hiring Bonus</b> é obrigatório quando Hiring Bonus for Sim.<br/>";
+            }
+
+            if (getSafeValue("cpHiringBonusDataInicio") == "") {
+                msg += "O campo <b>Data Início do Hiring Bonus</b> é obrigatório quando Hiring Bonus for Sim.<br/>";
+            }
+
+            if (getSafeValue("cpHiringBonusObservacao") == "") {
+                msg += "O campo <b>Observação do Hiring Bonus</b> é obrigatório quando Hiring Bonus for Sim.<br/>";
+            }
+        }
+
+        if (getSafeValue("cpTipoPLR") != "") {
+            if (getSafeValue("cpValorPLR") == "") {
+                msg += "O campo <b>Valor PLR</b> é obrigatório quando Tipo PLR estiver preenchido.<br/>";
+            }
+
+            if (getSafeValue("cpDataPLR") == "") {
+                msg += "O campo <b>Data PLR</b> é obrigatório quando Tipo PLR estiver preenchido.<br/>";
             }
         }
     }
@@ -172,7 +211,7 @@ function validateForm(form) {
     // =========================================================================
     if (atividade == 128) {
         var decisaoKit = getSafeValue("cpAprovacaoKit");
-        
+
         // Se a opção for '3' (Solicitar Correção)
         if (decisaoKit == "3") {
             // Usa o ID exato do seu HTML: cpParecerValidaKit
@@ -247,21 +286,21 @@ function validateForm(form) {
     // Atividade 122 é "Aguardando Candidato" (conforme seu log anterior).
     // Adicionei validação segura usando getSafeValue.
     if ((atividade == 1 || atividade == 0 || atividade == 41 || atividade == 122) && acaoUsuario == "true") {
-        
+
         // DADOS DO COLABORADOR
         if (getSafeValue("cpfcnpj") == "") msg += "CPF não informado.<br>";
         if (getSafeValue("txtNomeColaborador") == "") msg += "Nome não informado.<br>";
-        
+
         // Validação de Segurança para CPF (Só se o campo txtFuncAtivo estiver preenchido)
         if (getSafeValue("txtFuncAtivo") == "FUNC_ATIVO") {
-             msg += "Existem funcionários ativos utilizando o CPF informado.<br>";
+            msg += "Existem funcionários ativos utilizando o CPF informado.<br>";
         }
     }
-  
+
     // GESTOR
     if (atividade == 7 && acaoUsuario == "true") {
         if (getSafeValue("cpAprovacaoGestor") == "0") msg += "Aprovação pendente.<br>";
-        if (getSafeValue("cpAprovacaoGestor") == "2" && getSafeValue("cpParecerAprovGestor") == "") 
+        if (getSafeValue("cpAprovacaoGestor") == "2" && getSafeValue("cpParecerAprovGestor") == "")
             msg += "Parecer de Reprovação obrigatório.<br>";
     }
 
@@ -287,12 +326,12 @@ function validateForm(form) {
 
     // ADMISSÃO RH (Atividade 97)
     if (atividade == 97 && acaoUsuario == "true") {
-        var decisao = getSafeValue("cpAprovacaoAdmissao"); 
-        
+        var decisao = getSafeValue("cpAprovacaoAdmissao");
+
         if (decisao == "" || decisao == "0") {
             msg += "Aprovação pendente na etapa de Admissão RH.<br>";
         }
-        
+
         // Agora exigimos o parecer APENAS se for Correção (3)
         if (decisao == "3" && getSafeValue("cpParecerAprovaAdmissao") == "") {
             msg += "É obrigatório informar o motivo no campo Parecer para solicitar correção.<br>";
@@ -301,12 +340,12 @@ function validateForm(form) {
 
     // VALIDAR KIT (Atividade 128)
     if (atividade == 128 && acaoUsuario == "true") {
-        var decisaoKit = getSafeValue("cpAprovacaoKit"); 
-        
+        var decisaoKit = getSafeValue("cpAprovacaoKit");
+
         if (decisaoKit == "" || decisaoKit == "0") {
             msg += "Aprovação pendente na etapa de Validação do Kit Admissão.<br>";
         }
-        
+
         // Exige parecer se a escolha for "Solicitar Correção"
         if (decisaoKit == "3" && getSafeValue("cpParecerValidaKit") == "") {
             msg += "É obrigatório informar o motivo no campo Parecer para solicitar correção.<br>";

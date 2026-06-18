@@ -11,9 +11,25 @@ function servicetask138(attempt, message) {
             return String(v).trim();
         };
 
+        function normalizarTextoIntegracao(v) {
+            if (v === null || v === undefined) return "";
+
+            var texto = String(v).trim();
+
+            if (texto === "") return "";
+
+            return texto.toUpperCase();
+        }
+
         function tag(n, v) {
+            var texto = normalizarTextoIntegracao(v);
+            if (texto === "") return "";
+            return "<" + n + ">" + escapeXML(texto) + "</" + n + ">";
+        }
+
+        function tagRaw(n, v) {
             if (v === null || v === undefined || String(v).trim() === "") return "";
-            return "<" + n + ">" + escapeXML(v) + "</" + n + ">";
+            return "<" + n + ">" + escapeXML(String(v).trim()) + "</" + n + ">";
         }
 
         function tagInt(n, v) {
@@ -50,6 +66,141 @@ function servicetask138(attempt, message) {
                 } else {
                     return limpo + ",00";
                 }
+            }
+        }
+
+        function isSim(v) {
+            var valor = String(v || "").trim().toLowerCase();
+            return valor === "sim" || valor === "s" || valor === "1";
+        }
+
+        function extrairMesAnoDataBR(data) {
+            var valor = String(data || "").trim();
+
+            if (valor === "") {
+                return {
+                    mes: "",
+                    ano: ""
+                };
+            }
+
+            var partes = valor.split("/");
+
+            if (partes.length === 3) {
+                return {
+                    mes: partes[1],
+                    ano: partes[2]
+                };
+            }
+
+            return {
+                mes: "",
+                ano: ""
+            };
+        }
+
+        function montarEventoProgramadoXml(nomeControle, nomeValor, nomeDataInicio, nomeObservacao, descricaoLog, chapaFinal) {
+            if (!isSim(getStr(nomeControle))) {
+                return "";
+            }
+
+            var valorEvento = getStr(nomeValor);
+            var dataEvento = extrairMesAnoDataBR(getStr(nomeDataInicio));
+            var observacaoEvento = getStr(nomeObservacao);
+
+            if (valorEvento === "" || dataEvento.mes === "" || dataEvento.ano === "") {
+                throw "ERRO: Evento programado " + descricaoLog + " marcado como Sim, mas sem Valor ou Data Início.";
+            }
+
+            var xmlEvento = "";
+            xmlEvento += "  <PFEVENTOSPROG>\n";
+            xmlEvento += tag("ID", "-1");
+            xmlEvento += tag("CODCOLIGADA", COLIGADA);
+            xmlEvento += tag("CHAPA", chapaFinal);
+            xmlEvento += tag("CODEVENTO", "1535");
+            xmlEvento += tag("TIPO", "04");
+            xmlEvento += tag("VALOR", formatarSalario(valorEvento));
+            xmlEvento += tag("MESINIC", dataEvento.mes);
+            xmlEvento += tag("ANOINIC", dataEvento.ano);
+            xmlEvento += tag("COMPLEMENTO1", observacaoEvento);
+            xmlEvento += tag("SEMPREVALIDO", "1");
+            xmlEvento += "  </PFEVENTOSPROG>\n";
+
+            return xmlEvento;
+        }
+
+        function integrarEventosProgramados(authService, RM_CONTEXTO, chapaFinal) {
+            var xmlEventos = "";
+
+            xmlEventos += montarEventoProgramadoXml(
+                "cpUpFront",
+                "cpUpFrontValor",
+                "cpUpFrontDataInicio",
+                "cpUpFrontObservacao",
+                "UP Front",
+                chapaFinal
+            );
+
+            xmlEventos += montarEventoProgramadoXml(
+                "cpHiringBonus",
+                "cpHiringBonusValor",
+                "cpHiringBonusDataInicio",
+                "cpHiringBonusObservacao",
+                "Hiring Bonus",
+                chapaFinal
+            );
+
+            if (xmlEventos === "") {
+                log.info("### Nenhum evento programado para integrar.");
+                return;
+            }
+
+            var xmlEventosFull = "<FopEventoProgramado>\n";
+            xmlEventosFull += xmlEventos;
+            xmlEventosFull += "</FopEventoProgramado>";
+
+            log.info("### XML EVENTOS PROGRAMADOS: \n" + xmlEventosFull);
+
+            var resultEventos = authService.saveRecord("FopEventoProgramadoData", xmlEventosFull, RM_CONTEXTO);
+            log.info("### RETORNO RM EVENTOS PROGRAMADOS: " + resultEventos);
+
+            if (resultEventos && resultEventos.indexOf("===") != -1) {
+                throw "Erro ao integrar Eventos Programados: " + resultEventos;
+            }
+        }
+
+        function integrarValoresAssociados(authService, RM_CONTEXTO, chapaFinal) {
+            var tipoPLR = getStr("cpTipoPLR");
+
+            if (tipoPLR === "") {
+                log.info("### Nenhum valor associado para integrar.");
+                return;
+            }
+
+            if (getStr("cpValorPLR") === "" || getStr("cpDataPLR") === "") {
+                throw "ERRO: Para integrar Valores Associados, preencha Tipo PLR, Valor PLR e Data.";
+            }
+
+            var xmlValores = "<FopFuncVal>\n";
+
+            xmlValores += "  <PFUNCVAL>\n";
+            xmlValores += tag("CODCOLIGADA", COLIGADA);
+            xmlValores += tag("CHAPA", chapaFinal);
+            xmlValores += tag("CODVALOR", tipoPLR);
+            xmlValores += tag("VALOR", formatarSalario(getStr("cpValorPLR")));
+            xmlValores += tag("DTVALOR", formatarDataRM(getStr("cpDataPLR")));
+            xmlValores += tag("OBSERVACAO", getStr("cpObservacaoPLR"));
+            xmlValores += "  </PFUNCVAL>\n";
+
+            xmlValores += "</FopFuncVal>";
+
+            log.info("### XML VALORES ASSOCIADOS: \n" + xmlValores);
+
+            var resultValores = authService.saveRecord("FopFuncValData", xmlValores, RM_CONTEXTO);
+            log.info("### RETORNO RM VALORES ASSOCIADOS: " + resultValores);
+
+            if (resultValores && resultValores.indexOf("===") != -1) {
+                throw "Erro ao integrar Valores Associados: " + resultValores;
             }
         }
 
@@ -214,7 +365,14 @@ function servicetask138(attempt, message) {
         var dtAdmissaoXML = formatarDataRM(getStr("FUN_ADMISSAO"));
         if (!dtAdmissaoXML) throw "ERRO: Data de Admissão obrigatória não preenchida.";
 
-        var salario = formatarSalario(getStr("FUN_VLRSALARIO"));
+        var salarioBruto = getStr("FUN_VLRSALARIO");
+
+        if (salarioBruto === "") {
+            throw "ERRO: O campo Salário (FUN_VLRSALARIO) está vazio. Verifique se a parametrização da jornada não limpou o campo antes da integração.";
+        }
+
+        var salario = formatarSalario(salarioBruto);
+
         var horasMensaisNum = parseFloat(getStr("cpQtdHorasMes") || getStr("FUN_HRMENSAIS") || "220");
         var usaSalComposto = getStr("cpUsaSalarioComposto") === "Sim" ? "1" : "0";
 
@@ -331,8 +489,22 @@ function servicetask138(attempt, message) {
         if (vinculoEmpreg) xmlFunc += tag("VINCULORAIS", vinculoEmpreg);
 
         xmlFunc += tag("SITUACAORAIS", getStr("cpSituacaoRais") || "1");
+
         xmlFunc += tag("SITUACAOFGTS", getStr("FUN_ALTFGTS"));
         xmlFunc += tag("DTSALDOFGTS", formatarDataRM(getStr("cpDataUltimoSaldoFGTS")));
+
+        if (getStr("cpDataOpcaoFGTS") !== "") {
+            xmlFunc += tag("DTOPCAOFGTS", formatarDataRM(getStr("cpDataOpcaoFGTS")));
+        }
+
+        if (getStr("cpValorSaldoFGTS") !== "") {
+            xmlFunc += tag("SALDOFGTSREAL", formatarSalario(getStr("cpValorSaldoFGTS")));
+        }
+
+        if (getStr("cpSaldoFGTSFinsRescisorios") !== "") {
+            xmlFunc += tag("SALDOFGTS", formatarSalario(getStr("cpSaldoFGTSFinsRescisorios")));
+        }
+
         xmlFunc += tag("ESOCIALNATATIVIDADE", getStr("FUN_NATATIV"));
 
         if (indicativoAdmissao && indicativoAdmissao !== "S" && indicativoAdmissao !== "N") xmlFunc += tag("INDADMISSAO", indicativoAdmissao);
@@ -347,11 +519,17 @@ function servicetask138(attempt, message) {
         var codOcorrencia = cleanId(getStr("FUN_CODOCORRENCIA_IDDESC"));
         if (codOcorrencia) xmlFunc += tag("CODOCORRENCIA", codOcorrencia);
 
-        // var codEquipe = getStr("cpCodigoEquipe");
-        // if (codEquipe) xmlFunc += tag("CODEQUIPE", codEquipe);
+        var codEquipe = getStr("cpCodigoEquipe");
+        if (codEquipe) xmlFunc += tag("CODEQUIPE", codEquipe);
 
         var codQuiosque = cleanId(getStr("FUN_CODQUIOSQUE_IDDESC"));
         if (codQuiosque) xmlFunc += tag("CODGRPQUIOSQUE", codQuiosque);
+
+        // xmlFunc += tag("UTILIZAPONTOWEB", getStr("MarcaPonto"));
+        // xmlFunc += tag("HABILITAPORTAL", getStr("cpHabilitaPortalRM"));
+        // xmlFunc += tag("CODUSUARIOPORTAL", getStr("cpCodigoUsuarioPortalPonto"));
+        // xmlFunc += tag("NOMEUSUARIOPORTAL", getStr("cpNomeUsuarioPortalPonto"));
+        // xmlFunc += tag("CATEGORIAPONTO", getStr("CatPonto"));
 
         xmlFunc += tagInt("USAVALETRANSP", getStr("ValeTransp") === "1" ? "1" : "0");
         xmlFunc += tagInt("TEMPOPARCIAL", getStr("FUN_CONTRATOPARCIAL") || "0");
@@ -457,12 +635,6 @@ function servicetask138(attempt, message) {
             xmlFunc += tag("TPCONTABANCARIA", getStr("TipodeContPagto"));
             xmlFunc += tag("HSTBANCO_DTMUDANCA", dtAdmissaoXML);
 
-            var bancoFGTS = cleanId(getStr("FUN_BANCOFGTS"));
-            if (bancoFGTS) xmlFunc += tag("CODBANCOFGTS", bancoFGTS);
-
-            var contaFGTS = getStr("cpContaFGTS");
-            if (contaFGTS) xmlFunc += tag("CONTAFGTS", contaFGTS);
-
             var bancoPIS = cleanId(getStr("FUN_CODBANCOPIS"));
             if (bancoPIS) xmlFunc += tag("CODBANCOPIS", bancoPIS);
 
@@ -470,13 +642,24 @@ function servicetask138(attempt, message) {
             if (opBancaria) xmlFunc += tag("OPBANCARIA", opBancaria);
         }
 
+        var bancoFGTS = cleanId(getStr("FUN_BANCOFGTS"));
+        if (bancoFGTS) {
+            xmlFunc += tag("CODBANCOFGTS", bancoFGTS);
+        }
+
+        var contaFGTS = getStr("cpContaFGTS");
+        if (contaFGTS) {
+            xmlFunc += tag("CONTAFGTS", contaFGTS);
+        }
+
         xmlFunc += tag("PERCENTADIANT", getStr("FUN_PADT"));
         xmlFunc += tag("AJUDACUSTO", formatarSalario(getStr("FUN_AJUDACUSTO")));
         var arredondamento = getStr("cpArredondamento") === "Sim" ? "1" : "0";
         xmlFunc += tag("ARREDONDAMENTO", arredondamento);
 
+        xmlFunc += "  </PFunc>\n";
 
-        xmlFunc += "  </PFunc>\n</FopFunc>";
+        xmlFunc += "</FopFunc>";
 
         log.info("### XML DE INTEGRAÇÃO MONTADO (FUNCIONÁRIO): \n" + xmlFunc);
 
@@ -527,6 +710,10 @@ function servicetask138(attempt, message) {
             hAPI.setCardValue("FUN_CHAPA", chapaFinal);
             hAPI.setCardValue("TxtChapa", chapaFinal);
             log.info("### SUCESSO! CHAPA GERADA: " + chapaFinal);
+
+            // Integra tabelas filhas do funcionário somente depois da chapa existir no RM.
+            integrarEventosProgramados(authService, RM_CONTEXTO, chapaFinal);
+            integrarValoresAssociados(authService, RM_CONTEXTO, chapaFinal);
 
             // Captura o CodPessoa gerado pelo RM (Se for pessoa nova)
             try {

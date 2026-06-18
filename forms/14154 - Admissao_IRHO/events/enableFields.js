@@ -147,9 +147,6 @@ function enableFields(form) {
     { campo: "FUN_DIASUTEISMES", atividade: "0,1,41,97" },
     { campo: "FUN_DIASUTPROXMES", atividade: "0,1,41,97" },
 
-    { campo: "FUN_INTEGRCONTABIL_IDDESC", atividade: "0,1,41,97" },
-    { campo: "FUN_INTEGRGERENCIAL_IDDESC", atividade: "0,1,41,97" },
-
     { campo: "cpJornadaAdmissao", atividade: "0,1,41" },
     { campo: "cpTipoContrato", atividade: "0,1,41,97" },
     { campo: "cpEmailCandidato", atividade: "0,1,41,97" },
@@ -210,14 +207,19 @@ function enableFields(form) {
     { campo: "TipodeContPagto", atividade: "0,1,41,97" },
 
     // PAINEL: PREENCHIMENTO EXCLUSIVO ÁREA RH (Somente Atividade 97)
+    // PAINEL: PREENCHIMENTO EXCLUSIVO ÁREA RH (Somente Atividade 97)
     { campo: "zoom_sindicato", atividade: "97" },
+    { campo: "cod_sindicato", atividade: "97" },
+
     { campo: "zoom_categoriaEsocial", atividade: "97" },
     { campo: "FUN_CATESOCIAL", atividade: "97" },
+
     { campo: "FUN_NATATIV", atividade: "97" },
     { campo: "FUN_INDADMISSAO", atividade: "97" },
     { campo: "FUN_CONTRATOPARCIAL", atividade: "97" },
     { campo: "FUN_TPJORNADA", atividade: "97" },
     { campo: "FUN_SEQTURN_IDDESC_AD", atividade: "97" },
+
     { campo: "FUN_TIPOPGTO_IDDESC_AD", atividade: "97" },
     { campo: "cpUsaSalarioComposto", atividade: "97" },
     { campo: "FUN_SALARIOBASE", atividade: "97" },
@@ -225,22 +227,44 @@ function enableFields(form) {
     { campo: "cpArredondamento", atividade: "97" },
     { campo: "FUN_AJUDACUSTO", atividade: "97" },
     { campo: "cpQtdHorasMes", atividade: "97" },
-    { campo: "FUN_INSS", atividade: "97" },
-    { campo: "FUN_IRRF", atividade: "97" },
+
     { campo: "FUN_ALTFGTS", atividade: "97" },
     { campo: "cpDataUltimoSaldoFGTS", atividade: "97" },
+    { campo: "cpDataOpcaoFGTS", atividade: "97" },
+    { campo: "cpValorSaldoFGTS", atividade: "97" },
+    { campo: "cpSaldoFGTSFinsRescisorios", atividade: "97" },
+    { campo: "zoom_banco_fgts", atividade: "97" },
+    { campo: "FUN_BANCOFGTS", atividade: "97" },
+    { campo: "cpContaFGTS", atividade: "97" },
+
     { campo: "cpRegimePrevidenciario", atividade: "97" },
     { campo: "cpRegimeTrabalhista", atividade: "97" },
     { campo: "zoom_sindicato_filiacao", atividade: "97" },
+    { campo: "FUN_CODDESCSINDICATOFILIACAO", atividade: "97" },
     { campo: "zoom_contribuicao_sindical", atividade: "97" },
+    { campo: "FUN_PGCTSIN", atividade: "97" },
+    { campo: "FUN_PGCTSIN_IDDESC_AD", atividade: "97" },
+
+    { campo: "FUN_INSS", atividade: "97" },
+    { campo: "FUN_IRRF", atividade: "97" },
     { campo: "zoom_ocorrencia_sefip", atividade: "97" },
+    { campo: "FUN_CODOCORRENCIA_IDDESC", atividade: "97" },
     { campo: "zoom_categoria_sefip", atividade: "97" },
+    { campo: "FUN_CATSEFIP_IDDESC", atividade: "97" },
     { campo: "zoom_situacao_rais", atividade: "97" },
+    { campo: "cpSituacaoRais", atividade: "97" },
     { campo: "zoom_vinculo_rais", atividade: "97" },
+    { campo: "FUN_VINCEMPREG", atividade: "97" },
+    { campo: "FUN_VINCEMPREG_IDDESC_AD", atividade: "97" },
+
     { campo: "zoom_quiosque", atividade: "97" },
+    { campo: "FUN_CODQUIOSQUE_IDDESC", atividade: "97" },
     { campo: "zoom_equipe", atividade: "97" },
-    { campo: "cpIndiceInicioHorario", atividade: "97" },
+    { campo: "cpCodigoEquipe", atividade: "97" },
     { campo: "zoom_centroCusto", atividade: "97" },
+    { campo: "FUN_CC", atividade: "97" },
+    { campo: "cpIndiceInicioHorario", atividade: "97" },
+
     { campo: "FUN_INTEGRCONTABIL_IDDESC", atividade: "97" },
     { campo: "FUN_INTEGRGERENCIAL_IDDESC", atividade: "97" },
 
@@ -252,20 +276,26 @@ function enableFields(form) {
     { campo: "CatPonto", atividade: "97" },
 
     // Campos Complementares RH - Valores Associados
+    // Campos Complementares RH - Eventos Programados
     { campo: "cpUpFront", atividade: "97" },
-    { campo: "cpUpFrontTipo", atividade: "97" },
+    { campo: "cpUpFrontValor", atividade: "97" },
+    { campo: "cpUpFrontObservacao", atividade: "97" },
+    { campo: "cpUpFrontDataInicio", atividade: "97" },
     { campo: "cpHiringBonus", atividade: "97" },
-    { campo: "cpHiringBonusTipo", atividade: "97" },
-    { campo: "cpBonusValor", atividade: "97" },
-    { campo: "cpBonusTipo", atividade: "97" },
-    { campo: "cpPrazoClawback", atividade: "97" },
-    { campo: "cpValorPLR", atividade: "97" },
-    { campo: "cpObservacaoPLR", atividade: "97" },
+    { campo: "cpHiringBonusValor", atividade: "97" },
+    { campo: "cpHiringBonusObservacao", atividade: "97" },
+    { campo: "cpHiringBonusDataInicio", atividade: "97" },
 
-    // Campos Complementares RH - FGTS
-    { campo: "cpDataOpcaoFGTS", atividade: "97" },
-    { campo: "cpValorSaldoFGTS", atividade: "97" },
-    { campo: "cpSaldoFGTSFinsRescisorios", atividade: "97" },
+    // Campos Complementares RH - Valores Associados
+    { campo: "cpTipoPLR", atividade: "97" },
+    { campo: "cpValorPLR", atividade: "97" },
+    { campo: "cpDataPLR", atividade: "97" },
+    { campo: "cpObservacaoPLR", atividade: "97" },
+    { campo: "cpPrazoClawback", atividade: "97" },
+
+    // Campos de incidência dos dependentes
+    { campo: "TxtIncIRRF", atividade: "97" },
+    { campo: "TxtIncPensao", atividade: "97" },
 
     // Campos Complementares RH - Benefícios Integráveis
     { campo: "cpDataInclusaoAM", atividade: "97" },
@@ -284,7 +314,7 @@ function enableFields(form) {
     // Campos Complementares RH - Anotações RM
     { campo: "cpAnotacoesPessoaisRM", atividade: "97" },
 
-        // PAINEL: INFORMAÇÕES ADICIONAIS (Atividade 97)
+    // PAINEL: INFORMAÇÕES ADICIONAIS (Atividade 97)
     { campo: "cpNomeGestorImediato", atividade: "97" },
     { campo: "cpPlantaUnidade", atividade: "97" },
     { campo: "cpModeloTrabalho", atividade: "97" },

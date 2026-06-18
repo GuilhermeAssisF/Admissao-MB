@@ -11,13 +11,41 @@ function servicetask139(attempt, message) {
             return String(v).trim();
         };
 
+        function normalizarTextoIntegracao(v) {
+            if (v === null || v === undefined) return "";
+
+            var texto = String(v).trim();
+
+            if (texto === "") return "";
+
+            return texto.toUpperCase();
+        }
+
         function tag(n, v) {
+            var texto = normalizarTextoIntegracao(v);
+            if (texto === "") return "";
+            return "<" + n + ">" + escapeXML(texto) + "</" + n + ">";
+        }
+
+        function tagRaw(n, v) {
             if (v === null || v === undefined || String(v).trim() === "") return "";
-            return "<" + n + ">" + escapeXML(v) + "</" + n + ">";
+            return "<" + n + ">" + escapeXML(String(v).trim()) + "</" + n + ">";
         }
 
         function escapeXML(str) {
             return String(str || "").replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function formatarDataRM(d) {
+            if (!d || d == "") return "";
+
+            var p = String(d).split("/");
+
+            if (p.length == 3) {
+                return p[2] + "-" + p[1] + "-" + p[0] + "T00:00:00";
+            }
+
+            return d;
         }
 
         // =========================================================================
@@ -59,23 +87,98 @@ function servicetask139(attempt, message) {
 
             if (!texto) return "";
 
+            var textoNormalizado = texto.toLowerCase();
+
+            if (
+                textoNormalizado.indexOf("selecione") > -1 ||
+                textoNormalizado.indexOf("não opto") > -1 ||
+                textoNormalizado.indexOf("nao opto") > -1 ||
+                textoNormalizado === "000000"
+            ) {
+                return "";
+            }
+
             if (texto.indexOf(" - ") > -1) {
-                return texto.split(" - ")[0].trim();
+                texto = texto.split(" - ")[0].trim();
+            }
+
+            // Proteção: códigos de plano no RM devem ser curtos.
+            // Evita mandar descrições como "Selecione o plano odontológico..."
+            if (texto.length > 10) {
+                return "";
             }
 
             return texto;
         }
 
+        function normalizarTextoComplementar(valor) {
+            var texto = String(valor || "").trim();
+
+            if (!texto) return "";
+
+            var textoNormalizado = texto.toLowerCase();
+
+            if (
+                textoNormalizado.indexOf("selecione") > -1 ||
+                textoNormalizado === "null" ||
+                textoNormalizado === "undefined"
+            ) {
+                return "";
+            }
+
+            return texto;
+        }
+
+        function normalizarModeloTrabalho(valor) {
+            var texto = String(valor || "").trim();
+
+            if (!texto) return "";
+
+            if (texto.indexOf(" - ") > -1) {
+                texto = texto.split(" - ")[0].trim();
+            }
+
+            var normalizado = texto.toLowerCase();
+
+            try {
+                normalizado = normalizado.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            } catch (e) { }
+
+            if (normalizado.indexOf("selecione") > -1) return "";
+
+            if (normalizado === "1" || normalizado === "presencial") return "1";
+            if (normalizado === "2" || normalizado === "hibrido") return "2";
+            if (normalizado === "3" || normalizado === "home office" || normalizado === "homeoffice") return "3";
+
+            return "";
+        }
+
         var planoAM = extrairCodigoPlano(
             getStr("cpPlanoAM") ||
-            getStr("TxtIncPlanoSaudeTipoCod") ||
-            getStr("TxtIncPlanoSaudeTipo")
+            getStr("TxtIncPlanoSaudeTipoCod")
         );
 
         var planoAO = extrairCodigoPlano(
             getStr("cpPlanoAO") ||
-            getStr("TxtIncPlanoOdontoTipoCod") ||
-            getStr("TxtIncPlanoOdontoTipo")
+            getStr("TxtIncPlanoOdontoTipoCod")
+        );
+
+        var dataInclusaoAM = getStr("cpDataInclusaoAM");
+        var dataInclusaoAO = getStr("cpDataInclusaoAO");
+
+        var clawback = getStr("cpPrazoClawback");
+        var nivelIngles = getStr("cpNivelIngles");
+
+        var modeloTrabalho = normalizarModeloTrabalho(
+            getStr("cpModeloTrabalho") ||
+            getStr("cpModeloDeTrabalho") ||
+            getStr("MODELODETRABALHO")
+        );
+
+        var formacaoFuncionario = normalizarTextoComplementar(
+            getStr("cpFormacaoFuncionario") ||
+            getStr("cpFormacao") ||
+            getStr("FORMACAO")
         );
 
         // Se todos os campos estiverem vazios, não há necessidade de chamar o RM
@@ -84,7 +187,13 @@ function servicetask139(attempt, message) {
             parentescoEmergencia === "" &&
             telefoneEmergencia === "" &&
             planoAM === "" &&
-            planoAO === ""
+            planoAO === "" &&
+            dataInclusaoAM === "" &&
+            dataInclusaoAO === "" &&
+            clawback === "" &&
+            nivelIngles === "" &&
+            modeloTrabalho === "" &&
+            formacaoFuncionario === ""
         ) {
             log.info("### NENHUM DADO COMPLEMENTAR PARA INTEGRAR. IGNORANDO TASK 139...");
             return true;
@@ -104,7 +213,16 @@ function servicetask139(attempt, message) {
         xmlCompl += tag("CHAPA", CHAPA);
         xmlCompl += "  </PFunc>\n";
 
-        if (planoAM !== "" || planoAO !== "") {
+        if (
+            planoAM !== "" ||
+            planoAO !== "" ||
+            dataInclusaoAM !== "" ||
+            dataInclusaoAO !== "" ||
+            clawback !== "" ||
+            nivelIngles !== "" ||
+            modeloTrabalho !== "" ||
+            formacaoFuncionario !== ""
+        ) {
             xmlCompl += "  <PFCOMPL>\n";
             xmlCompl += tag("CODCOLIGADA", COLIGADA);
             xmlCompl += tag("CHAPA", CHAPA);
@@ -113,8 +231,32 @@ function servicetask139(attempt, message) {
                 xmlCompl += tag("ASSMEDICA", planoAM);
             }
 
+            if (dataInclusaoAM !== "") {
+                xmlCompl += tag("DTINCASSITMED", formatarDataRM(dataInclusaoAM));
+            }
+
             if (planoAO !== "") {
                 xmlCompl += tag("ASSODONTO", planoAO);
+            }
+
+            if (dataInclusaoAO !== "") {
+                xmlCompl += tag("DTINCASSITODO", formatarDataRM(dataInclusaoAO));
+            }
+
+            if (clawback !== "") {
+                xmlCompl += tag("CLAWBACK", formatarDataRM(clawback));
+            }
+
+            if (nivelIngles !== "") {
+                xmlCompl += tag("NIVEL_INGLES", nivelIngles);
+            }
+
+            if (modeloTrabalho !== "") {
+                xmlCompl += tag("MODELODETRABALHO", modeloTrabalho);
+            }
+
+            if (formacaoFuncionario !== "") {
+                xmlCompl += tag("FORMACAO", formacaoFuncionario);
             }
 
             xmlCompl += "  </PFCOMPL>\n";

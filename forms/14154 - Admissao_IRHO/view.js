@@ -360,122 +360,77 @@ $(document).ready(function () {
   });
 
   // Função para UP Front
-  function toggleUpFrontTipo() {
-    var isSim = $("#cpUpFront").val() == "sim";
-    var $radiosTipo = $("input[name='cpUpFrontTipo']");
-    var $campoInfo = $("#cpUpFrontInfoEventos");
+  function obterDataAdmissaoRH() {
+    return $("#FUN_ADMISSAO").val() || $("#cpDataPrevisaoAdmissao").val() || "";
+  }
 
-    // O tipo agora fica sempre visível
-    $("#divUpFrontTipo").show();
+  function prepararCampoBloqueado($campo, bloqueado) {
+    if (!$campo.length) return;
 
-    if (isSim) {
-      $radiosTipo
-        .prop("disabled", false)
-        .css("cursor", "pointer");
+    $campo
+      .prop("readonly", bloqueado)
+      .prop("disabled", false)
+      .css({
+        "pointer-events": bloqueado ? "none" : "auto",
+        "background-color": bloqueado ? "#f3f4f6" : "#fff",
+        "cursor": bloqueado ? "not-allowed" : "auto"
+      });
+  }
 
-      $("#divUpFrontInfoEventos").show();
+  function preencherDataInicioPadrao(campoId) {
+    var $campo = $("#" + campoId);
+    if (!$campo.length) return;
 
-      $campoInfo
-        .prop("readonly", false)
-        .prop("disabled", false)
-        .css({
-          "pointer-events": "auto",
-          "background-color": "#fff",
-          "cursor": "auto"
-        });
-    } else {
-      if (atividade == 0 || atividade == 1 || atividade == 41) {
-        $radiosTipo.prop("checked", false);
-        $campoInfo.val("");
-      }
-
-      $radiosTipo
-        .prop("disabled", true)
-        .css("cursor", "not-allowed");
-
-      $("#divUpFrontInfoEventos").hide();
-
-      $campoInfo
-        .prop("readonly", true)
-        .prop("disabled", false)
-        .css({
-          "pointer-events": "none",
-          "background-color": "#f3f4f6",
-          "cursor": "not-allowed"
-        });
+    if (!$.trim($campo.val() || "")) {
+      $campo.val(obterDataAdmissaoRH());
     }
   }
 
-  // Função para Hiring Bonus
-  function toggleHiringBonusTipo() {
-    var isSim = $("#cpHiringBonus").val() == "sim";
-    var $radiosTipo = $("input[name='cpHiringBonusTipo']");
-    var $campoInfo = $("#cpHiringBonusInfoEventos");
+  function toggleEventoProgramado(prefixo) {
+    var isSim = $("#" + prefixo).val() == "sim";
 
-    // O tipo agora fica sempre visível
-    $("#divHiringBonusTipo").show();
+    prepararCampoBloqueado($("#" + prefixo + "Valor"), !isSim);
+    prepararCampoBloqueado($("#" + prefixo + "Observacao"), !isSim);
 
-    if (isSim) {
-      $radiosTipo
-        .prop("disabled", false)
-        .css("cursor", "pointer");
+    preencherDataInicioPadrao(prefixo + "DataInicio");
 
-      $("#divHiringBonusInfoEventos").show();
+    $("#" + prefixo + "DataInicio")
+      .prop("readonly", false)
+      .prop("disabled", false)
+      .css({
+        "pointer-events": "auto",
+        "background-color": "#fff",
+        "cursor": "auto"
+      });
+  }
 
-      $campoInfo
-        .prop("readonly", false)
-        .prop("disabled", false)
-        .css({
-          "pointer-events": "auto",
-          "background-color": "#fff",
-          "cursor": "auto"
-        });
-    } else {
-      if (atividade == 0 || atividade == 1 || atividade == 41) {
-        $radiosTipo.prop("checked", false);
-        $campoInfo.val("");
-      }
+  function toggleUpFrontCampos() {
+    toggleEventoProgramado("cpUpFront");
+  }
 
-      $radiosTipo
-        .prop("disabled", true)
-        .css("cursor", "not-allowed");
+  function toggleHiringBonusCampos() {
+    toggleEventoProgramado("cpHiringBonus");
+  }
 
-      $("#divHiringBonusInfoEventos").hide();
+  function preencherDatasValoresAssociados() {
+    var dataAdmissao = obterDataAdmissaoRH();
 
-      $campoInfo
-        .prop("readonly", true)
-        .prop("disabled", false)
-        .css({
-          "pointer-events": "none",
-          "background-color": "#f3f4f6",
-          "cursor": "not-allowed"
-        });
+    if (!$.trim($("#cpDataPLR").val() || "")) {
+      $("#cpDataPLR").val(dataAdmissao);
     }
   }
 
-  // Função para Bonus
-  function toggleBonusTipo() {
-    var valor = $("#cpBonusValor").val();
-    // Verifica se o valor não é vazio, 0,00 ou 0.00
-    if (valor != "" && valor != "0,00" && valor != "0.00" && valor != null) {
-      $("#divBonusTipo").show();
-    } else {
-      $("#divBonusTipo").hide();
-      // Limpa seleção apenas em modo de edição
-      if (atividade == 0 || atividade == 1 || atividade == 41) {
-        $("input[name='cpBonusTipo']").prop("checked", false);
-      }
-    }
-  }
+  toggleUpFrontCampos();
+  toggleHiringBonusCampos();
+  preencherDatasValoresAssociados();
 
-  // Dispara as funções no carregamento da página (para modo de visão e edição)
-  toggleUpFrontTipo();
-  toggleHiringBonusTipo();
-  toggleBonusTipo();
-
-  $("#cpUpFront").off("change.valoresAssociados").on("change.valoresAssociados", toggleUpFrontTipo);
-  $("#cpHiringBonus").off("change.valoresAssociados").on("change.valoresAssociados", toggleHiringBonusTipo);
-  $("#cpBonusValor").off("blur.valoresAssociados change.valoresAssociados").on("blur.valoresAssociados change.valoresAssociados", toggleBonusTipo);
+  $("#cpUpFront").off("change.valoresAssociados").on("change.valoresAssociados", toggleUpFrontCampos);
+  $("#cpHiringBonus").off("change.valoresAssociados").on("change.valoresAssociados", toggleHiringBonusCampos);
+  $("#FUN_ADMISSAO").off("change.valoresAssociados").on("change.valoresAssociados", function () {
+    preencherDataInicioPadrao("cpUpFrontDataInicio");
+    preencherDataInicioPadrao("cpHiringBonusDataInicio");
+    preencherDatasValoresAssociados();
+  });
 
   // 1. Cria uma regra onde o primeiro dígito da hora é opcional (permitindo HH:MM ou HHH:MM)
   var maskBehavior = function (val) {
@@ -499,6 +454,9 @@ $(document).ready(function () {
 
   // 3. Aplica a máscara em todos os campos que tenham a classe 'mask-horario'
   $('.mask-horario').mask(maskBehavior, options);
+  if (jQuery.fn.maskMoney) {
+    jQuery(".money").maskMoney({ decimal: ",", thousands: "", precision: 2 });
+  }
 
   // ====================================================================
   // RECEÇÃO DE DADOS DO PAINEL ATS (Com De-Para de Zoom e Desbloqueio)
@@ -520,7 +478,8 @@ $(document).ready(function () {
       }
 
       // 3. Separa o CNPJ para tratamento especial
-      var cnpjFilial = c["CNPJ_FILIAL_ATS"];
+      var cnpjFilial = c["CNPJ_FILIAL_ATS"] || dadosOriginais.cnpjFilial || dadosOriginais.CNPJ_FILIAL_ATS || "";
+      var cnpjBuscadoLimpo = String(cnpjFilial || "").replace(/\D/g, "");
       delete c["CNPJ_FILIAL_ATS"];
 
       // 1. Cola os dados normais
@@ -565,7 +524,8 @@ $(document).ready(function () {
 
             // Variável com o CNPJ do ATS (certifique-se de que atsData.cnpjFilial ou a variável que você usa aqui seja a correta)
             // Limpamos pontos e traços para garantir a comparação
-            var cnpjBuscadoLimpo = String(atsData.cnpjFilial || atsData.CNPJ_FILIAL_ATS || "").replace(/\D/g, '');
+            // Usa o CNPJ já normalizado antes da chamada assíncrona do dataset.
+            // Não usar atsData aqui, pois essa variável não existe neste escopo.
 
             if (dataset && dataset.values && dataset.values.length > 0) {
               var filiaisRetornadas = dataset.values;
@@ -829,8 +789,10 @@ $(document).ready(function () {
     '#txtAdmissao', '#FUN_ADMISSAO', '#FUN_DATABASE', '#cpTerminoContrato',
     '#cpVencPrimeiraExp', '#cpVencSegundaExp', '#cpDataHoraExame', '#cpDataUltimoSaldoFGTS',
     '#cpDataOpcaoFGTS', '#cpDataInclusaoAM', '#cpDataInclusaoAO',
+    '#cpUpFrontDataInicio', '#cpHiringBonusDataInicio', '#cpDataPLR',
     '#cpEstagioDataInicio', '#cpEstagioDataFim',
-    '#Reg_Prof_Emissao', '#Passaporte_Emissao', '#Passaporte_Validade', '#cpDataExameAdmissional'
+    '#Reg_Prof_Emissao', '#Passaporte_Emissao', '#Passaporte_Validade', '#cpDataExameAdmissional',
+    '#cpPrazoClawback'
   ];
 
   // 2. Inicialização padronizada usando a API do Fluig
@@ -1799,6 +1761,7 @@ $(document).ready(function () {
     }
 
     var status = $("#cpStatusCand").val() || "Não iniciado";
+    var passoAtual = $("#cpPassoAtualCandidato").val() || "1";
     var percentual = parseInt($("#cpPctCand").val(), 10);
     var ultimaAtualizacao = $("#cpUltAtualCand").val() || "-";
     var origem = $("#cpOrigemAtualCand").val();
@@ -2040,8 +2003,8 @@ $(document).ready(function () {
         }, 500);
       }
 
-      // Limpa o localStorage
-      localStorage.removeItem("FLUIG_ATS_DATA");
+      // Não remover aqui. A rotina completa abaixo ainda precisa ler FLUIG_ATS_DATA.
+      // localStorage.removeItem("FLUIG_ATS_DATA");
 
       FLUIGC.toast({ title: 'Integração ATS:', message: 'Dados do candidato importados com sucesso!', type: 'success' });
 
@@ -2927,6 +2890,18 @@ function limparCamposJornadaAnterior() {
     var meta = aplicados[campoId] || {};
     var hiddenFields = meta.hiddenFields || [];
 
+    var camposManuaisProtegidosContraLimpeza = {
+      FUN_VLRSALARIO: true,
+      FUN_SALARIOBASE: true,
+      FUN_VALORHORA: true
+    };
+
+    if (camposManuaisProtegidosContraLimpeza[campoId]) {
+      console.warn("[Jornada] Campo manual protegido não será limpo:", campoId);
+      delete window.camposJornadaAplicados[campoId];
+      continue;
+    }
+
     logJornadaGrupo("Limpando campo parametrizado", {
       campoId: campoId,
       tipo: meta.tipo || "",
@@ -3069,6 +3044,20 @@ function aplicarCampoSimplesJornada(itemCampo) {
   }
 
   var valor = obterValorAplicacaoCampoSimplesJornada(itemCampo);
+
+  var camposManuaisProtegidosContraVazio = {
+    FUN_VLRSALARIO: true,
+    FUN_SALARIOBASE: true,
+    FUN_VALORHORA: true
+  };
+
+  if (
+    camposManuaisProtegidosContraVazio[campoId] &&
+    $.trim(String(valor || "")) === ""
+  ) {
+    console.warn("[Jornada] Campo manual protegido não será limpo por valor vazio:", campoId);
+    return;
+  }
 
   window.camposJornadaAplicados[campoId] = {
     tipo: itemCampo.campoTipo || "simples",
@@ -4260,9 +4249,10 @@ function removedZoomItem(removedItem) {
     $('#FUN_SECAO_DESC_AD').val("");
 
   } else if (removedItem.inputId == "FUN_FAIXASALARIAL") {
-    $('#FUN_VLRSALARIO').val('');
+    // Não limpar o salário automaticamente.
+    // A faixa salarial pode ser recarregada/limpa por parametrização, reload de zoom ou troca de estrutura,
+    // mas o salário principal da admissão deve permanecer manual até alteração explícita do RH.
     $('#FUN_VLRSALARIO').prop('readonly', false);
-    $('#txtSalario').val(''); // Limpa o campo do form antigo também
     $('#txtSalario').prop('readonly', false);
 
   } else if (removedItem.inputId == "FUN_CATSEFIP_IDDESC") {

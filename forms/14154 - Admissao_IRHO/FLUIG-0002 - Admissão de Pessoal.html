@@ -804,6 +804,28 @@
                           </div>
                         </div>
 
+                        <div class="row bloco-incidencias-dependente">
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label>IRRF?</label>
+                              <select class="form-control input-sm Tabela" name="TxtIncIRRF" id="TxtIncIRRF">
+                                <option value="0">Não</option>
+                                <option value="1">Sim</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label>Pensão?</label>
+                              <select class="form-control input-sm Tabela" name="TxtIncPensao" id="TxtIncPensao">
+                                <option value="0">Não</option>
+                                <option value="1">Sim</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
                         <div class="row bloco-beneficios-dependente">
                           <div class="col-md-3">
                             <div class="form-group">
@@ -865,15 +887,7 @@
                         </div>
 
                         <div class="hide">
-                          <select class="form-control input-sm Tabela" name="TxtIncIRRF" id="TxtIncIRRF">
-                            <option value="0">Não</option>
-                            <option value="1">Sim</option>
-                          </select>
                           <select class="form-control input-sm Tabela" name="TxtIncINSS" id="TxtIncINSS">
-                            <option value="0">Não</option>
-                            <option value="1">Sim</option>
-                          </select>
-                          <select class="form-control input-sm Tabela" name="TxtIncPensao" id="TxtIncPensao">
                             <option value="0">Não</option>
                             <option value="1">Sim</option>
                           </select>
@@ -2893,45 +2907,27 @@
           <div class="row">
             <div class="col-md-12">
               <h3 style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 15px; margin-bottom: 15px;">
-                FGTS e PIS</h3>
-            </div>
-            <div class="col-md-3">
-              <div class="form-group">
-                <label for="zoom_banco_fgts">Banco FGTS</label>
-                <input type="zoom" id="zoom_banco_fgts" name="zoom_banco_fgts" class="form-control" data-zoom="{
-                'displayKey': 'IDDESC_BANCO',
-                'datasetId': 'ds_irho_banco',
-                'maximumSelectionLength': '1',
-                'placeholder': 'Selecione...',
-                'fields': [
-                    {'field': 'IDDESC_BANCO', 'label': 'Banco', 'standard': 'true', 'search': 'true'}
-                ]
-            }">
-              </div>
+                Dados PIS
+              </h3>
             </div>
 
-            <div class="col-md-3">
-              <div class="form-group">
-                <label>Conta FGTS</label>
-                <input type="text" name="cpContaFGTS" id="cpContaFGTS" class="form-control">
-              </div>
-            </div>
-            <div class="col-md-3">
+            <div class="col-md-6">
               <div class="form-group">
                 <label for="zoom_banco_pis">Banco PIS</label>
                 <input type="zoom" id="zoom_banco_pis" name="zoom_banco_pis" class="form-control" data-zoom="{
-                'displayKey': 'IDDESC_BANCO',
-                'datasetId': 'ds_irho_banco',
-                'maximumSelectionLength': '1',
-                'placeholder': 'Selecione...',
-                'fields': [
-                    {'field': 'IDDESC_BANCO', 'label': 'Banco', 'standard': 'true', 'search': 'true'}
-                ]
-            }">
+        'displayKey': 'IDDESC_BANCO',
+        'datasetId': 'ds_irho_banco',
+        'maximumSelectionLength': '1',
+        'placeholder': 'Selecione...',
+        'fields': [
+          {'field': 'IDDESC_BANCO', 'label': 'Banco', 'standard': 'true', 'search': 'true'}
+        ]
+      }">
                 <input type="hidden" name="FUN_CODBANCOPIS" id="FUN_CODBANCOPIS">
               </div>
             </div>
-            <div class="col-md-3">
+
+            <div class="col-md-6">
               <div class="form-group">
                 <label>Operação Bancária</label>
                 <input type="text" name="cpOperacaoBancaria" id="cpOperacaoBancaria" class="form-control">
@@ -2954,37 +2950,36 @@
 
           <div class="row">
             <div class="col-md-12">
-              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px;">1. Integração e Contrato
+              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px;">
+                1. Integração e Contrato
               </h4>
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="zoom_sindicato">Sindicato</label>
-              <input type="zoom" id="zoom_sindicato" name="zoom_sindicato" class="form-control" data-zoom="{
-            'displayKey': 'IDDESC_SINDICATO',
-            'datasetId': 'ds_irho_sindicato',
-            'maximumSelectionLength': '1',
-            'placeholder': 'Digite o nome ou código...',
-            'fields': [
-                {'field': 'CODIGO', 'label': 'Código', 'search': 'true'},
-                {'field': 'IDDESC_SINDICATO', 'label': 'Sindicato', 'standard': 'true', 'search': 'true'}
-            ]
-        }">
-              <input type="hidden" id="cod_sindicato" name="cod_sindicato">
             </div>
 
             <div class="form-group col-md-6">
               <label for="zoom_categoriaEsocial">Categoria eSocial</label>
               <input type="zoom" id="zoom_categoriaEsocial" name="zoom_categoriaEsocial" class="form-control" data-zoom="{
-            'displayKey': 'IDDESC_CATEGORIAESOCIAL',
-            'datasetId': 'ds_irho_categoriaEsocial',
-            'maximumSelectionLength': '1',
-            'placeholder': 'Digite o código ou descrição...',
-            'fields': [
-                {'field': 'IDDESC_CATEGORIAESOCIAL', 'label': 'Categoria eSocial', 'standard': 'true', 'search': 'true'}
-            ]
-        }">
+      'displayKey': 'IDDESC_CATEGORIAESOCIAL',
+      'datasetId': 'ds_irho_categoriaEsocial',
+      'maximumSelectionLength': '1',
+      'placeholder': 'Digite o código ou descrição...',
+      'fields': [
+        {'field': 'IDDESC_CATEGORIAESOCIAL', 'label': 'Categoria eSocial', 'standard': 'true', 'search': 'true'}
+      ]
+    }">
               <input type="hidden" id="FUN_CATESOCIAL" name="FUN_CATESOCIAL">
+            </div>
+
+            <div class="form-group col-md-6">
+              <label>Sequência do Turno</label>
+              <input type="zoom" id="FUN_SEQTURN_IDDESC_AD" name="FUN_SEQTURN_IDDESC_AD" data-zoom="{
+      'displayKey':'INDINICIOHOR',
+      'datasetId':'ds_irho_seqTurno',
+      'maximumSelectionLength':'1',
+      'placeholder':'Escolha a Sequência',
+      'fields':[
+        {'field':'INDINICIOHOR','label':'Código','standard':'true','search':'true'}
+      ]
+    }" />
             </div>
 
             <div class="form-group col-md-3">
@@ -3019,23 +3014,10 @@
               <select id="FUN_TPJORNADA" name="FUN_TPJORNADA" class="form-control">
                 <option value="1">Submetidos a Horário (Cap II CLT)</option>
                 <option value="2">Atividade Externa (Inciso I, Art.62)</option>
-                <option value="3">Funções Específicadas (Inciso II, Art.62)</option>
+                <option value="3">Funções Especificadas (Inciso II, Art.62)</option>
                 <option value="4">Teletrabalho (Inciso III, Art.62)</option>
               </select>
               <input type="hidden" name="FUN_TPJORNADA_DESC_AD" id="FUN_TPJORNADA_DESC_AD">
-            </div>
-
-            <div class="form-group col-md-6">
-              <label>Sequência do Turno</label>
-              <input type="zoom" id="FUN_SEQTURN_IDDESC_AD" name="FUN_SEQTURN_IDDESC_AD" data-zoom="{
-            'displayKey':'INDINICIOHOR',
-            'datasetId':'ds_irho_seqTurno',
-            'maximumSelectionLength':'1',
-            'placeholder':'Escolha a Sequência',
-            'fields':[
-                {'field':'INDINICIOHOR','label':'Código','standard':'true','search':'true'}
-            ]
-        }" />
             </div>
           </div>
 
@@ -3111,12 +3093,16 @@
           <div class="row">
             <div class="col-md-12">
               <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
-                Valores Associados e Eventos Programados
+                3. Eventos Programados
               </h4>
             </div>
           </div>
 
           <div class="row">
+            <div class="col-md-12">
+              <h5 style="font-weight: bold; margin-top: 10px;">UP Front</h5>
+            </div>
+
             <div class="form-group col-md-3">
               <label class="labelField" for="cpUpFront">UP Front</label>
               <select class="form-control" name="cpUpFront" id="cpUpFront">
@@ -3126,16 +3112,33 @@
               </select>
             </div>
 
-            <div class="form-group col-md-3" id="divUpFrontTipo">
-              <label class="labelField">Tipo UP Front</label>
-              <div style="margin-top: 8px;">
-                <label class="radio-inline">
-                  <input type="radio" name="cpUpFrontTipo" id="cpUpFrontTipoL" value="liquido"> Líquido
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" name="cpUpFrontTipo" id="cpUpFrontTipoB" value="bruto"> Bruto
-                </label>
+            <div class="form-group col-md-3">
+              <label for="cpUpFrontValor">Valor</label>
+              <input type="text" class="form-control money" name="cpUpFrontValor" id="cpUpFrontValor"
+                mask="#00.000.000.000.000,00" readonly>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="cpUpFrontDataInicio">Data Início</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="cpUpFrontDataInicio" id="cpUpFrontDataInicio"
+                  mask="00/00/0000">
+                <span class="input-group-addon">
+                  <span class="fluigicon fluigicon-calendar"></span>
+                </span>
               </div>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="cpUpFrontObservacao">Observação</label>
+              <input type="text" class="form-control" name="cpUpFrontObservacao" id="cpUpFrontObservacao"
+                maxlength="255" readonly>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <h5 style="font-weight: bold; margin-top: 10px;">Hiring Bonus</h5>
             </div>
 
             <div class="form-group col-md-3">
@@ -3147,62 +3150,73 @@
               </select>
             </div>
 
-            <div class="form-group col-md-3" id="divHiringBonusTipo">
-              <label class="labelField">Tipo Hiring Bonus</label>
-              <div style="margin-top: 8px;">
-                <label class="radio-inline">
-                  <input type="radio" name="cpHiringBonusTipo" id="cpHiringBonusTipoL" value="liquido"> Líquido
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" name="cpHiringBonusTipo" id="cpHiringBonusTipoB" value="bruto"> Bruto
-                </label>
+            <div class="form-group col-md-3">
+              <label for="cpHiringBonusValor">Valor</label>
+              <input type="text" class="form-control money" name="cpHiringBonusValor" id="cpHiringBonusValor"
+                mask="#00.000.000.000.000,00" readonly>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="cpHiringBonusDataInicio">Data Início</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="cpHiringBonusDataInicio" id="cpHiringBonusDataInicio"
+                  mask="00/00/0000">
+                <span class="input-group-addon">
+                  <span class="fluigicon fluigicon-calendar"></span>
+                </span>
               </div>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="cpHiringBonusObservacao">Observação</label>
+              <input type="text" class="form-control" name="cpHiringBonusObservacao" id="cpHiringBonusObservacao"
+                maxlength="255" readonly>
             </div>
           </div>
 
-          <div class="row" id="linhaInfoEventosUpFrontHiring">
-            <div class="form-group col-md-6" id="divUpFrontInfoEventos" style="display: none;">
-              <label class="labelField" for="cpUpFrontInfoEventos">Informações de UP Front / Eventos Programados</label>
-              <input type="text" class="form-control" name="cpUpFrontInfoEventos" id="cpUpFrontInfoEventos"
-                maxlength="255" placeholder="Informe as condições, evento programado ou observação do UP Front">
-            </div>
-
-            <div class="form-group col-md-6" id="divHiringBonusInfoEventos" style="display: none;">
-              <label class="labelField" for="cpHiringBonusInfoEventos">Informações de Hiring Bonus / Eventos
-                Programados</label>
-              <input type="text" class="form-control" name="cpHiringBonusInfoEventos" id="cpHiringBonusInfoEventos"
-                maxlength="255" placeholder="Informe as condições, evento programado ou observação do Hiring Bonus">
+          <div class="row">
+            <div class="col-md-12">
+              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
+                4. Valores Associados
+              </h4>
             </div>
           </div>
 
           <div class="row">
             <div class="form-group col-md-3">
-              <label class="labelField" for="cpBonusValor">Bônus</label>
-              <input type="text" class="form-control money" name="cpBonusValor" id="cpBonusValor"
-                placeholder="Informe o valor" />
-            </div>
-
-            <div class="form-group col-md-3" id="divBonusTipo">
-              <label class="labelField">Tipo Bônus</label>
-              <div style="margin-top: 8px;">
-                <label class="radio-inline">
-                  <input type="radio" name="cpBonusTipo" id="cpBonusTipoM" value="mensal"> Mensal
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" name="cpBonusTipo" id="cpBonusTipoA" value="anual"> Anual
-                </label>
-              </div>
-            </div>
-
-            <div class="form-group col-md-3">
-              <label for="cpPrazoClawback">Prazo do Clawback</label>
-              <input type="text" name="cpPrazoClawback" id="cpPrazoClawback" class="form-control"
-                placeholder="Ex.: 12 meses">
+              <label for="cpTipoPLR">Tipo PLR</label>
+              <select name="cpTipoPLR" id="cpTipoPLR" class="form-control">
+                <option value=""></option>
+                <option value="01">01 - Valor PLR semestral</option>
+                <option value="02">02 - Valor PLR Anual</option>
+                <option value="03">03 - Bonus Associado</option>
+              </select>
             </div>
 
             <div class="form-group col-md-3">
               <label for="cpValorPLR">Valor PLR</label>
               <input type="text" name="cpValorPLR" id="cpValorPLR" class="form-control" mask="#00.000.000.000.000,00">
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="cpDataPLR">Data</label>
+              <div class="input-group">
+                <input type="text" name="cpDataPLR" id="cpDataPLR" class="form-control" mask="00/00/0000">
+                <span class="input-group-addon">
+                  <span class="fluigicon fluigicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="cpPrazoClawback">Prazo do Clawback</label>
+              <div class="input-group">
+                <input type="text" name="cpPrazoClawback" id="cpPrazoClawback" class="form-control" mask="00/00/0000"
+                  placeholder="dd/mm/aaaa">
+                <span class="input-group-addon">
+                  <span class="fluigicon fluigicon-calendar"></span>
+                </span>
+              </div>
             </div>
           </div>
 
@@ -3217,7 +3231,157 @@
           <div class="row">
             <div class="col-md-12">
               <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
-                3. SEFIP, RAIS, Regimes e Impostos
+                5. FGTS
+              </h4>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-3">
+              <label>FGTS</label>
+              <select name="FUN_ALTFGTS" id="FUN_ALTFGTS" class="form-control">
+                <option value="1">1 - Optante</option>
+                <option value="2">2 - Não Optante</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label>Data Últ. Saldo FGTS</label>
+              <div class="input-group">
+                <input type="text" name="cpDataUltimoSaldoFGTS" id="cpDataUltimoSaldoFGTS" class="form-control"
+                  mask="00/00/0000">
+                <span class="input-group-addon">
+                  <span class="fluigicon fluigicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="cpDataOpcaoFGTS">Data de Opção do FGTS</label>
+              <div class="input-group">
+                <input type="text" name="cpDataOpcaoFGTS" id="cpDataOpcaoFGTS" class="form-control" mask="00/00/0000">
+                <span class="input-group-addon">
+                  <span class="fluigicon fluigicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="cpValorSaldoFGTS">Saldo FGTS</label>
+              <input type="text" name="cpValorSaldoFGTS" id="cpValorSaldoFGTS" class="form-control" value="0,00"
+                mask="#00.000.000.000.000,00">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-3">
+              <label for="cpSaldoFGTSFinsRescisorios">Saldo FGTS para Fins Rescisórios</label>
+              <input type="text" name="cpSaldoFGTSFinsRescisorios" id="cpSaldoFGTSFinsRescisorios" class="form-control"
+                value="0,00" mask="#00.000.000.000.000,00">
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="zoom_banco_fgts">Banco FGTS</label>
+              <input type="zoom" id="zoom_banco_fgts" name="zoom_banco_fgts" class="form-control" data-zoom="{
+      'displayKey': 'IDDESC_BANCO',
+      'datasetId': 'ds_irho_banco',
+      'maximumSelectionLength': '1',
+      'placeholder': 'Selecione...',
+      'fields': [
+        {'field': 'IDDESC_BANCO', 'label': 'Banco', 'standard': 'true', 'search': 'true'}
+      ]
+    }">
+              <input type="hidden" name="FUN_BANCOFGTS" id="FUN_BANCOFGTS">
+            </div>
+
+            <div class="form-group col-md-3">
+              <label>Conta FGTS</label>
+              <input type="text" name="cpContaFGTS" id="cpContaFGTS" class="form-control">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
+                6. Sindicato e Regimes
+              </h4>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-4">
+              <label for="zoom_sindicato">Sindicato</label>
+              <input type="zoom" id="zoom_sindicato" name="zoom_sindicato" class="form-control" data-zoom="{
+      'displayKey': 'IDDESC_SINDICATO',
+      'datasetId': 'ds_irho_sindicato',
+      'maximumSelectionLength': '1',
+      'placeholder': 'Digite o nome ou código...',
+      'fields': [
+        {'field': 'CODIGO', 'label': 'Código', 'search': 'true'},
+        {'field': 'IDDESC_SINDICATO', 'label': 'Sindicato', 'standard': 'true', 'search': 'true'}
+      ]
+    }">
+              <input type="hidden" id="cod_sindicato" name="cod_sindicato">
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="zoom_sindicato_filiacao">Sindicato Filiação</label>
+              <input type="zoom" id="zoom_sindicato_filiacao" name="zoom_sindicato_filiacao" class="form-control"
+                data-zoom="{
+      'displayKey': 'IDDESC_SINDICATO',
+      'datasetId': 'ds_irho_sindicato',
+      'maximumSelectionLength': '1',
+      'placeholder': 'Digite o nome ou código...',
+      'fields': [
+        {'field': 'CODIGO', 'label': 'Código', 'search': 'true'},
+        {'field': 'IDDESC_SINDICATO', 'label': 'Sindicato', 'standard': 'true', 'search': 'true'}
+      ]
+    }">
+              <input type="hidden" id="FUN_CODDESCSINDICATOFILIACAO" name="FUN_CODDESCSINDICATOFILIACAO">
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="zoom_contribuicao_sindical">Contribuição Sindical</label>
+              <input type="zoom" id="zoom_contribuicao_sindical" name="zoom_contribuicao_sindical" class="form-control"
+                data-zoom="{
+      'displayKey': 'IDDESC_CONTRIBUICAO',
+      'datasetId': 'ds_irho_contribuicaoSindical',
+      'maximumSelectionLength': '1',
+      'placeholder': 'Selecione...',
+      'fields': [
+        {'field': 'IDDESC_CONTRIBUICAO', 'label': 'Contribuição', 'standard': 'true', 'search': 'true'}
+      ]
+    }">
+              <input type="hidden" id="FUN_PGCTSIN" name="FUN_PGCTSIN">
+              <input type="hidden" id="FUN_PGCTSIN_IDDESC_AD" name="FUN_PGCTSIN_IDDESC_AD">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="cpRegimePrevidenciario">Tipo Regime Previdenciário</label>
+              <select name="cpRegimePrevidenciario" id="cpRegimePrevidenciario" class="form-control">
+                <option value=""></option>
+                <option value="1">Regime Geral da Previdência Social - RGPS</option>
+                <option value="2">Regime Próprio de Previdência Social - RPPS</option>
+                <option value="3">Regime de Previdência Social no Exterior</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="cpRegimeTrabalhista">Tipo Regime Trabalhista</label>
+              <select name="cpRegimeTrabalhista" id="cpRegimeTrabalhista" class="form-control">
+                <option value=""></option>
+                <option value="1">CLT - Consolidação das Leis de Trabalho</option>
+                <option value="2">Estatutário / Legislações Específicas</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
+                7. SEFIP, RAIS e Impostos
               </h4>
             </div>
           </div>
@@ -3230,6 +3394,7 @@
                 <option value="0">Não Calcula</option>
               </select>
             </div>
+
             <div class="form-group col-md-3">
               <label>IRRF</label>
               <select name="FUN_IRRF" id="FUN_IRRF" class="form-control">
@@ -3237,151 +3402,62 @@
                 <option value="0">Não Calcula</option>
               </select>
             </div>
-            <div class="form-group col-md-3">
-              <label>FGTS</label>
-              <select name="FUN_ALTFGTS" id="FUN_ALTFGTS" class="form-control">
-                <option value="1">1 - Optante</option>
-                <option value="2">2 - Não Optante</option>
-              </select>
-            </div>
-            <div class="form-group col-md-3">
-              <label>Data Últ. Saldo FGTS</label>
-              <div class="input-group">
-                <input type="text" name="cpDataUltimoSaldoFGTS" id="cpDataUltimoSaldoFGTS" class="form-control"
-                  mask="00/00/0000">
-                <span class="input-group-addon">
-                  <span class="fluigicon fluigicon-calendar"></span>
-                </span>
-              </div>
-            </div>
-          </div>
 
-          <div class="row">
-            <div class="form-group col-md-4">
-              <label for="cpDataOpcaoFGTS">Data de Opção do FGTS</label>
-              <div class="input-group">
-                <input type="text" name="cpDataOpcaoFGTS" id="cpDataOpcaoFGTS" class="form-control" mask="00/00/0000">
-                <span class="input-group-addon">
-                  <span class="fluigicon fluigicon-calendar"></span>
-                </span>
-              </div>
-            </div>
-
-            <div class="form-group col-md-4">
-              <label for="cpValorSaldoFGTS">Saldo FGTS</label>
-              <input type="text" name="cpValorSaldoFGTS" id="cpValorSaldoFGTS" class="form-control" value="0,00"
-                mask="#00.000.000.000.000,00">
-            </div>
-
-            <div class="form-group col-md-4">
-              <label for="cpSaldoFGTSFinsRescisorios">Saldo FGTS para Fins Rescisórios</label>
-              <input type="text" name="cpSaldoFGTSFinsRescisorios" id="cpSaldoFGTSFinsRescisorios" class="form-control"
-                value="0,00" mask="#00.000.000.000.000,00">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-3">
-              <label for="cpRegimePrevidenciario">Tipo Regime Previdenciário</label>
-              <select name="cpRegimePrevidenciario" id="cpRegimePrevidenciario" class="form-control">
-                <option value=""></option>
-                <option value="1">Regime Geral da Previdência Social - RGPS</option>
-                <option value="2">Regime Próprio de Previdência Social - RPPS</option>
-                <option value="3">Regime de Previdência Social no Exterior</option>
-              </select>
-            </div>
-            <div class="form-group col-md-3">
-              <label for="cpRegimeTrabalhista">Tipo Regime Trabalhista</label>
-              <select name="cpRegimeTrabalhista" id="cpRegimeTrabalhista" class="form-control">
-                <option value=""></option>
-                <option value="1">CLT - Consolidação das Leis de Trabalho</option>
-                <option value="2">Estatutário / Legislações Específicas</option>
-              </select>
-            </div>
-            <div class="form-group col-md-3">
-              <label for="zoom_sindicato_filiacao">Sindicato Filiação</label>
-              <input type="zoom" id="zoom_sindicato_filiacao" name="zoom_sindicato_filiacao" class="form-control"
-                data-zoom="{
-            'displayKey': 'IDDESC_SINDICATO', 
-            'datasetId': 'ds_irho_sindicato', 
-            'maximumSelectionLength': '1', 
-            'placeholder': 'Digite o nome ou código...',
-            'fields': [ 
-                {'field': 'CODIGO', 'label': 'Código', 'search': 'true'},
-                {'field': 'IDDESC_SINDICATO', 'label': 'Sindicato', 'standard': 'true', 'search': 'true'} 
-            ]
-        }">
-              <input type="hidden" id="FUN_CODDESCSINDICATOFILIACAO" name="FUN_CODDESCSINDICATOFILIACAO">
-            </div>
-            <div class="form-group col-md-3">
-              <label for="zoom_contribuicao_sindical">Contribuição Sindical</label>
-              <input type="zoom" id="zoom_contribuicao_sindical" name="zoom_contribuicao_sindical" class="form-control"
-                data-zoom="{
-            'displayKey': 'IDDESC_CONTRIBUICAO',
-            'datasetId': 'ds_irho_contribuicaoSindical',
-            'maximumSelectionLength': '1',
-            'placeholder': 'Selecione...',
-            'fields': [
-                {'field': 'IDDESC_CONTRIBUICAO', 'label': 'Contribuição', 'standard': 'true', 'search': 'true'}
-            ]
-        }">
-            </div>
-          </div>
-
-          <div class="row">
             <div class="form-group col-md-3">
               <label for="zoom_ocorrencia_sefip">Cód. Ocorrência SEFIP</label>
               <input type="zoom" id="zoom_ocorrencia_sefip" name="zoom_ocorrencia_sefip" class="form-control" data-zoom="{
-            'displayKey': 'IDDESC_OCORRENCIA',
-            'datasetId': 'ds_IRHO_codOcorrenciaSefip',
-            'maximumSelectionLength': '1',
-            'placeholder': 'Selecione...',
-            'fields': [
-                {'field': 'IDDESC_OCORRENCIA', 'label': 'Ocorrência', 'standard': 'true', 'search': 'true'}
-            ]
-        }">
+      'displayKey': 'IDDESC_OCORRENCIA',
+      'datasetId': 'ds_IRHO_codOcorrenciaSefip',
+      'maximumSelectionLength': '1',
+      'placeholder': 'Selecione...',
+      'fields': [
+        {'field': 'IDDESC_OCORRENCIA', 'label': 'Ocorrência', 'standard': 'true', 'search': 'true'}
+      ]
+    }">
               <input type="hidden" id="FUN_CODOCORRENCIA_IDDESC" name="FUN_CODOCORRENCIA_IDDESC">
             </div>
 
             <div class="form-group col-md-3">
               <label for="zoom_categoria_sefip">Cód. Categoria SEFIP</label>
               <input type="zoom" id="zoom_categoria_sefip" name="zoom_categoria_sefip" class="form-control" data-zoom="{
-            'displayKey': 'IDDESC_CATSEFIP',
-            'datasetId': 'ds_irho_codCategoriaSefip',
-            'maximumSelectionLength': '1',
-            'placeholder': 'Selecione...',
-            'fields': [
-                {'field': 'IDDESC_CATSEFIP', 'label': 'Categoria', 'standard': 'true', 'search': 'true'}
-            ]
-        }">
+      'displayKey': 'IDDESC_CATSEFIP',
+      'datasetId': 'ds_irho_codCategoriaSefip',
+      'maximumSelectionLength': '1',
+      'placeholder': 'Selecione...',
+      'fields': [
+        {'field': 'IDDESC_CATSEFIP', 'label': 'Categoria', 'standard': 'true', 'search': 'true'}
+      ]
+    }">
               <input type="hidden" id="FUN_CATSEFIP_IDDESC" name="FUN_CATSEFIP_IDDESC">
             </div>
+          </div>
 
-            <div class="form-group col-md-3">
+          <div class="row">
+            <div class="form-group col-md-6">
               <label for="zoom_situacao_rais">Situação Empreg. (RAIS)</label>
               <input type="zoom" id="zoom_situacao_rais" name="zoom_situacao_rais" class="form-control" data-zoom="{
-            'displayKey': 'IDDESC_SITUACAO',
-            'datasetId': 'ds_irho_situacaoRais',
-            'maximumSelectionLength': '1',
-            'placeholder': 'Selecione...',
-            'fields': [
-                {'field': 'IDDESC_SITUACAO', 'label': 'Situação', 'standard': 'true', 'search': 'true'}
-            ]
-        }">
+      'displayKey': 'IDDESC_SITUACAO',
+      'datasetId': 'ds_irho_situacaoRais',
+      'maximumSelectionLength': '1',
+      'placeholder': 'Selecione...',
+      'fields': [
+        {'field': 'IDDESC_SITUACAO', 'label': 'Situação', 'standard': 'true', 'search': 'true'}
+      ]
+    }">
               <input type="hidden" id="cpSituacaoRais" name="cpSituacaoRais">
             </div>
 
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-6">
               <label for="zoom_vinculo_rais">Vínculo Empreg. (RAIS)</label>
               <input type="zoom" id="zoom_vinculo_rais" name="zoom_vinculo_rais" class="form-control" data-zoom="{
-            'displayKey': 'IDDESC_VINCULO',
-            'datasetId': 'ds_irho_vinculoRais',
-            'maximumSelectionLength': '1',
-            'placeholder': 'Selecione...',
-            'fields': [
-                {'field': 'IDDESC_VINCULO', 'label': 'Vínculo', 'standard': 'true', 'search': 'true'}
-            ]
-        }">
+      'displayKey': 'IDDESC_VINCULO',
+      'datasetId': 'ds_irho_vinculoRais',
+      'maximumSelectionLength': '1',
+      'placeholder': 'Selecione...',
+      'fields': [
+        {'field': 'IDDESC_VINCULO', 'label': 'Vínculo', 'standard': 'true', 'search': 'true'}
+      ]
+    }">
               <input type="hidden" id="FUN_VINCEMPREG" name="FUN_VINCEMPREG">
               <input type="hidden" id="FUN_VINCEMPREG_IDDESC_AD" name="FUN_VINCEMPREG_IDDESC_AD">
             </div>
@@ -3389,10 +3465,13 @@
 
           <div class="row">
             <div class="col-md-12">
-              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">4.
-                Controle de Ponto e Portal</h4>
+              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
+                8. Controle de Ponto e Portal
+              </h4>
             </div>
+          </div>
 
+          <div class="row">
             <div class="form-group col-md-3">
               <label for="MarcaPonto">Utiliza Cartão de Ponto?</label>
               <select class="form-control" name="MarcaPonto" id="MarcaPonto">
@@ -3427,14 +3506,14 @@
             <div class="form-group col-md-4">
               <label for="zoom_quiosque">Grupo de Quiosque</label>
               <input type="zoom" id="zoom_quiosque" name="zoom_quiosque" class="form-control" data-zoom="{
-        'displayKey': 'IDDESC_QUIOSQUE',
-        'datasetId': 'ds_irho_grupoQuiosque',
-        'maximumSelectionLength': '1',
-        'placeholder': 'Aguardando empresa...',
-        'filterValues': 'CODCOLIGADA,', 
-        'fields': [
-            {'field': 'IDDESC_QUIOSQUE', 'label': 'Grupo', 'standard': 'true', 'search': 'true'}
-        ]
+      'displayKey': 'IDDESC_QUIOSQUE',
+      'datasetId': 'ds_irho_grupoQuiosque',
+      'maximumSelectionLength': '1',
+      'placeholder': 'Aguardando empresa...',
+      'filterValues': 'CODCOLIGADA,',
+      'fields': [
+        {'field': 'IDDESC_QUIOSQUE', 'label': 'Grupo', 'standard': 'true', 'search': 'true'}
+      ]
     }">
               <input type="hidden" id="FUN_CODQUIOSQUE_IDDESC" name="FUN_CODQUIOSQUE_IDDESC">
             </div>
@@ -3447,46 +3526,38 @@
       'maximumSelectionLength': '1',
       'placeholder': 'Selecione a equipe...',
       'fields': [
-          {'field': 'IDDESC_EQUIPE', 'label': 'Equipe', 'standard': 'true', 'search': 'true'}
+        {'field': 'IDDESC_EQUIPE', 'label': 'Equipe', 'standard': 'true', 'search': 'true'}
       ]
-  }">
+    }">
               <input type="hidden" id="cpCodigoEquipe" name="cpCodigoEquipe">
             </div>
 
             <div class="form-group col-md-4">
+              <label for="zoom_centroCusto">Centro de Custo</label>
+              <input type="zoom" id="zoom_centroCusto" name="zoom_centroCusto" class="form-control" data-zoom="{
+      'displayKey': 'IDDESC_CC',
+      'datasetId': 'ds_irho_centroCustos',
+      'maximumSelectionLength': '1',
+      'placeholder': 'Digite o código ou nome...',
+      'filterValues': 'CODCOLIGADA,',
+      'fields': [
+        {'field': 'IDDESC_CC', 'label': 'Centro de Custo', 'standard': 'true', 'search': 'true'}
+      ]
+    }">
+              <input type="hidden" id="FUN_CC" name="FUN_CC">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
               <label for="CatPonto">Categoria do Ponto</label>
               <input type="text" class="form-control" name="CatPonto" id="CatPonto">
             </div>
-          </div>
 
-          <div class="row">
-            <div class="col-md-12">
-              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
-                5. Horário de Trabalho e Dados Contábeis
-              </h4>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-6">
               <label>Índice Início Horário</label>
               <input type="text" name="cpIndiceInicioHorario" id="cpIndiceInicioHorario" class="form-control"
                 placeholder="Índice...">
-            </div>
-
-            <div class="form-group col-md-9">
-              <label for="zoom_centroCusto">Centro de Custo</label>
-              <input type="zoom" id="zoom_centroCusto" name="zoom_centroCusto" class="form-control" data-zoom="{
-            'displayKey': 'IDDESC_CC',
-            'datasetId': 'ds_irho_centroCustos',
-            'maximumSelectionLength': '1',
-            'placeholder': 'Digite o código ou nome...',
-            'filterValues': 'CODCOLIGADA,',
-            'fields': [
-                {'field': 'IDDESC_CC', 'label': 'Centro de Custo', 'standard': 'true', 'search': 'true'}
-            ]
-        }">
-              <input type="hidden" id="FUN_CC" name="FUN_CC">
             </div>
           </div>
 
@@ -3500,7 +3571,7 @@
               <label>Integração Gerencial</label>
               <input type="text" name="FUN_INTEGRGERENCIAL_IDDESC" id="FUN_INTEGRGERENCIAL_IDDESC" class="form-control">
             </div>
-          </div>          
+          </div>
 
           <div class="row" id="tituloContratoEstagioAprendizRH">
             <div class="col-md-12">
@@ -3612,9 +3683,9 @@
               <label>Modelo de Trabalho</label>
               <select name="cpModeloTrabalho" id="cpModeloTrabalho" class="form-control">
                 <option value=""></option>
-                <option value="Presencial">Presencial</option>
-                <option value="Híbrido">Híbrido</option>
-                <option value="Remoto">Remoto</option>
+                <option value="1">Presencial</option>
+                <option value="2">Híbrido</option>
+                <option value="3">Remoto</option>
               </select>
             </div>
           </div>
