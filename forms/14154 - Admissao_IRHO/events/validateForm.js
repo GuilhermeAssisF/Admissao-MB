@@ -92,7 +92,7 @@ function validateForm(form) {
             { id: "zoom_categoria_sefip", nome: "Cód. Categoria SEFIP" },
             { id: "zoom_situacao_rais", nome: "Situação Empreg. (RAIS)" },
             { id: "zoom_vinculo_rais", nome: "Vínculo Empreg. (RAIS)" },
-            { id: "cpIndiceInicioHorario", nome: "Índice Início Horário" },
+            //{ id: "cpIndiceInicioHorario", nome: "Índice Início Horário" },
             { id: "FUN_TPJORNADA", nome: "Tipo de Jornada" },
             { id: "zoom_centroCusto", nome: "Centro de Custo" },
             { id: "FUN_NATATIV", nome: "Natureza da Atividade" },

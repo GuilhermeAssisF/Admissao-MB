@@ -2955,7 +2955,7 @@
               </h4>
             </div>
 
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-12 campo-categoria-esocial-rh">
               <label for="zoom_categoriaEsocial">Categoria eSocial</label>
               <input type="zoom" id="zoom_categoriaEsocial" name="zoom_categoriaEsocial" class="form-control" data-zoom="{
       'displayKey': 'IDDESC_CATEGORIAESOCIAL',
@@ -2968,21 +2968,23 @@
     }">
               <input type="hidden" id="FUN_CATESOCIAL" name="FUN_CATESOCIAL">
             </div>
+          </div>
 
-            <div class="form-group col-md-6">
+          <div class="row">
+            <div class="form-group col-md-4">
               <label>Sequência do Turno</label>
               <input type="zoom" id="FUN_SEQTURN_IDDESC_AD" name="FUN_SEQTURN_IDDESC_AD" data-zoom="{
-      'displayKey':'INDINICIOHOR',
-      'datasetId':'ds_irho_seqTurno',
-      'maximumSelectionLength':'1',
-      'placeholder':'Escolha a Sequência',
-      'fields':[
-        {'field':'INDINICIOHOR','label':'Código','standard':'true','search':'true'}
-      ]
-    }" />
+        'displayKey':'INDINICIOHOR',
+        'datasetId':'ds_irho_seqTurno',
+        'maximumSelectionLength':'1',
+        'placeholder':'Escolha a Sequência',
+        'fields':[
+          {'field':'INDINICIOHOR','label':'Código','standard':'true','search':'true'}
+        ]
+      }" />
             </div>
 
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-4">
               <label>Natureza da Atividade</label>
               <select name="FUN_NATATIV" id="FUN_NATATIV" class="form-control">
                 <option value="1">Trabalho urbano</option>
@@ -2990,7 +2992,7 @@
               </select>
             </div>
 
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-4">
               <label>Indicativo de Admissão</label>
               <select name="FUN_INDADMISSAO" id="FUN_INDADMISSAO" class="form-control">
                 <option value="1">Normal</option>
@@ -2998,8 +3000,10 @@
                 <option value="3">Dec. Decisão Judicial</option>
               </select>
             </div>
+          </div>
 
-            <div class="form-group col-md-3">
+          <div class="row">
+            <div class="form-group col-md-6">
               <label>Contrato Tempo Parcial</label>
               <select name="FUN_CONTRATOPARCIAL" id="FUN_CONTRATOPARCIAL" class="form-control">
                 <option value="0">Não é tempo parcial</option>
@@ -3554,8 +3558,7 @@
               <input type="text" class="form-control" name="CatPonto" id="CatPonto">
             </div>
 
-            <div class="form-group col-md-6">
-              <label>Índice Início Horário</label>
+            <div class="form-group col-md-6 hide" id="blocoIndiceInicioHorario" <label>Índice Início Horário</label>
               <input type="text" name="cpIndiceInicioHorario" id="cpIndiceInicioHorario" class="form-control"
                 placeholder="Índice...">
             </div>
@@ -3824,7 +3827,7 @@
             </div>
           </div>
 
-          <div class="row">
+          <div class="row hide" id="blocoExameAdmissional">
             <div class="col-md-12">
               <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">Exame
                 Admissional</h4>

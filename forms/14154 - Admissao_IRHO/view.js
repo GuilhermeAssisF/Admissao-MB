@@ -364,6 +364,15 @@ $(document).ready(function () {
     return $("#FUN_ADMISSAO").val() || $("#cpDataPrevisaoAdmissao").val() || "";
   }
 
+  function obterDataHojeBR() {
+    var hoje = new Date();
+    var dia = String(hoje.getDate()).padStart(2, "0");
+    var mes = String(hoje.getMonth() + 1).padStart(2, "0");
+    var ano = hoje.getFullYear();
+
+    return dia + "/" + mes + "/" + ano;
+  }
+
   function prepararCampoBloqueado($campo, bloqueado) {
     if (!$campo.length) return;
 
@@ -377,12 +386,28 @@ $(document).ready(function () {
       });
   }
 
-  function preencherDataInicioPadrao(campoId) {
+  function preencherDataInicioPadrao(campoId, forcarAtualizacao) {
     var $campo = $("#" + campoId);
     if (!$campo.length) return;
 
-    if (!$.trim($campo.val() || "")) {
-      $campo.val(obterDataAdmissaoRH());
+    var dataAdmissao = obterDataAdmissaoRH();
+    if (!dataAdmissao) return;
+
+    var valorAtual = $.trim($campo.val() || "");
+    var valorAutoAnterior = $campo.attr("data-auto-admissao") || "";
+    var dataHoje = obterDataHojeBR();
+
+    var deveAtualizar =
+      forcarAtualizacao === true ||
+      valorAtual === "" ||
+      valorAtual === dataHoje ||
+      valorAtual === valorAutoAnterior;
+
+    if (deveAtualizar) {
+      $campo
+        .val(dataAdmissao)
+        .attr("data-auto-admissao", dataAdmissao)
+        .trigger("change");
     }
   }
 
@@ -412,25 +437,37 @@ $(document).ready(function () {
     toggleEventoProgramado("cpHiringBonus");
   }
 
-  function preencherDatasValoresAssociados() {
-    var dataAdmissao = obterDataAdmissaoRH();
-
-    if (!$.trim($("#cpDataPLR").val() || "")) {
-      $("#cpDataPLR").val(dataAdmissao);
-    }
+  function preencherDatasValoresAssociados(forcarAtualizacao) {
+    preencherDataInicioPadrao("cpDataPLR", forcarAtualizacao === true);
   }
 
   toggleUpFrontCampos();
   toggleHiringBonusCampos();
   preencherDatasValoresAssociados();
 
-  $("#cpUpFront").off("change.valoresAssociados").on("change.valoresAssociados", toggleUpFrontCampos);
-  $("#cpHiringBonus").off("change.valoresAssociados").on("change.valoresAssociados", toggleHiringBonusCampos);
-  $("#FUN_ADMISSAO").off("change.valoresAssociados").on("change.valoresAssociados", function () {
-    preencherDataInicioPadrao("cpUpFrontDataInicio");
-    preencherDataInicioPadrao("cpHiringBonusDataInicio");
-    preencherDatasValoresAssociados();
+  $("#cpUpFront").off("change.valoresAssociados").on("change.valoresAssociados", function () {
+    toggleUpFrontCampos();
+    preencherDataInicioPadrao("cpUpFrontDataInicio", true);
   });
+
+  $("#cpHiringBonus").off("change.valoresAssociados").on("change.valoresAssociados", function () {
+    toggleHiringBonusCampos();
+    preencherDataInicioPadrao("cpHiringBonusDataInicio", true);
+  });
+
+  $("#FUN_ADMISSAO, #cpDataPrevisaoAdmissao")
+    .off("change.valoresAssociados blur.valoresAssociados")
+    .on("change.valoresAssociados blur.valoresAssociados", function () {
+      preencherDataInicioPadrao("cpUpFrontDataInicio", true);
+      preencherDataInicioPadrao("cpHiringBonusDataInicio", true);
+      preencherDatasValoresAssociados(true);
+    });
+
+  setTimeout(function () {
+    preencherDataInicioPadrao("cpUpFrontDataInicio", true);
+    preencherDataInicioPadrao("cpHiringBonusDataInicio", true);
+    preencherDatasValoresAssociados(true);
+  }, 500);
 
   // 1. Cria uma regra onde o primeiro dígito da hora é opcional (permitindo HH:MM ou HHH:MM)
   var maskBehavior = function (val) {
@@ -1438,8 +1475,40 @@ $(document).ready(function () {
       });
   }
 
+  function normalizarParentescoBeneficio(valor) {
+    var texto = normalizarPlanoBeneficio(valor);
+
+    if (
+      texto.indexOf("conjuge") > -1 ||
+      texto.indexOf("companheiro") > -1 ||
+      texto.indexOf("companheira") > -1
+    ) {
+      return "conjuge";
+    }
+
+    if (
+      texto.indexOf("filho") > -1 ||
+      texto.indexOf("filha") > -1 ||
+      texto.indexOf("enteado") > -1 ||
+      texto.indexOf("enteada") > -1
+    ) {
+      return "filho";
+    }
+
+    return texto;
+  }
+
+  function montarChaveBeneficioDependente(nome, parentesco) {
+    return normalizarPlanoBeneficio(nome) + "||" + normalizarParentescoBeneficio(parentesco);
+  }
+
   function listarNomesDependentesBeneficio(valor) {
-    var mapa = {};
+    var mapa = {
+      nomes: {},
+      chaves: {},
+      possuiChaveComParentesco: false
+    };
+
     var texto = String(valor || "").trim();
 
     if (!texto) return mapa;
@@ -1447,15 +1516,33 @@ $(document).ready(function () {
     var partes = texto.split(/[,;\n]+/);
 
     for (var i = 0; i < partes.length; i++) {
-      var item = partes[i] || "";
-
-      item = item
+      var item = String(partes[i] || "")
         .replace(/^-/, "")
-        .replace(/\(.*?\)/g, "")
         .trim();
 
-      if (item) {
-        mapa[normalizarPlanoBeneficio(item)] = true;
+      if (!item) continue;
+
+      var nome = item;
+      var parentesco = "";
+
+      var posParentesco = item.lastIndexOf(" (");
+
+      if (posParentesco > -1) {
+        nome = item.substring(0, posParentesco).trim();
+
+        parentesco = item
+          .substring(posParentesco + 2)
+          .replace(/\)$/, "")
+          .trim();
+      }
+
+      if (nome) {
+        mapa.nomes[normalizarPlanoBeneficio(nome)] = true;
+      }
+
+      if (nome && parentesco) {
+        mapa.chaves[montarChaveBeneficioDependente(nome, parentesco)] = true;
+        mapa.possuiChaveComParentesco = true;
       }
     }
 
@@ -1480,10 +1567,20 @@ $(document).ready(function () {
     $("input[id^='txtNomDepen___']").each(function () {
       var $nome = $(this);
       var indice = this.id.split("___")[1];
-      var nomeDep = normalizarPlanoBeneficio($nome.val());
 
-      var temSaude = !!mapaSaude[nomeDep];
-      var temOdonto = !!mapaOdonto[nomeDep];
+      var nomeDepOriginal = $nome.val();
+      var parentescoDepOriginal = $("#txtParentescoDepen___" + indice).val();
+
+      var nomeDep = normalizarPlanoBeneficio(nomeDepOriginal);
+      var chaveDep = montarChaveBeneficioDependente(nomeDepOriginal, parentescoDepOriginal);
+
+      var temSaude = mapaSaude.possuiChaveComParentesco
+        ? !!mapaSaude.chaves[chaveDep]
+        : !!mapaSaude.nomes[nomeDep];
+
+      var temOdonto = mapaOdonto.possuiChaveComParentesco
+        ? !!mapaOdonto.chaves[chaveDep]
+        : !!mapaOdonto.nomes[nomeDep];
 
       $("#TxtIncMedica___" + indice).val(temSaude ? "1" : "0");
       $("#cpDataInclusaoAMDep___" + indice).val(temSaude ? dataAM : "");
@@ -1879,6 +1976,18 @@ $(document).ready(function () {
 
     // Bloqueia Dados do Solicitante
     $('#cpNumeroSolicitacao, #cpDataAbertura, #cpNomeSolicitante, #cpFuncaoSolicitante, #cpEmpresaSolicitante, #cpDepartamentoObraSolicitante, #cpEmailSolicitante, #cpEstadoSolicitante').prop('readonly', true).css('pointer-events', 'none');
+
+    setTimeout(function () {
+      if (typeof reocultarCamposZoomParametrizadosJornada === "function") {
+        reocultarCamposZoomParametrizadosJornada("atividade 97 - liberacao dos paineis");
+      }
+    }, 300);
+
+    setTimeout(function () {
+      if (typeof reocultarCamposZoomParametrizadosJornada === "function") {
+        reocultarCamposZoomParametrizadosJornada("atividade 97 - pos renderizacao Fluig");
+      }
+    }, 1200);
   }
 
   // Reaplica cedo a jornada salva para evitar que os zooms fiquem visíveis apenas com o código
@@ -1909,6 +2018,18 @@ $(document).ready(function () {
     if (typeof reaplicarJornadaSalvaAoCarregar === "function") {
       reaplicarJornadaSalvaAoCarregar();
     }
+
+    setTimeout(function () {
+      if (typeof reocultarCamposZoomParametrizadosJornada === "function") {
+        reocultarCamposZoomParametrizadosJornada("apos reloadZoomFilial/liberarSequenciaTurno");
+      }
+    }, 500);
+
+    setTimeout(function () {
+      if (typeof reocultarCamposZoomParametrizadosJornada === "function") {
+        reocultarCamposZoomParametrizadosJornada("apos reaplicacao final da jornada");
+      }
+    }, 1500);
   }, 2500);
 
   // Quando a filial é alterada, revalida os documentos do Kit
@@ -2013,12 +2134,29 @@ $(document).ready(function () {
     }
   }
 
-  aplicarPlanosCandidatoNoPainelBeneficios();
+  function reaplicarPlanosCandidatoComDelay(origem) {
+    aplicarPlanosCandidatoNoPainelBeneficios();
 
-  $("#FUN_ADMISSAO, #cpDataInclusaoAM, #cpDataInclusaoAO, #TxtDepsPlanoSaude, #TxtDepsPlanoOdonto")
+    setTimeout(function () {
+      aplicarPlanosCandidatoNoPainelBeneficios();
+      console.log("[Benefícios] Reaplicação após carregamento:", origem || "");
+    }, 600);
+
+    setTimeout(function () {
+      aplicarPlanosCandidatoNoPainelBeneficios();
+      console.log("[Benefícios] Reaplicação final:", origem || "");
+    }, 1500);
+  }
+
+  reaplicarPlanosCandidatoComDelay("document.ready");
+
+  $(
+    "#FUN_ADMISSAO, #cpDataInclusaoAM, #cpDataInclusaoAO, #TxtDepsPlanoSaude, #TxtDepsPlanoOdonto, " +
+    "input[id^='txtNomDepen___'], input[id^='txtParentescoDepen___']"
+  )
     .off("change.beneficiosIntegraveis blur.beneficiosIntegraveis")
     .on("change.beneficiosIntegraveis blur.beneficiosIntegraveis", function () {
-      aplicarPlanosCandidatoNoPainelBeneficios();
+      reaplicarPlanosCandidatoComDelay(this.id);
     });
 
   aplicarBloqueioContratoEstagioAprendizRH();
@@ -2652,6 +2790,19 @@ function injetarEstiloCamposParametrizadosJornada() {
     'color:#374151!important;' +
     'border:1px solid #d1d5db!important;' +
     '}' +
+    '#s2id_zoom_categoriaEsocial,' +
+    '#zoom_categoriaEsocial + .select2-container{' +
+    'width:100%!important;' +
+    'max-width:100%!important;' +
+    '}' +
+    '#s2id_zoom_categoriaEsocial .select2-choice .select2-chosen,' +
+    '#zoom_categoriaEsocial + .select2-container .select2-selection__rendered{' +
+    'display:block!important;' +
+    'max-width:100%!important;' +
+    'overflow:hidden!important;' +
+    'text-overflow:ellipsis!important;' +
+    'white-space:nowrap!important;' +
+    '}' +
     '</style>'
   );
 }
@@ -2751,6 +2902,49 @@ function criarOuAtualizarCampoTextoParametrizado(campoId, texto) {
   setTimeout(ocultarCampoOriginalEZoom, 50);
   setTimeout(ocultarCampoOriginalEZoom, 200);
   setTimeout(ocultarCampoOriginalEZoom, 600);
+}
+
+function reocultarCamposZoomParametrizadosJornada(origem) {
+  $(".campo-parametrizado-jornada[data-campo-original]").each(function () {
+    var $mirror = $(this);
+    var campoId = $mirror.attr("data-campo-original");
+    var $campoOriginal = $("#" + campoId);
+
+    if (!campoId || !$campoOriginal.length) {
+      return true;
+    }
+
+    var $containersSelect2 = $();
+
+    var $select2Antigo = $("#s2id_" + campoId);
+    if ($select2Antigo.length) {
+      $containersSelect2 = $containersSelect2.add($select2Antigo);
+    }
+
+    var $select2Novo = $campoOriginal.nextAll(".select2-container").first();
+    if ($select2Novo.length) {
+      $containersSelect2 = $containersSelect2.add($select2Novo);
+    }
+
+    $campoOriginal
+      .attr("data-param-jornada-oculto", "S")
+      .hide();
+
+    if ($containersSelect2.length) {
+      $containersSelect2
+        .attr("data-param-jornada-container-oculto", "S")
+        .hide();
+    }
+
+    $mirror
+      .show()
+      .prop("readonly", true)
+      .addClass("campo-parametrizado-jornada");
+  });
+
+  if (origem) {
+    console.log("[Jornada] Reocultando zooms parametrizados:", origem);
+  }
 }
 
 function removerCampoTextoParametrizado(campoId) {
@@ -4232,7 +4426,10 @@ function removedZoomItem(removedItem) {
     $('#FUN_CODSINDICATOFILIACAO').val("");
     $('#FUN_DESCSINDICATOFILIACAO').val("");
 
-  } else if (removedItem.inputId == "FUN_CATESOCIAL_IDDESC_AD") {
+  } else if (
+    removedItem.inputId == "FUN_CATESOCIAL_IDDESC_AD" ||
+    removedItem.inputId == "zoom_categoriaEsocial"
+  ) {
     $('#FUN_CATESOCIAL').val("");
     $('#FUN_CATESOCIAL_DESC_AD').val("");
 

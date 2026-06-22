@@ -11,6 +11,21 @@ function servicetask138(attempt, message) {
             return String(v).trim();
         };
 
+        function removerAcentosIntegracao(texto) {
+            var mapa = {
+                "Á": "A", "À": "A", "Â": "A", "Ã": "A", "Ä": "A",
+                "É": "E", "È": "E", "Ê": "E", "Ë": "E",
+                "Í": "I", "Ì": "I", "Î": "I", "Ï": "I",
+                "Ó": "O", "Ò": "O", "Ô": "O", "Õ": "O", "Ö": "O",
+                "Ú": "U", "Ù": "U", "Û": "U", "Ü": "U",
+                "Ç": "C", "Ñ": "N"
+            };
+
+            return String(texto || "").replace(/[ÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇÑ]/g, function (letra) {
+                return mapa[letra] || letra;
+            });
+        }
+
         function normalizarTextoIntegracao(v) {
             if (v === null || v === undefined) return "";
 
@@ -18,7 +33,20 @@ function servicetask138(attempt, message) {
 
             if (texto === "") return "";
 
-            return texto.toUpperCase();
+            texto = texto.toUpperCase();
+            texto = removerAcentosIntegracao(texto);
+
+            texto = texto
+                .replace(/&/g, " E ")
+                .replace(/[ªº°]/g, "")
+                .replace(/[´`'"]/g, "")
+                .replace(/[“”‘’]/g, "")
+                .replace(/[–—]/g, "-")
+                .replace(/[^A-Z0-9 @._,\-\/:;]+/g, " ")
+                .replace(/\s+/g, " ")
+                .trim();
+
+            return texto;
         }
 
         function tag(n, v) {
@@ -99,7 +127,7 @@ function servicetask138(attempt, message) {
             };
         }
 
-        function montarEventoProgramadoXml(nomeControle, nomeValor, nomeDataInicio, nomeObservacao, descricaoLog, chapaFinal) {
+        function montarEventoProgramadoXml(nomeControle, nomeValor, nomeDataInicio, nomeObservacao, descricaoLog, chapaFinal, codEvento) {
             if (!isSim(getStr(nomeControle))) {
                 return "";
             }
@@ -112,12 +140,16 @@ function servicetask138(attempt, message) {
                 throw "ERRO: Evento programado " + descricaoLog + " marcado como Sim, mas sem Valor ou Data Início.";
             }
 
+            if (!codEvento) {
+                throw "ERRO: Evento programado " + descricaoLog + " sem CODEVENTO configurado.";
+            }
+
             var xmlEvento = "";
             xmlEvento += "  <PFEVENTOSPROG>\n";
             xmlEvento += tag("ID", "-1");
             xmlEvento += tag("CODCOLIGADA", COLIGADA);
             xmlEvento += tag("CHAPA", chapaFinal);
-            xmlEvento += tag("CODEVENTO", "1535");
+            xmlEvento += tag("CODEVENTO", codEvento);
             xmlEvento += tag("TIPO", "04");
             xmlEvento += tag("VALOR", formatarSalario(valorEvento));
             xmlEvento += tag("MESINIC", dataEvento.mes);
@@ -138,7 +170,8 @@ function servicetask138(attempt, message) {
                 "cpUpFrontDataInicio",
                 "cpUpFrontObservacao",
                 "UP Front",
-                chapaFinal
+                chapaFinal,
+                "8980"
             );
 
             xmlEventos += montarEventoProgramadoXml(
@@ -147,7 +180,8 @@ function servicetask138(attempt, message) {
                 "cpHiringBonusDataInicio",
                 "cpHiringBonusObservacao",
                 "Hiring Bonus",
-                chapaFinal
+                chapaFinal,
+                "1535"
             );
 
             if (xmlEventos === "") {
@@ -550,8 +584,8 @@ function servicetask138(attempt, message) {
         xmlFunc += tag("CODNATURALIDADE", getStr("txtNaturalidadeCod"));
         xmlFunc += tag("ESTADONATAL", getUF(getStr("ESTADO")));
 
-        var tpSanguineo = cleanId(getStr("TipoSanguineo"));
-        if (tpSanguineo) xmlFunc += tag("TIPOSANG", tpSanguineo);
+        // var tpSanguineo = cleanId(getStr("TipoSanguineo"));
+        // if (tpSanguineo) xmlFunc += tag("TIPOSANG", tpSanguineo);
 
         // Endereço
         xmlFunc += tag("CEP", limparPontuacao(getStr("txtCEP")));

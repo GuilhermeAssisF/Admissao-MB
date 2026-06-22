@@ -36,7 +36,7 @@ var REGRAS_OBRIGATORIEDADE = {
         "zoom_categoria_sefip",
         "zoom_situacao_rais",
         "zoom_vinculo_rais",
-        "cpIndiceInicioHorario",
+        //"cpIndiceInicioHorario",
         "FUN_CONTRATOPARCIAL",
         "FUN_TPJORNADA",
         "zoom_centroCusto",

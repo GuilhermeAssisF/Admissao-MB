@@ -11,6 +11,21 @@ function servicetask139(attempt, message) {
             return String(v).trim();
         };
 
+        function removerAcentosIntegracao(texto) {
+            var mapa = {
+                "Á": "A", "À": "A", "Â": "A", "Ã": "A", "Ä": "A",
+                "É": "E", "È": "E", "Ê": "E", "Ë": "E",
+                "Í": "I", "Ì": "I", "Î": "I", "Ï": "I",
+                "Ó": "O", "Ò": "O", "Ô": "O", "Õ": "O", "Ö": "O",
+                "Ú": "U", "Ù": "U", "Û": "U", "Ü": "U",
+                "Ç": "C", "Ñ": "N"
+            };
+
+            return String(texto || "").replace(/[ÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇÑ]/g, function (letra) {
+                return mapa[letra] || letra;
+            });
+        }
+
         function normalizarTextoIntegracao(v) {
             if (v === null || v === undefined) return "";
 
@@ -18,7 +33,20 @@ function servicetask139(attempt, message) {
 
             if (texto === "") return "";
 
-            return texto.toUpperCase();
+            texto = texto.toUpperCase();
+            texto = removerAcentosIntegracao(texto);
+
+            texto = texto
+                .replace(/&/g, " E ")
+                .replace(/[ªº°]/g, "")
+                .replace(/[´`'"]/g, "")
+                .replace(/[“”‘’]/g, "")
+                .replace(/[–—]/g, "-")
+                .replace(/[^A-Z0-9 @._,\-\/:;]+/g, " ")
+                .replace(/\s+/g, " ")
+                .trim();
+
+            return texto;
         }
 
         function tag(n, v) {
@@ -167,7 +195,7 @@ function servicetask139(attempt, message) {
         var dataInclusaoAO = getStr("cpDataInclusaoAO");
 
         var clawback = getStr("cpPrazoClawback");
-        var nivelIngles = getStr("cpNivelIngles");
+        // var nivelIngles = getStr("cpNivelIngles");
 
         var modeloTrabalho = normalizarModeloTrabalho(
             getStr("cpModeloTrabalho") ||
@@ -191,7 +219,7 @@ function servicetask139(attempt, message) {
             dataInclusaoAM === "" &&
             dataInclusaoAO === "" &&
             clawback === "" &&
-            nivelIngles === "" &&
+            // nivelIngles === "" &&
             modeloTrabalho === "" &&
             formacaoFuncionario === ""
         ) {
@@ -219,7 +247,7 @@ function servicetask139(attempt, message) {
             dataInclusaoAM !== "" ||
             dataInclusaoAO !== "" ||
             clawback !== "" ||
-            nivelIngles !== "" ||
+            // nivelIngles !== "" ||
             modeloTrabalho !== "" ||
             formacaoFuncionario !== ""
         ) {
@@ -247,9 +275,9 @@ function servicetask139(attempt, message) {
                 xmlCompl += tag("CLAWBACK", formatarDataRM(clawback));
             }
 
-            if (nivelIngles !== "") {
-                xmlCompl += tag("NIVEL_INGLES", nivelIngles);
-            }
+            // if (nivelIngles !== "") {
+            //     xmlCompl += tag("NIVEL_INGLES", nivelIngles);
+            // }
 
             if (modeloTrabalho !== "") {
                 xmlCompl += tag("MODELODETRABALHO", modeloTrabalho);

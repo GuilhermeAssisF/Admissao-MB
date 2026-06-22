@@ -263,7 +263,7 @@ function enableFields(form) {
     { campo: "cpCodigoEquipe", atividade: "97" },
     { campo: "zoom_centroCusto", atividade: "97" },
     { campo: "FUN_CC", atividade: "97" },
-    { campo: "cpIndiceInicioHorario", atividade: "97" },
+    //{ campo: "cpIndiceInicioHorario", atividade: "97" },
 
     { campo: "FUN_INTEGRCONTABIL_IDDESC", atividade: "97" },
     { campo: "FUN_INTEGRGERENCIAL_IDDESC", atividade: "97" },
