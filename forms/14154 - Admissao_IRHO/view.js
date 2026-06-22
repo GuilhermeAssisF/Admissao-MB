@@ -2148,6 +2148,105 @@ $(document).ready(function () {
     }, 1500);
   }
 
+  function atualizarDeficienciaDependenteFormulario($campoPossui) {
+    if (!$campoPossui || !$campoPossui.length) {
+      return;
+    }
+
+    var campoId = $campoPossui.attr("id") || "";
+    var partesId = campoId.split("___");
+
+    if (partesId.length < 2) {
+      return;
+    }
+
+    var indice = partesId[1];
+
+    var $campoTipo =
+      $("#TxtTipoDeficienciaDep___" + indice);
+
+    var $blocoTipo =
+      $campoTipo.closest(".bloco-tipo-deficiencia-dependente");
+
+    if ($campoPossui.val() === "Sim") {
+      $blocoTipo.show();
+    } else {
+      $blocoTipo.hide();
+    }
+  }
+
+  function atualizarDeficienciasDependentesFormulario() {
+    $("select[id^='TxtPossuiDeficienciaDep___']").each(function () {
+      atualizarDeficienciaDependenteFormulario($(this));
+    });
+  }
+
+  $(document)
+    .off(
+      "change.deficienciaDependente",
+      "select[id^='TxtPossuiDeficienciaDep___']"
+    )
+    .on(
+      "change.deficienciaDependente",
+      "select[id^='TxtPossuiDeficienciaDep___']",
+      function () {
+        atualizarDeficienciaDependenteFormulario($(this));
+      }
+    );
+
+  setTimeout(function () {
+    atualizarDeficienciasDependentesFormulario();
+  }, 300);
+
+  function atualizarMaeFilhoFormulario($campoParentesco) {
+    if (!$campoParentesco || !$campoParentesco.length) {
+      return;
+    }
+
+    var parentesco = String(
+      $campoParentesco.val() || ""
+    ).toLowerCase();
+
+    try {
+      parentesco = parentesco
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    } catch (e) { }
+
+    var isFilho =
+      parentesco === "filho" ||
+      parentesco === "filho(a)";
+
+    var $linha = $campoParentesco.closest("tr");
+
+    $linha
+      .find(".bloco-mae-filho-dependente")
+      .toggle(isFilho);
+  }
+
+  function atualizarMaesFilhosFormulario() {
+    $("input[id^='txtParentescoDepen___']").each(function () {
+      atualizarMaeFilhoFormulario($(this));
+    });
+  }
+
+  $(document)
+    .off(
+      "change.maeFilho blur.maeFilho",
+      "input[id^='txtParentescoDepen___']"
+    )
+    .on(
+      "change.maeFilho blur.maeFilho",
+      "input[id^='txtParentescoDepen___']",
+      function () {
+        atualizarMaeFilhoFormulario($(this));
+      }
+    );
+
+  setTimeout(function () {
+    atualizarMaesFilhosFormulario();
+  }, 300);
+
   reaplicarPlanosCandidatoComDelay("document.ready");
 
   $(
