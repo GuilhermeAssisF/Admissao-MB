@@ -2217,11 +2217,20 @@ $(document).ready(function () {
       parentesco === "filho" ||
       parentesco === "filho(a)";
 
+    var isConjuge =
+      parentesco.indexOf("conjuge") > -1 ||
+      parentesco.indexOf("companheiro") > -1 ||
+      parentesco.indexOf("companheira") > -1;
+
     var $linha = $campoParentesco.closest("tr");
 
     $linha
       .find(".bloco-mae-filho-dependente")
       .toggle(isFilho);
+
+    $linha
+      .find(".bloco-data-uniao-dependente")
+      .toggle(isConjuge);
   }
 
   function atualizarMaesFilhosFormulario() {
