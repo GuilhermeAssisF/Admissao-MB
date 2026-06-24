@@ -241,7 +241,7 @@ function enableFields(form) {
     { campo: "cpRegimeTrabalhista", atividade: "97" },
     { campo: "zoom_sindicato_filiacao", atividade: "97" },
     { campo: "FUN_CODDESCSINDICATOFILIACAO", atividade: "97" },
-    { campo: "zoom_contribuicao_sindical", atividade: "97" },
+
     { campo: "FUN_PGCTSIN", atividade: "97" },
     { campo: "FUN_PGCTSIN_IDDESC_AD", atividade: "97" },
 
@@ -448,16 +448,75 @@ function enableFields(form) {
   );
 
   // ==========================================================
+  // CAMPOS PROTEGIDOS DURANTE CORREÇÃO DA INTEGRAÇÃO
+  // ==========================================================
+  function campoProtegidoNaCorrecaoIntegracao(nomeCampo) {
+    var camposProtegidos = {
+      // Chaves geradas/controladas pelo processo e pelo RM
+      "TxtChapa": true,
+      "FUN_CHAPA": true,
+      "FUN_CODPESSOA": true,
+
+      // Aprovação da reabertura
+      "cpReaberturaChamado": true,
+      "cpParecerReabertura": true,
+
+      // Aprovação do gestor
+      "cpAprovacaoGestor": true,
+      "cpParecerAprovGestor": true,
+      "cpRespGestor": true,
+
+      // Aprovação do diretor
+      "cpAprovacaoDiretor": true,
+      "cpParecerAprovaDiretor": true,
+      "cpRespDiretor": true,
+
+      // Aprovação inicial do RH
+      "cpAprovacaoRH": true,
+      "cpParecerAprovaRH": true,
+      "txtChapaJaExiste": true,
+      "cpRespRH": true,
+
+      // Validação posterior do kit
+      "cpParecerValidaKit": true,
+      "cpRespValidaKit": true,
+      "cpParecerBPO": true
+    };
+
+    if (camposProtegidos[nomeCampo]) {
+      return true;
+    }
+
+    // Não libera checklists antigos.
+    if (nomeCampo.indexOf("Ckb") === 0) {
+      return true;
+    }
+
+    // Não libera campos usados somente na geração do kit.
+    if (nomeCampo.indexOf("zoom_kit_") === 0) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // ==========================================================
   // LOOP SEGURO: Desbloqueia só o que está no Array acima
   // ==========================================================
   for (var i = 0; i < Campos.length; i++) {
     var Campo = Campos[i];
+    var nomeCampo = Campo["campo"];
     var atividades = Campo["atividade"].split(",");
 
-    if (atividades.indexOf(atividade.toString()) >= 0) {
-      form.setEnabled(Campo["campo"], true);
+    if (atividade == 97) {
+      form.setEnabled(
+        nomeCampo,
+        !campoProtegidoNaCorrecaoIntegracao(nomeCampo)
+      );
+    } else if (atividades.indexOf(atividade.toString()) >= 0) {
+      form.setEnabled(nomeCampo, true);
     } else {
-      form.setEnabled(Campo["campo"], false);
+      form.setEnabled(nomeCampo, false);
     }
   }
 
@@ -465,25 +524,47 @@ function enableFields(form) {
   // REGRAS DE SEGURANÇA EXCLUSIVAS DA ATIVIDADE 97
   // ==========================================================
   if (atividade == 97) {
-    // Bloqueia o Painel: Dados do Solicitante
-    form.setEnabled("cpNumeroSolicitacao", false);
-    form.setEnabled("cpDataAbertura", false);
-    form.setEnabled("cpNomeSolicitante", false);
-    form.setEnabled("cpFuncaoSolicitante", false);
-    form.setEnabled("cpEmpresaSolicitante", false);
-    form.setEnabled("cpDepartamentoObraSolicitante", false);
-    form.setEnabled("cpEmailSolicitante", false);
-    form.setEnabled("cpEstadoSolicitante", false);
+    var jornadaEventos = String(
+      form.getValue("cpJornadaAdmissao") || ""
+    )
+      .replace(/^\s+|\s+$/g, "")
+      .toLowerCase();
 
-    // Bloqueia o Painel: Informe a chapa do Colaborador
-    form.setEnabled("TxtChapa", false);
-    form.setEnabled("FUN_CODPESSOA", false);
+    var permiteUpFront =
+      jornadaEventos == "associado";
 
-    // Bloqueia Banco e Agência de Pagamento
-    form.setEnabled("BancoPAgto", false);
-    form.setEnabled("AgPagto", false);
+    var permiteHiringBonus =
+      !permiteUpFront &&
+      jornadaEventos.indexOf("clt") >= 0;
+
+    var camposUpFront = [
+      "cpUpFront",
+      "cpUpFrontValor",
+      "cpUpFrontDataInicio",
+      "cpUpFrontObservacao"
+    ];
+
+    var camposHiringBonus = [
+      "cpHiringBonus",
+      "cpHiringBonusValor",
+      "cpHiringBonusDataInicio",
+      "cpHiringBonusObservacao"
+    ];
+
+    for (var up = 0; up < camposUpFront.length; up++) {
+      form.setEnabled(
+        camposUpFront[up],
+        permiteUpFront
+      );
+    }
+
+    for (var hb = 0; hb < camposHiringBonus.length; hb++) {
+      form.setEnabled(
+        camposHiringBonus[hb],
+        permiteHiringBonus
+      );
+    }
   }
-
 
   // ==========================================================
   // TRAVA DE SEGURANÇA PARA ESTÁGIO
@@ -491,7 +572,7 @@ function enableFields(form) {
   var jornada = form.getValue("cpJornadaAdmissao");
   if (jornada == "Estagio" || jornada == "Estágio") {
     var camposBloqueadosEstagio = [
-      "zoom_sindicato", "FUN_CODDESCSINDICATOFILIACAO", "FUN_PGCTSIN_IDDESC_AD",
+      "zoom_sindicato", "FUN_CODDESCSINDICATOFILIACAO",
       "FUN_INSS", "FUN_IRRF", "FUN_ALTFGTS", "cpDataUltimoSaldoFGTS",
       "FUN_CODOCORRENCIA_IDDESC", "FUN_CATSEFIP_IDDESC", "cpSituacaoRais", "FUN_VINCEMPREG_IDDESC_AD",
       "cpContratoPrazo", "cpDiasVencPrimeiraExp", "cpVencPrimeiraExp",

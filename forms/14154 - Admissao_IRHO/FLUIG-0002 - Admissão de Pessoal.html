@@ -3427,7 +3427,7 @@
               <input type="hidden" id="cod_sindicato" name="cod_sindicato">
             </div>
 
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-4" style="display: none;">
               <label for="zoom_sindicato_filiacao">Sindicato Filiação</label>
               <input type="zoom" id="zoom_sindicato_filiacao" name="zoom_sindicato_filiacao" class="form-control"
                 data-zoom="{
@@ -3443,72 +3443,61 @@
               <input type="hidden" id="FUN_CODDESCSINDICATOFILIACAO" name="FUN_CODDESCSINDICATOFILIACAO">
             </div>
 
-            <div class="form-group col-md-4">
-              <label for="zoom_contribuicao_sindical">Contribuição Sindical</label>
-              <input type="zoom" id="zoom_contribuicao_sindical" name="zoom_contribuicao_sindical" class="form-control"
-                data-zoom="{
-      'displayKey': 'IDDESC_CONTRIBUICAO',
-      'datasetId': 'ds_irho_contribuicaoSindical',
-      'maximumSelectionLength': '1',
-      'placeholder': 'Selecione...',
-      'fields': [
-        {'field': 'IDDESC_CONTRIBUICAO', 'label': 'Contribuição', 'standard': 'true', 'search': 'true'}
-      ]
-    }">
-              <input type="hidden" id="FUN_PGCTSIN" name="FUN_PGCTSIN">
-              <input type="hidden" id="FUN_PGCTSIN_IDDESC_AD" name="FUN_PGCTSIN_IDDESC_AD">
-            </div>
-          </div>
+            <!-- Contribuição Sindical fixa para integração com o RM -->
+            <input type="hidden" id="FUN_PGCTSIN" name="FUN_PGCTSIN" value="X">
 
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="cpRegimePrevidenciario">Tipo Regime Previdenciário</label>
-              <select name="cpRegimePrevidenciario" id="cpRegimePrevidenciario" class="form-control">
-                <option value=""></option>
-                <option value="1">Regime Geral da Previdência Social - RGPS</option>
-                <option value="2">Regime Próprio de Previdência Social - RPPS</option>
-                <option value="3">Regime de Previdência Social no Exterior</option>
-              </select>
+            <input type="hidden" id="FUN_PGCTSIN_IDDESC_AD" name="FUN_PGCTSIN_IDDESC_AD" value="X - Não Optante">
+
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="cpRegimePrevidenciario">Tipo Regime Previdenciário</label>
+                <select name="cpRegimePrevidenciario" id="cpRegimePrevidenciario" class="form-control">
+                  <option value=""></option>
+                  <option value="1">Regime Geral da Previdência Social - RGPS</option>
+                  <option value="2">Regime Próprio de Previdência Social - RPPS</option>
+                  <option value="3">Regime de Previdência Social no Exterior</option>
+                </select>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="cpRegimeTrabalhista">Tipo Regime Trabalhista</label>
+                <select name="cpRegimeTrabalhista" id="cpRegimeTrabalhista" class="form-control">
+                  <option value=""></option>
+                  <option value="1">CLT - Consolidação das Leis de Trabalho</option>
+                  <option value="2">Estatutário / Legislações Específicas</option>
+                </select>
+              </div>
             </div>
 
-            <div class="form-group col-md-6">
-              <label for="cpRegimeTrabalhista">Tipo Regime Trabalhista</label>
-              <select name="cpRegimeTrabalhista" id="cpRegimeTrabalhista" class="form-control">
-                <option value=""></option>
-                <option value="1">CLT - Consolidação das Leis de Trabalho</option>
-                <option value="2">Estatutário / Legislações Específicas</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">
-              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
-                7. SEFIP, RAIS e Impostos
-              </h4>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-3">
-              <label>INSS</label>
-              <select name="FUN_INSS" id="FUN_INSS" class="form-control">
-                <option value="1">Calcula</option>
-                <option value="0">Não Calcula</option>
-              </select>
+            <div class="row">
+              <div class="col-md-12">
+                <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
+                  7. SEFIP, RAIS e Impostos
+                </h4>
+              </div>
             </div>
 
-            <div class="form-group col-md-3">
-              <label>IRRF</label>
-              <select name="FUN_IRRF" id="FUN_IRRF" class="form-control">
-                <option value="1">Calcula</option>
-                <option value="0">Não Calcula</option>
-              </select>
-            </div>
+            <div class="row">
+              <div class="form-group col-md-3">
+                <label>INSS</label>
+                <select name="FUN_INSS" id="FUN_INSS" class="form-control">
+                  <option value="1">Calcula</option>
+                  <option value="0">Não Calcula</option>
+                </select>
+              </div>
 
-            <div class="form-group col-md-3">
-              <label for="zoom_ocorrencia_sefip">Cód. Ocorrência SEFIP</label>
-              <input type="zoom" id="zoom_ocorrencia_sefip" name="zoom_ocorrencia_sefip" class="form-control" data-zoom="{
+              <div class="form-group col-md-3">
+                <label>IRRF</label>
+                <select name="FUN_IRRF" id="FUN_IRRF" class="form-control">
+                  <option value="1">Calcula</option>
+                  <option value="0">Não Calcula</option>
+                </select>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="zoom_ocorrencia_sefip">Cód. Ocorrência SEFIP</label>
+                <input type="zoom" id="zoom_ocorrencia_sefip" name="zoom_ocorrencia_sefip" class="form-control"
+                  data-zoom="{
       'displayKey': 'IDDESC_OCORRENCIA',
       'datasetId': 'ds_IRHO_codOcorrenciaSefip',
       'maximumSelectionLength': '1',
@@ -3517,12 +3506,12 @@
         {'field': 'IDDESC_OCORRENCIA', 'label': 'Ocorrência', 'standard': 'true', 'search': 'true'}
       ]
     }">
-              <input type="hidden" id="FUN_CODOCORRENCIA_IDDESC" name="FUN_CODOCORRENCIA_IDDESC">
-            </div>
+                <input type="hidden" id="FUN_CODOCORRENCIA_IDDESC" name="FUN_CODOCORRENCIA_IDDESC">
+              </div>
 
-            <div class="form-group col-md-3">
-              <label for="zoom_categoria_sefip">Cód. Categoria SEFIP</label>
-              <input type="zoom" id="zoom_categoria_sefip" name="zoom_categoria_sefip" class="form-control" data-zoom="{
+              <div class="form-group col-md-3">
+                <label for="zoom_categoria_sefip">Cód. Categoria SEFIP</label>
+                <input type="zoom" id="zoom_categoria_sefip" name="zoom_categoria_sefip" class="form-control" data-zoom="{
       'displayKey': 'IDDESC_CATSEFIP',
       'datasetId': 'ds_irho_codCategoriaSefip',
       'maximumSelectionLength': '1',
@@ -3531,14 +3520,14 @@
         {'field': 'IDDESC_CATSEFIP', 'label': 'Categoria', 'standard': 'true', 'search': 'true'}
       ]
     }">
-              <input type="hidden" id="FUN_CATSEFIP_IDDESC" name="FUN_CATSEFIP_IDDESC">
+                <input type="hidden" id="FUN_CATSEFIP_IDDESC" name="FUN_CATSEFIP_IDDESC">
+              </div>
             </div>
-          </div>
 
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="zoom_situacao_rais">Situação Empreg. (RAIS)</label>
-              <input type="zoom" id="zoom_situacao_rais" name="zoom_situacao_rais" class="form-control" data-zoom="{
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="zoom_situacao_rais">Situação Empreg. (RAIS)</label>
+                <input type="zoom" id="zoom_situacao_rais" name="zoom_situacao_rais" class="form-control" data-zoom="{
       'displayKey': 'IDDESC_SITUACAO',
       'datasetId': 'ds_irho_situacaoRais',
       'maximumSelectionLength': '1',
@@ -3547,12 +3536,12 @@
         {'field': 'IDDESC_SITUACAO', 'label': 'Situação', 'standard': 'true', 'search': 'true'}
       ]
     }">
-              <input type="hidden" id="cpSituacaoRais" name="cpSituacaoRais">
-            </div>
+                <input type="hidden" id="cpSituacaoRais" name="cpSituacaoRais">
+              </div>
 
-            <div class="form-group col-md-6">
-              <label for="zoom_vinculo_rais">Vínculo Empreg. (RAIS)</label>
-              <input type="zoom" id="zoom_vinculo_rais" name="zoom_vinculo_rais" class="form-control" data-zoom="{
+              <div class="form-group col-md-6">
+                <label for="zoom_vinculo_rais">Vínculo Empreg. (RAIS)</label>
+                <input type="zoom" id="zoom_vinculo_rais" name="zoom_vinculo_rais" class="form-control" data-zoom="{
       'displayKey': 'IDDESC_VINCULO',
       'datasetId': 'ds_irho_vinculoRais',
       'maximumSelectionLength': '1',
@@ -3561,54 +3550,54 @@
         {'field': 'IDDESC_VINCULO', 'label': 'Vínculo', 'standard': 'true', 'search': 'true'}
       ]
     }">
-              <input type="hidden" id="FUN_VINCEMPREG" name="FUN_VINCEMPREG">
-              <input type="hidden" id="FUN_VINCEMPREG_IDDESC_AD" name="FUN_VINCEMPREG_IDDESC_AD">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">
-              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
-                8. Controle de Ponto e Portal
-              </h4>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-3">
-              <label for="MarcaPonto">Utiliza Cartão de Ponto?</label>
-              <select class="form-control" name="MarcaPonto" id="MarcaPonto">
-                <option value=""></option>
-                <option value="1">Sim</option>
-                <option value="2">Não</option>
-              </select>
+                <input type="hidden" id="FUN_VINCEMPREG" name="FUN_VINCEMPREG">
+                <input type="hidden" id="FUN_VINCEMPREG_IDDESC_AD" name="FUN_VINCEMPREG_IDDESC_AD">
+              </div>
             </div>
 
-            <div class="form-group col-md-3">
-              <label for="cpHabilitaPortalRM">Habilitar Acesso ao Portal RM?</label>
-              <select class="form-control" name="cpHabilitaPortalRM" id="cpHabilitaPortalRM">
-                <option value=""></option>
-                <option value="1">Sim</option>
-                <option value="2">Não</option>
-              </select>
+            <div class="row">
+              <div class="col-md-12">
+                <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
+                  8. Controle de Ponto e Portal
+                </h4>
+              </div>
             </div>
 
-            <div class="form-group col-md-3">
-              <label for="cpCodigoUsuarioPortalPonto">Código Usuário Portal/Ponto</label>
-              <input type="text" name="cpCodigoUsuarioPortalPonto" id="cpCodigoUsuarioPortalPonto" class="form-control"
-                readonly>
+            <div class="row">
+              <div class="form-group col-md-3">
+                <label for="MarcaPonto">Utiliza Cartão de Ponto?</label>
+                <select class="form-control" name="MarcaPonto" id="MarcaPonto">
+                  <option value=""></option>
+                  <option value="1">Sim</option>
+                  <option value="2">Não</option>
+                </select>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="cpHabilitaPortalRM">Habilitar Acesso ao Portal RM?</label>
+                <select class="form-control" name="cpHabilitaPortalRM" id="cpHabilitaPortalRM">
+                  <option value=""></option>
+                  <option value="1">Sim</option>
+                  <option value="2">Não</option>
+                </select>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="cpCodigoUsuarioPortalPonto">Código Usuário Portal/Ponto</label>
+                <input type="text" name="cpCodigoUsuarioPortalPonto" id="cpCodigoUsuarioPortalPonto"
+                  class="form-control" readonly>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="cpNomeUsuarioPortalPonto">Nome do Usuário Portal/Ponto</label>
+                <input type="text" name="cpNomeUsuarioPortalPonto" id="cpNomeUsuarioPortalPonto" class="form-control">
+              </div>
             </div>
 
-            <div class="form-group col-md-3">
-              <label for="cpNomeUsuarioPortalPonto">Nome do Usuário Portal/Ponto</label>
-              <input type="text" name="cpNomeUsuarioPortalPonto" id="cpNomeUsuarioPortalPonto" class="form-control">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-4">
-              <label for="zoom_quiosque">Grupo de Quiosque</label>
-              <input type="zoom" id="zoom_quiosque" name="zoom_quiosque" class="form-control" data-zoom="{
+            <div class="row">
+              <div class="form-group col-md-4">
+                <label for="zoom_quiosque">Grupo de Quiosque</label>
+                <input type="zoom" id="zoom_quiosque" name="zoom_quiosque" class="form-control" data-zoom="{
       'displayKey': 'IDDESC_QUIOSQUE',
       'datasetId': 'ds_irho_grupoQuiosque',
       'maximumSelectionLength': '1',
@@ -3618,12 +3607,12 @@
         {'field': 'IDDESC_QUIOSQUE', 'label': 'Grupo', 'standard': 'true', 'search': 'true'}
       ]
     }">
-              <input type="hidden" id="FUN_CODQUIOSQUE_IDDESC" name="FUN_CODQUIOSQUE_IDDESC">
-            </div>
+                <input type="hidden" id="FUN_CODQUIOSQUE_IDDESC" name="FUN_CODQUIOSQUE_IDDESC">
+              </div>
 
-            <div class="form-group col-md-4">
-              <label for="zoom_equipe">Código de Equipe</label>
-              <input type="zoom" id="zoom_equipe" name="zoom_equipe" class="form-control" data-zoom="{
+              <div class="form-group col-md-4">
+                <label for="zoom_equipe">Código de Equipe</label>
+                <input type="zoom" id="zoom_equipe" name="zoom_equipe" class="form-control" data-zoom="{
       'displayKey': 'IDDESC_EQUIPE',
       'datasetId': 'ds_irho_codEquipe',
       'maximumSelectionLength': '1',
@@ -3632,12 +3621,12 @@
         {'field': 'IDDESC_EQUIPE', 'label': 'Equipe', 'standard': 'true', 'search': 'true'}
       ]
     }">
-              <input type="hidden" id="cpCodigoEquipe" name="cpCodigoEquipe">
-            </div>
+                <input type="hidden" id="cpCodigoEquipe" name="cpCodigoEquipe">
+              </div>
 
-            <div class="form-group col-md-4">
-              <label for="zoom_centroCusto">Centro de Custo</label>
-              <input type="zoom" id="zoom_centroCusto" name="zoom_centroCusto" class="form-control" data-zoom="{
+              <div class="form-group col-md-4">
+                <label for="zoom_centroCusto">Centro de Custo</label>
+                <input type="zoom" id="zoom_centroCusto" name="zoom_centroCusto" class="form-control" data-zoom="{
       'displayKey': 'IDDESC_CC',
       'datasetId': 'ds_irho_centroCustos',
       'maximumSelectionLength': '1',
@@ -3647,1213 +3636,1226 @@
         {'field': 'IDDESC_CC', 'label': 'Centro de Custo', 'standard': 'true', 'search': 'true'}
       ]
     }">
-              <input type="hidden" id="FUN_CC" name="FUN_CC">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="CatPonto">Categoria do Ponto</label>
-              <input type="text" class="form-control" name="CatPonto" id="CatPonto">
-            </div>
-
-            <div class="form-group col-md-6 hide" id="blocoIndiceInicioHorario" <label>Índice Início Horário</label>
-              <input type="text" name="cpIndiceInicioHorario" id="cpIndiceInicioHorario" class="form-control"
-                placeholder="Índice...">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-3" style="display: none;">
-              <label>Integração Contábil</label>
-              <input type="text" name="FUN_INTEGRCONTABIL_IDDESC" id="FUN_INTEGRCONTABIL_IDDESC" class="form-control">
-            </div>
-
-            <div class="form-group col-md-3" style="display: none;">
-              <label>Integração Gerencial</label>
-              <input type="text" name="FUN_INTEGRGERENCIAL_IDDESC" id="FUN_INTEGRGERENCIAL_IDDESC" class="form-control">
-            </div>
-          </div>
-
-          <div class="row" id="tituloContratoEstagioAprendizRH">
-            <div class="col-md-12">
-              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
-                7. Contrato Estágio / Aprendiz
-              </h4>
-            </div>
-          </div>
-
-          <div class="row bloco-estagio-aprendiz-rh">
-            <div class="form-group col-md-3">
-              <label for="cpEstagioDataInicio">Data Início</label>
-              <div class="input-group">
-                <input type="text" name="cpEstagioDataInicio" id="cpEstagioDataInicio" class="form-control"
-                  mask="00/00/0000">
-                <span class="input-group-addon">
-                  <span class="fluigicon fluigicon-calendar"></span>
-                </span>
+                <input type="hidden" id="FUN_CC" name="FUN_CC">
               </div>
             </div>
 
-            <div class="form-group col-md-3">
-              <label for="cpEstagioDataFim">Data Fim</label>
-              <div class="input-group">
-                <input type="text" name="cpEstagioDataFim" id="cpEstagioDataFim" class="form-control" mask="00/00/0000">
-                <span class="input-group-addon">
-                  <span class="fluigicon fluigicon-calendar"></span>
-                </span>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="CatPonto">Categoria do Ponto</label>
+                <input type="text" class="form-control" name="CatPonto" id="CatPonto">
+              </div>
+
+              <div class="form-group col-md-6 hide" id="blocoIndiceInicioHorario" <label>Índice Início Horário</label>
+                <input type="text" name="cpIndiceInicioHorario" id="cpIndiceInicioHorario" class="form-control"
+                  placeholder="Índice...">
               </div>
             </div>
 
-            <div class="form-group col-md-3">
-              <label for="cpEstagioTipoContrato">Tipo de Contrato</label>
-              <input type="text" name="cpEstagioTipoContrato" id="cpEstagioTipoContrato" class="form-control">
-            </div>
+            <div class="row">
+              <div class="form-group col-md-3" style="display: none;">
+                <label>Integração Contábil</label>
+                <input type="text" name="FUN_INTEGRCONTABIL_IDDESC" id="FUN_INTEGRCONTABIL_IDDESC" class="form-control">
+              </div>
 
-            <div class="form-group col-md-3">
-              <label for="cpEstagioTipo">Tipo de Estágio</label>
-              <input type="text" name="cpEstagioTipo" id="cpEstagioTipo" class="form-control">
-            </div>
-          </div>
-
-          <div class="row bloco-estagio-aprendiz-rh">
-            <div class="form-group col-md-4">
-              <label for="cpEstagioInstituicaoEnsino">Instituição de Ensino</label>
-              <input type="text" name="cpEstagioInstituicaoEnsino" id="cpEstagioInstituicaoEnsino" class="form-control">
-            </div>
-
-            <div class="form-group col-md-4">
-              <label for="cpEstagioGestor">Gestor</label>
-              <input type="text" name="cpEstagioGestor" id="cpEstagioGestor" class="form-control">
-            </div>
-
-            <div class="form-group col-md-4">
-              <label for="cpEstagioModalidadeContratacao">Modalidade de Contratação</label>
-              <input type="text" name="cpEstagioModalidadeContratacao" id="cpEstagioModalidadeContratacao"
-                class="form-control">
-            </div>
-          </div>
-
-          <div class="row bloco-estagio-aprendiz-rh">
-            <div class="form-group col-md-4">
-              <label for="cpEstagioCnpjAtivPrat">CNPJ das Atividades Práticas</label>
-              <input type="text" name="cpEstagioCnpjAtivPrat" id="cpEstagioCnpjAtivPrat" class="form-control"
-                mask="00.000.000/0000-00">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">
-              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
-                8. Anotações RM
-              </h4>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-12">
-              <label for="cpAnotacoesPessoaisRM">Anotações Pessoais para o TOTVS RM</label>
-              <textarea name="cpAnotacoesPessoaisRM" id="cpAnotacoesPessoaisRM" class="form-control" rows="4"
-                placeholder="Campo destinado às anotações pessoais que hoje são transcritas manualmente no TOTVS RM."></textarea>
-            </div>
-          </div>
-
-        </div>
-      </div>
-      <!-- Informe a chapa do Colaborador -->
-
-      <!-- Informações Adicionais -->
-      <div class="panel panel-info" id="painelInfoAdicionais">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <span class="fluigicon fluigicon-plus-sign fluigicon-lg"></span>
-            &nbsp;Informações Adicionais (Atividades, Equipamentos e Global)
-          </h3>
-        </div>
-        <div class="panel-body">
-
-          <div class="row">
-            <div class="form-group col-md-4">
-              <label>Nome do Gestor Imediato</label>
-              <input type="text" name="cpNomeGestorImediato" id="cpNomeGestorImediato" class="form-control">
-            </div>
-            <div class="form-group col-md-4">
-              <label>Planta / Unidade</label>
-              <input type="text" name="cpPlantaUnidade" id="cpPlantaUnidade" class="form-control">
-            </div>
-            <div class="form-group col-md-4">
-              <label>Modelo de Trabalho</label>
-              <select name="cpModeloTrabalho" id="cpModeloTrabalho" class="form-control">
-                <option value=""></option>
-                <option value="1">Presencial</option>
-                <option value="2">Híbrido</option>
-                <option value="3">Remoto</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-4">
-              <label for="cpFormacaoFuncionario">Formação do Funcionário</label>
-              <input type="text" name="cpFormacaoFuncionario" id="cpFormacaoFuncionario" class="form-control">
-            </div>
-
-            <div class="form-group col-md-4">
-              <label for="cpNivelIngles">Nível de Inglês</label>
-              <select name="cpNivelIngles" id="cpNivelIngles" class="form-control">
-                <option value=""></option>
-                <option value="Não informado">Não informado</option>
-                <option value="Básico">Básico</option>
-                <option value="Intermediário">Intermediário</option>
-                <option value="Avançado">Avançado</option>
-                <option value="Fluente">Fluente</option>
-              </select>
-            </div>
-
-            <div class="form-group col-md-4">
-              <label for="cpPracaAtuacao">Praça de Atuação</label>
-              <input type="text" name="cpPracaAtuacao" id="cpPracaAtuacao" class="form-control">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-12">
-              <label>Descrição das Atividades do Colaborador</label>
-              <textarea name="cpDescricaoAtividades" id="cpDescricaoAtividades" class="form-control"
-                rows="2"></textarea>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-3">
-              <label>Necessita de Notebook?</label>
-              <select name="cpNecessitaNotebook" id="cpNecessitaNotebook" class="form-control">
-                <option value=""></option>
-                <option value="Sim">Sim</option>
-                <option value="Nao">Não</option>
-              </select>
-            </div>
-            <div class="form-group col-md-3">
-              <label>Necessita de EPI?</label>
-              <select name="cpNecessitaEPI" id="cpNecessitaEPI" class="form-control">
-                <option value=""></option>
-                <option value="Sim">Sim</option>
-                <option value="Nao">Não</option>
-              </select>
-            </div>
-            <div class="form-group col-md-3">
-              <label>First Name (Primeiro Nome)</label>
-              <input type="text" name="cpFirstName" id="cpFirstName" class="form-control">
-            </div>
-            <div class="form-group col-md-3">
-              <label>Last Name (Último Nome)</label>
-              <input type="text" name="cpLastName" id="cpLastName" class="form-control">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-4">
-              <label>Will this user work on a plant?</label>
-              <select name="cpWorkOnPlant" id="cpWorkOnPlant" class="form-control">
-                <option value=""></option>
-                <option value="Sim">Sim</option>
-                <option value="Nao">Não</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label>Job Title (Nome do Cargo)</label>
-              <input type="text" name="cpJobTitle" id="cpJobTitle" class="form-control">
-            </div>
-            <div class="form-group col-md-4">
-              <label>Department (Departamento)</label>
-              <select name="cpDepartment" id="cpDepartment" class="form-control">
-                <option value=""></option>
-                <option value="Agronomy">Agronomy (Agronomia)</option>
-                <option value="Business Development">Business Development (Des. de Novos Negócios)</option>
-                <option value="Director">Director (Diretoria)</option>
-                <option value="Engineering">Engineering (Engenharia)</option>
-                <option value="Field Service">Field Service (Prospecção)</option>
-                <option value="Finance">Finance (Financeiro)</option>
-                <option value="Human Resources">Human Resources (Recursos Humanos)</option>
-                <option value="Industrial Excellence & ESG">Industrial Excellence & ESG</option>
-                <option value="Information Technology">Information Technology (T.I.)</option>
-                <option value="Marketing and Communication">Marketing and Communication</option>
-                <option value="Operations">Operations (Operação)</option>
-                <option value="Procurement">Procurement (Compras e Suprimentos)</option>
-                <option value="Research and Development">Research and Development (P&D)</option>
-                <option value="Top Management">Top Management (Alta Gestão)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-4">
-              <label>Email of the direct manager</label>
-              <input type="email" name="cpEmailDirectManager" id="cpEmailDirectManager" class="form-control">
-            </div>
-            <div class="form-group col-md-4">
-              <label>User Status</label>
-              <select name="cpUserStatus" id="cpUserStatus" class="form-control">
-                <option value=""></option>
-                <option value="Employee">Employee or similar (Colaborador)</option>
-                <option value="External">External (Externo)</option>
-                <option value="Intern">Intern (Estagiário)</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label>Internal Group</label>
-              <select name="cpNetzeroInternalGroup" id="cpNetzeroInternalGroup" class="form-control">
-                <option value=""></option>
-                <option value="Group A">Group A: Co-Founders, CXOs, Directors...</option>
-                <option value="Group B">Group B: Operations</option>
-                <option value="Group C">Group C: R&D</option>
-                <option value="Group D">Group D: Services</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="cpCadastroHierarquia">Cadastro de Hierarquias</label>
-              <textarea name="cpCadastroHierarquia" id="cpCadastroHierarquia" class="form-control" rows="3"
-                placeholder="Informe estrutura hierárquica, gestor, diretoria, centro de responsabilidade ou observações de hierarquia."></textarea>
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="cpRequisitosAcesso">Requisitos de Acesso / Certificações</label>
-              <textarea name="cpRequisitosAcesso" id="cpRequisitosAcesso" class="form-control" rows="3"
-                placeholder="Informe certificações, acessos necessários, grupos, permissões e requisitos específicos."></textarea>
-            </div>
-          </div>
-
-          <div class="row hide" id="blocoExameAdmissional">
-            <div class="col-md-12">
-              <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">Exame
-                Admissional</h4>
-            </div>
-            <div class="form-group col-md-6">
-              <label>Local de Realização do Exame Admissional</label>
-              <input type="text" name="cpLocalExameAdmissional" id="cpLocalExameAdmissional" class="form-control">
-            </div>
-            <div class="form-group col-md-4">
-              <label>Data de Realização do Exame Admissional</label>
-              <div class="input-group">
-                <input type="text" name="cpDataExameAdmissional" id="cpDataExameAdmissional" class="form-control"
-                  mask="00/00/0000" />
-                <span class="input-group-addon">
-                  <span class="fluigicon fluigicon-calendar"></span>
-                </span>
+              <div class="form-group col-md-3" style="display: none;">
+                <label>Integração Gerencial</label>
+                <input type="text" name="FUN_INTEGRGERENCIAL_IDDESC" id="FUN_INTEGRGERENCIAL_IDDESC"
+                  class="form-control">
               </div>
             </div>
-          </div>
 
-        </div>
-      </div>
-      <!-- Informações Adicionais -->
-
-      <!-- Etapas do processo -->
-      <div class="panel panel-default" id="painelAprovacaoRH">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <span class="fluigicon fluigicon-user-checked fluigicon-lg"></span>
-            &nbsp;Aprovação
-          </h3>
-        </div>
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="labelField">Aprovador</label>
-                <input type="text" name="cpRespAdmissao" id="cpRespAdmissao" class="form-control" readonly />
+            <div class="row" id="tituloContratoEstagioAprendizRH">
+              <div class="col-md-12">
+                <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
+                  7. Contrato Estágio / Aprendiz
+                </h4>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="labelField">Aprovação</label>
-                <select class="form-control" name="cpAprovacaoAdmissao" id="cpAprovacaoAdmissao">
-                  <option value="" selected>Selecione uma opção...</option>
-                  <option value="1">Integrar Funcionário</option>
-                  <option value="3">Solicitar Correção</option>
-                  <option value="4">Pular Integração (Testes)</option>
+
+            <div class="row bloco-estagio-aprendiz-rh">
+              <div class="form-group col-md-3">
+                <label for="cpEstagioDataInicio">Data Início</label>
+                <div class="input-group">
+                  <input type="text" name="cpEstagioDataInicio" id="cpEstagioDataInicio" class="form-control"
+                    mask="00/00/0000">
+                  <span class="input-group-addon">
+                    <span class="fluigicon fluigicon-calendar"></span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="cpEstagioDataFim">Data Fim</label>
+                <div class="input-group">
+                  <input type="text" name="cpEstagioDataFim" id="cpEstagioDataFim" class="form-control"
+                    mask="00/00/0000">
+                  <span class="input-group-addon">
+                    <span class="fluigicon fluigicon-calendar"></span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="cpEstagioTipoContrato">Tipo de Contrato</label>
+                <input type="text" name="cpEstagioTipoContrato" id="cpEstagioTipoContrato" class="form-control">
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="cpEstagioTipo">Tipo de Estágio</label>
+                <input type="text" name="cpEstagioTipo" id="cpEstagioTipo" class="form-control">
+              </div>
+            </div>
+
+            <div class="row bloco-estagio-aprendiz-rh">
+              <div class="form-group col-md-4">
+                <label for="cpEstagioInstituicaoEnsino">Instituição de Ensino</label>
+                <input type="text" name="cpEstagioInstituicaoEnsino" id="cpEstagioInstituicaoEnsino"
+                  class="form-control">
+              </div>
+
+              <div class="form-group col-md-4">
+                <label for="cpEstagioGestor">Gestor</label>
+                <input type="text" name="cpEstagioGestor" id="cpEstagioGestor" class="form-control">
+              </div>
+
+              <div class="form-group col-md-4">
+                <label for="cpEstagioModalidadeContratacao">Modalidade de Contratação</label>
+                <input type="text" name="cpEstagioModalidadeContratacao" id="cpEstagioModalidadeContratacao"
+                  class="form-control">
+              </div>
+            </div>
+
+            <div class="row bloco-estagio-aprendiz-rh">
+              <div class="form-group col-md-4">
+                <label for="cpEstagioCnpjAtivPrat">CNPJ das Atividades Práticas</label>
+                <input type="text" name="cpEstagioCnpjAtivPrat" id="cpEstagioCnpjAtivPrat" class="form-control"
+                  mask="00.000.000/0000-00">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">
+                  8. Anotações RM
+                </h4>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-md-12">
+                <label for="cpAnotacoesPessoaisRM">Anotações Pessoais para o TOTVS RM</label>
+                <textarea name="cpAnotacoesPessoaisRM" id="cpAnotacoesPessoaisRM" class="form-control" rows="4"
+                  placeholder="Campo destinado às anotações pessoais que hoje são transcritas manualmente no TOTVS RM."></textarea>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- Informe a chapa do Colaborador -->
+
+        <!-- Informações Adicionais -->
+        <div class="panel panel-info" id="painelInfoAdicionais">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <span class="fluigicon fluigicon-plus-sign fluigicon-lg"></span>
+              &nbsp;Informações Adicionais (Atividades, Equipamentos e Global)
+            </h3>
+          </div>
+          <div class="panel-body">
+
+            <div class="row">
+              <div class="form-group col-md-4">
+                <label>Nome do Gestor Imediato</label>
+                <input type="text" name="cpNomeGestorImediato" id="cpNomeGestorImediato" class="form-control">
+              </div>
+              <div class="form-group col-md-4">
+                <label>Planta / Unidade</label>
+                <input type="text" name="cpPlantaUnidade" id="cpPlantaUnidade" class="form-control">
+              </div>
+              <div class="form-group col-md-4">
+                <label>Modelo de Trabalho</label>
+                <select name="cpModeloTrabalho" id="cpModeloTrabalho" class="form-control">
+                  <option value=""></option>
+                  <option value="1">Presencial</option>
+                  <option value="2">Híbrido</option>
+                  <option value="3">Remoto</option>
                 </select>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12" id="div_parecer_rh">
-              <div class="form-group">
-                <label class="labelField">Parecer</label>
-                <textarea class="form-control" rows="3" name="cpParecerAprovaAdmissao" id="cpParecerAprovaAdmissao"
-                  parecer></textarea>
+
+            <div class="row">
+              <div class="form-group col-md-4">
+                <label for="cpFormacaoFuncionario">Formação do Funcionário</label>
+                <input type="text" name="cpFormacaoFuncionario" id="cpFormacaoFuncionario" class="form-control">
+              </div>
+
+              <div class="form-group col-md-4">
+                <label for="cpNivelIngles">Nível de Inglês</label>
+                <select name="cpNivelIngles" id="cpNivelIngles" class="form-control">
+                  <option value=""></option>
+                  <option value="Não informado">Não informado</option>
+                  <option value="Básico">Básico</option>
+                  <option value="Intermediário">Intermediário</option>
+                  <option value="Avançado">Avançado</option>
+                  <option value="Fluente">Fluente</option>
+                </select>
+              </div>
+
+              <div class="form-group col-md-4">
+                <label for="cpPracaAtuacao">Praça de Atuação</label>
+                <input type="text" name="cpPracaAtuacao" id="cpPracaAtuacao" class="form-control">
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="panel panel-default" id="painelAnexarASO" style="display: none;">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <span class="fluigicon fluigicon-attachment fluigicon-lg"></span>
-            &nbsp;Anexar ASO (Atestado de Saúde Ocupacional)
-          </h3>
-        </div>
-        <div class="panel-body">
-          <input type="hidden" name="id_pdf_aso" id="id_pdf_aso">
+            <div class="row">
+              <div class="form-group col-md-12">
+                <label>Descrição das Atividades do Colaborador</label>
+                <textarea name="cpDescricaoAtividades" id="cpDescricaoAtividades" class="form-control"
+                  rows="2"></textarea>
+              </div>
+            </div>
 
-          <div class="row row-kit-dinamico" style="margin-bottom: 0;">
-            <div class="col-md-5">
-              <label
-                style="font-size: 13px; font-weight: bold; color: #555; margin-bottom: 10px; display: block;">Documento
-                ASO (PDF ou Imagem)</label>
-              <div class="modern-file-upload" id="box_file_aso">
-                <input type="file" name="btn_upload_aso" id="btn_upload_aso" accept="image/*,.pdf"
-                  onchange="handleAsoFileInputChange()">
-                <div class="upload-content">
-                  <i class="flaticon flaticon-file-pdf icon-md" style="color: #ef4444;"></i>
-                  <div style="display: flex; flex-direction: column; overflow: hidden; width: 100%; text-align: left;">
-                    <span class="upload-text" id="text_file_aso"
-                      style="font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Upload
-                      Manual</span>
-                    <small style="font-size: 10px; color: #94a3b8;" id="sub_text_file_aso">Arraste ou clique para
-                      anexar</small>
-                  </div>
+            <div class="row">
+              <div class="form-group col-md-3">
+                <label>Necessita de Notebook?</label>
+                <select name="cpNecessitaNotebook" id="cpNecessitaNotebook" class="form-control">
+                  <option value=""></option>
+                  <option value="Sim">Sim</option>
+                  <option value="Nao">Não</option>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label>Necessita de EPI?</label>
+                <select name="cpNecessitaEPI" id="cpNecessitaEPI" class="form-control">
+                  <option value=""></option>
+                  <option value="Sim">Sim</option>
+                  <option value="Nao">Não</option>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label>First Name (Primeiro Nome)</label>
+                <input type="text" name="cpFirstName" id="cpFirstName" class="form-control">
+              </div>
+              <div class="form-group col-md-3">
+                <label>Last Name (Último Nome)</label>
+                <input type="text" name="cpLastName" id="cpLastName" class="form-control">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-md-4">
+                <label>Will this user work on a plant?</label>
+                <select name="cpWorkOnPlant" id="cpWorkOnPlant" class="form-control">
+                  <option value=""></option>
+                  <option value="Sim">Sim</option>
+                  <option value="Nao">Não</option>
+                </select>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Job Title (Nome do Cargo)</label>
+                <input type="text" name="cpJobTitle" id="cpJobTitle" class="form-control">
+              </div>
+              <div class="form-group col-md-4">
+                <label>Department (Departamento)</label>
+                <select name="cpDepartment" id="cpDepartment" class="form-control">
+                  <option value=""></option>
+                  <option value="Agronomy">Agronomy (Agronomia)</option>
+                  <option value="Business Development">Business Development (Des. de Novos Negócios)</option>
+                  <option value="Director">Director (Diretoria)</option>
+                  <option value="Engineering">Engineering (Engenharia)</option>
+                  <option value="Field Service">Field Service (Prospecção)</option>
+                  <option value="Finance">Finance (Financeiro)</option>
+                  <option value="Human Resources">Human Resources (Recursos Humanos)</option>
+                  <option value="Industrial Excellence & ESG">Industrial Excellence & ESG</option>
+                  <option value="Information Technology">Information Technology (T.I.)</option>
+                  <option value="Marketing and Communication">Marketing and Communication</option>
+                  <option value="Operations">Operations (Operação)</option>
+                  <option value="Procurement">Procurement (Compras e Suprimentos)</option>
+                  <option value="Research and Development">Research and Development (P&D)</option>
+                  <option value="Top Management">Top Management (Alta Gestão)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-md-4">
+                <label>Email of the direct manager</label>
+                <input type="email" name="cpEmailDirectManager" id="cpEmailDirectManager" class="form-control">
+              </div>
+              <div class="form-group col-md-4">
+                <label>User Status</label>
+                <select name="cpUserStatus" id="cpUserStatus" class="form-control">
+                  <option value=""></option>
+                  <option value="Employee">Employee or similar (Colaborador)</option>
+                  <option value="External">External (Externo)</option>
+                  <option value="Intern">Intern (Estagiário)</option>
+                </select>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Internal Group</label>
+                <select name="cpNetzeroInternalGroup" id="cpNetzeroInternalGroup" class="form-control">
+                  <option value=""></option>
+                  <option value="Group A">Group A: Co-Founders, CXOs, Directors...</option>
+                  <option value="Group B">Group B: Operations</option>
+                  <option value="Group C">Group C: R&D</option>
+                  <option value="Group D">Group D: Services</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="cpCadastroHierarquia">Cadastro de Hierarquias</label>
+                <textarea name="cpCadastroHierarquia" id="cpCadastroHierarquia" class="form-control" rows="3"
+                  placeholder="Informe estrutura hierárquica, gestor, diretoria, centro de responsabilidade ou observações de hierarquia."></textarea>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="cpRequisitosAcesso">Requisitos de Acesso / Certificações</label>
+                <textarea name="cpRequisitosAcesso" id="cpRequisitosAcesso" class="form-control" rows="3"
+                  placeholder="Informe certificações, acessos necessários, grupos, permissões e requisitos específicos."></textarea>
+              </div>
+            </div>
+
+            <div class="row hide" id="blocoExameAdmissional">
+              <div class="col-md-12">
+                <h4 style="color: #1eaad9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px;">Exame
+                  Admissional</h4>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Local de Realização do Exame Admissional</label>
+                <input type="text" name="cpLocalExameAdmissional" id="cpLocalExameAdmissional" class="form-control">
+              </div>
+              <div class="form-group col-md-4">
+                <label>Data de Realização do Exame Admissional</label>
+                <div class="input-group">
+                  <input type="text" name="cpDataExameAdmissional" id="cpDataExameAdmissional" class="form-control"
+                    mask="00/00/0000" />
+                  <span class="input-group-addon">
+                    <span class="fluigicon fluigicon-calendar"></span>
+                  </span>
                 </div>
               </div>
             </div>
 
-            <div class="col-md-4" style="margin-top: 30px;">
-              <button type="button" class="btn btn-success btn-lg" id="btn_enviar_aso" onclick="uploadASOCandidato()"
-                style="font-weight: 600;">
-                <i class="flaticon flaticon-check-circle-on icon-sm"></i> Enviar para GED
-              </button>
+          </div>
+        </div>
+        <!-- Informações Adicionais -->
+
+        <!-- Etapas do processo -->
+        <div class="panel panel-default" id="painelAprovacaoRH">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <span class="fluigicon fluigicon-user-checked fluigicon-lg"></span>
+              &nbsp;Aprovação
+            </h3>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="labelField">Aprovador</label>
+                  <input type="text" name="cpRespAdmissao" id="cpRespAdmissao" class="form-control" readonly />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="labelField">Aprovação</label>
+                  <select class="form-control" name="cpAprovacaoAdmissao" id="cpAprovacaoAdmissao">
+                    <option value="" selected>Selecione uma opção...</option>
+                    <option value="1">Integrar Funcionário</option>
+                    <option value="3">Solicitar Correção</option>
+                    <option value="4">Pular Integração (Testes)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12" id="div_parecer_rh">
+                <div class="form-group">
+                  <label class="labelField">Parecer</label>
+                  <textarea class="form-control" rows="3" name="cpParecerAprovaAdmissao" id="cpParecerAprovaAdmissao"
+                    parecer></textarea>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="panel panel-default" id="painelGerarKit" style="display: none;">
-        <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
-          <h3 class="panel-title">
-            <span class="fluigicon fluigicon-print fluigicon-lg"></span>
-            &nbsp;Gerar Kit de Admissão (Segundo Link)
-          </h3>
-          <button type="button" class="btn btn-ged-master" id="btnAbrirPastaGerarKit"
-            onclick="gerenciarPastaCandidato()">
-            <i class="flaticon flaticon-folder-open icon-sm"></i> Abrir Pasta do Candidato
-          </button>
-        </div>
-
-        <div class="panel-body">
-          <div class="row" style="margin-bottom: 15px;">
-            <div class="col-md-12">
-              <div
-                style="border: 1px solid #bce8f1; color: #31708f; background-color: #d9edf7; padding: 12px; border-radius: 4px; font-size: 13px;">
-                <span class="fluigicon fluigicon-info-sign icon-sm"></span>
-                <strong>Instrução:</strong> Selecione os documentos desejados para o Kit de Admissão. O sistema irá
-                preencher os dados do candidato e gerar o PDF automaticamente no GED.
-              </div>
-            </div>
+        <div class="panel panel-default" id="painelAnexarASO" style="display: none;">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <span class="fluigicon fluigicon-attachment fluigicon-lg"></span>
+              &nbsp;Anexar ASO (Atestado de Saúde Ocupacional)
+            </h3>
           </div>
+          <div class="panel-body">
+            <input type="hidden" name="id_pdf_aso" id="id_pdf_aso">
 
-          <div class="row" style="margin-bottom: 15px; padding-left: 15px;">
-            <button type="button" class="btn btn-default btn-sm" id="btn_selecionar_todos_segundo"
-              onclick="selecionarTodosSegundoLink()" disabled>
-              <i class="flaticon flaticon-check-square icon-sm"></i> Selecionar Todos os Modelos
-            </button>
-          </div>
-
-          <div id="container_segundo_link" style="padding: 0 15px;">
-
-            <div id="container_contrato" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-document-check icon-sm"></i> Contrato de Trabalho</p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+            <div class="row row-kit-dinamico" style="margin-bottom: 0;">
+              <div class="col-md-5">
+                <label
+                  style="font-size: 13px; font-weight: bold; color: #555; margin-bottom: 10px; display: block;">Documento
+                  ASO (PDF ou Imagem)</label>
+                <div class="modern-file-upload" id="box_file_aso">
+                  <input type="file" name="btn_upload_aso" id="btn_upload_aso" accept="image/*,.pdf"
+                    onchange="handleAsoFileInputChange()">
+                  <div class="upload-content">
+                    <i class="flaticon flaticon-file-pdf icon-md" style="color: #ef4444;"></i>
+                    <div
+                      style="display: flex; flex-direction: column; overflow: hidden; width: 100%; text-align: left;">
+                      <span class="upload-text" id="text_file_aso"
+                        style="font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Upload
+                        Manual</span>
+                      <small style="font-size: 10px; color: #94a3b8;" id="sub_text_file_aso">Arraste ou clique para
+                        anexar</small>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div id="container_ponto_excecao" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-time icon-sm"></i> Acordo Individual - Ponto por Exceção</p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
-              </div>
-            </div>
-
-            <div id="container_termo_veiculo" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-car icon-sm"></i> Termo de Responsabilidade de Uso Veículo</p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
-              </div>
-            </div>
-
-            <div id="container_termo_nda" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-lock icon-sm"></i> Termo de Confidencialidade - NDA</p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
-              </div>
-            </div>
-
-            <div id="container_tce" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-class icon-sm"></i> TCE - Termo de Compromisso de Estágio</p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
-              </div>
-            </div>
-
-            <div id="container_compensacao_horas" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-calendar icon-sm"></i> Acordo de Compensação de Horas Trabalhadas</p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
-              </div>
-            </div>
-
-            <div id="container_prorrogacao_horas" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-time icon-sm"></i> Acordo de Prorrogação de Horas Trabalhadas</p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
-              </div>
-            </div>
-
-            <div id="container_renuncia_vt" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-car-front icon-sm"></i> Declaração de Renúncia de Vale Transporte</p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
-              </div>
-            </div>
-
-            <div id="container_solicitacao_vt" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-bus icon-sm"></i> Solicitação de Vale Transporte</p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
-              </div>
-            </div>
-
-            <div id="container_encargos_ir" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-users icon-sm"></i> Declaração de Encargos de Família - Imposto de Renda</p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
-              </div>
-            </div>
-
-            <div id="container_salario_familia" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-users icon-sm"></i> Ficha de Salário Família</p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
-              </div>
-            </div>
-
-            <div id="container_termo_responsabilidade" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-document-check icon-sm"></i> Termo de Responsabilidade</p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
-              </div>
-            </div>
-
-            <div id="container_ficha_registro" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-user icon-sm"></i> Ficha Registro de Empregado</p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
-              </div>
-            </div>
-
-            <div id="container_termo_sigilo" style="margin-bottom: 15px;">
-              <p class="text-muted"
-                style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
-                  class="flaticon flaticon-security icon-sm"></i> Termo de Proibição de Captura e Reprodução (Sigilo)
-              </p>
-              <div class="render-area">
-                <div class="text-center" style="padding: 10px; color: #777;"><i
-                    class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
-              </div>
-            </div>
-
-            <div class="row" id="row_btn_lote_segundo"
-              style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #cbd5e1; display: none;">
-              <div class="col-md-12 text-right">
-                <button type="button" class="btn btn-success btn-lg" onclick="window.processarSegundoLinkEmLote()"
+              <div class="col-md-4" style="margin-top: 30px;">
+                <button type="button" class="btn btn-success btn-lg" id="btn_enviar_aso" onclick="uploadASOCandidato()"
                   style="font-weight: 600;">
-                  <i class="flaticon flaticon-check-circle-on icon-sm"></i> Gerar e Enviar para GED
+                  <i class="flaticon flaticon-check-circle-on icon-sm"></i> Enviar para GED
                 </button>
               </div>
             </div>
-
           </div>
         </div>
-      </div>
 
-      <div class="panel panel-default" id="divValidarKit" style="display: none;">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <span class="fluigicon fluigicon-document-approved fluigicon-lg"></span>
-            &nbsp;Validar Kit Admissão
-          </h3>
-        </div>
-        <div class="panel-body">
-          <input type="hidden" name="id_pdf_contrato" id="id_pdf_contrato">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="labelField">Aprovador</label>
-                <input type="text" name="cpRespValidaKit" id="cpRespValidaKit" class="form-control" readonly />
+        <div class="panel panel-default" id="painelGerarKit" style="display: none;">
+          <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 class="panel-title">
+              <span class="fluigicon fluigicon-print fluigicon-lg"></span>
+              &nbsp;Gerar Kit de Admissão (Segundo Link)
+            </h3>
+            <button type="button" class="btn btn-ged-master" id="btnAbrirPastaGerarKit"
+              onclick="gerenciarPastaCandidato()">
+              <i class="flaticon flaticon-folder-open icon-sm"></i> Abrir Pasta do Candidato
+            </button>
+          </div>
+
+          <div class="panel-body">
+            <div class="row" style="margin-bottom: 15px;">
+              <div class="col-md-12">
+                <div
+                  style="border: 1px solid #bce8f1; color: #31708f; background-color: #d9edf7; padding: 12px; border-radius: 4px; font-size: 13px;">
+                  <span class="fluigicon fluigicon-info-sign icon-sm"></span>
+                  <strong>Instrução:</strong> Selecione os documentos desejados para o Kit de Admissão. O sistema irá
+                  preencher os dados do candidato e gerar o PDF automaticamente no GED.
+                </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="labelField">Aprovação</label>
-                <select class="form-control" name="cpAprovacaoKit" id="cpAprovacaoKit" onchange="controlaParecerKit()">
-                  <option value="" selected>Selecione uma opção...</option>
-                  <option value="1">Aprovado - Enviar para Assinatura</option>
-                  <option value="3">Solicitar Correção</option>
-                </select>
+
+            <div class="row" style="margin-bottom: 15px; padding-left: 15px;">
+              <button type="button" class="btn btn-default btn-sm" id="btn_selecionar_todos_segundo"
+                onclick="selecionarTodosSegundoLink()" disabled>
+                <i class="flaticon flaticon-check-square icon-sm"></i> Selecionar Todos os Modelos
+              </button>
+            </div>
+
+            <div id="container_segundo_link" style="padding: 0 15px;">
+
+              <div id="container_contrato" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-document-check icon-sm"></i> Contrato de Trabalho</p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div id="container_ponto_excecao" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-time icon-sm"></i> Acordo Individual - Ponto por Exceção</p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div id="container_termo_veiculo" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-car icon-sm"></i> Termo de Responsabilidade de Uso Veículo</p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div id="container_termo_nda" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-lock icon-sm"></i> Termo de Confidencialidade - NDA</p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div id="container_tce" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-class icon-sm"></i> TCE - Termo de Compromisso de Estágio</p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div id="container_compensacao_horas" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-calendar icon-sm"></i> Acordo de Compensação de Horas Trabalhadas</p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div id="container_prorrogacao_horas" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-time icon-sm"></i> Acordo de Prorrogação de Horas Trabalhadas</p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div id="container_renuncia_vt" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-car-front icon-sm"></i> Declaração de Renúncia de Vale Transporte</p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div id="container_solicitacao_vt" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-bus icon-sm"></i> Solicitação de Vale Transporte</p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div id="container_encargos_ir" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-users icon-sm"></i> Declaração de Encargos de Família - Imposto de Renda
+                </p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div id="container_salario_familia" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-users icon-sm"></i> Ficha de Salário Família</p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div id="container_termo_responsabilidade" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-document-check icon-sm"></i> Termo de Responsabilidade</p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div id="container_ficha_registro" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-user icon-sm"></i> Ficha Registro de Empregado</p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div id="container_termo_sigilo" style="margin-bottom: 15px;">
+                <p class="text-muted"
+                  style="font-size: 11px; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;"><i
+                    class="flaticon flaticon-security icon-sm"></i> Termo de Proibição de Captura e Reprodução (Sigilo)
+                </p>
+                <div class="render-area">
+                  <div class="text-center" style="padding: 10px; color: #777;"><i
+                      class="flaticon flaticon-refresh icon-spin icon-sm"></i> Carregando...</div>
+                </div>
+              </div>
+
+              <div class="row" id="row_btn_lote_segundo"
+                style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #cbd5e1; display: none;">
+                <div class="col-md-12 text-right">
+                  <button type="button" class="btn btn-success btn-lg" onclick="window.processarSegundoLinkEmLote()"
+                    style="font-weight: 600;">
+                    <i class="flaticon flaticon-check-circle-on icon-sm"></i> Gerar e Enviar para GED
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default" id="divValidarKit" style="display: none;">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <span class="fluigicon fluigicon-document-approved fluigicon-lg"></span>
+              &nbsp;Validar Kit Admissão
+            </h3>
+          </div>
+          <div class="panel-body">
+            <input type="hidden" name="id_pdf_contrato" id="id_pdf_contrato">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="labelField">Aprovador</label>
+                  <input type="text" name="cpRespValidaKit" id="cpRespValidaKit" class="form-control" readonly />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="labelField">Aprovação</label>
+                  <select class="form-control" name="cpAprovacaoKit" id="cpAprovacaoKit"
+                    onchange="controlaParecerKit()">
+                    <option value="" selected>Selecione uma opção...</option>
+                    <option value="1">Aprovado - Enviar para Assinatura</option>
+                    <option value="3">Solicitar Correção</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" id="linhaParecerValidaKit" style="display: none;">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="labelField">Parecer</label>
+                  <textarea class="form-control" rows="3" name="cpParecerValidaKit" id="cpParecerValidaKit"
+                    parecer></textarea>
+                </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="row" id="linhaParecerValidaKit" style="display: none;">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label class="labelField">Parecer</label>
-                <textarea class="form-control" rows="3" name="cpParecerValidaKit" id="cpParecerValidaKit"
-                  parecer></textarea>
+        <div class="hide" id="painelEtapasProcesso">
+          <input type="hidden" name="codGestor" id="codGestor" />
+          <input type="text" name="cpRespGestor" id="cpRespGestor" />
+          <input type="text" name="cpAprovacaoGestor" id="cpAprovacaoGestor" />
+          <textarea name="cpParecerAprovGestor" id="cpParecerAprovGestor"></textarea>
+
+          <input type="hidden" name="codDiretor" id="codDiretor" />
+          <input type="text" name="cpRespDiretor" id="cpRespDiretor" />
+          <input type="text" name="cpAprovacaoDiretor" id="cpAprovacaoDiretor" />
+          <textarea name="cpParecerAprovaDiretor" id="cpParecerAprovaDiretor"></textarea>
+
+          <input type="text" name="cpRespRH" id="cpRespRH" />
+          <input type="text" name="cpAprovacaoRH" id="cpAprovacaoRH" />
+          <textarea name="cpParecerAprovaRH" id="cpParecerAprovaRH"></textarea>
+
+          <input type="text" name="cpAnalistaBPO" id="cpAnalistaBPO" />
+          <textarea name="cpParecerBPO" id="cpParecerBPO"></textarea>
+        </div>
+
+        <div class="panel panel-warning" id="painelCorrecaoCandidato" style="display:none; margin-top: 15px;">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <span class="fluigicon fluigicon-exclamation-sign"></span> Retorno do Candidato (Correção)
+            </h3>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Parecer enviado pelo RH:</label>
+                  <textarea class="form-control" name="txtParecerHistoricoRH" id="txtParecerHistoricoRH" rows="2"
+                    readonly></textarea>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Resposta / Observação do Candidato:</label>
+                  <textarea class="form-control" name="txtRespostaCorrecaoCandidato" id="txtRespostaCorrecaoCandidato"
+                    rows="3" readonly></textarea>
+                  <span class="help-block" style="color: red;">* Verifique se há novos anexos na aba de anexos do
+                    processo.</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="hide" id="painelEtapasProcesso">
-        <input type="hidden" name="codGestor" id="codGestor" />
-        <input type="text" name="cpRespGestor" id="cpRespGestor" />
-        <input type="text" name="cpAprovacaoGestor" id="cpAprovacaoGestor" />
-        <textarea name="cpParecerAprovGestor" id="cpParecerAprovGestor"></textarea>
-
-        <input type="hidden" name="codDiretor" id="codDiretor" />
-        <input type="text" name="cpRespDiretor" id="cpRespDiretor" />
-        <input type="text" name="cpAprovacaoDiretor" id="cpAprovacaoDiretor" />
-        <textarea name="cpParecerAprovaDiretor" id="cpParecerAprovaDiretor"></textarea>
-
-        <input type="text" name="cpRespRH" id="cpRespRH" />
-        <input type="text" name="cpAprovacaoRH" id="cpAprovacaoRH" />
-        <textarea name="cpParecerAprovaRH" id="cpParecerAprovaRH"></textarea>
-
-        <input type="text" name="cpAnalistaBPO" id="cpAnalistaBPO" />
-        <textarea name="cpParecerBPO" id="cpParecerBPO"></textarea>
-      </div>
-
-      <div class="panel panel-warning" id="painelCorrecaoCandidato" style="display:none; margin-top: 15px;">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <span class="fluigicon fluigicon-exclamation-sign"></span> Retorno do Candidato (Correção)
-          </h3>
-        </div>
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label>Parecer enviado pelo RH:</label>
-                <textarea class="form-control" name="txtParecerHistoricoRH" id="txtParecerHistoricoRH" rows="2"
-                  readonly></textarea>
-              </div>
+        <div class="panel panel-default" id="divDadosOcultos" style="display: none;">
+          <div class="panel-heading">
+            <h4 class="panel-title">Dados Ocultos</h4>
+          </div>
+          <div class="panel-body">
+            <div class="form-group col-sm-4">
+              <label for="FUN_TPDEFICIENTESOC_DESC_AD" class="control-label">Tipo De Deficiencia
+                eSocial Descrição:</label>
+              <input type="text" name="FUN_TPDEFICIENTESOC_DESC_AD" id="FUN_TPDEFICIENTESOC_DESC_AD"
+                class="form-control">
             </div>
-            <div class="col-md-12">
-              <div class="form-group">
-                <label>Resposta / Observação do Candidato:</label>
-                <textarea class="form-control" name="txtRespostaCorrecaoCandidato" id="txtRespostaCorrecaoCandidato"
-                  rows="3" readonly></textarea>
-                <span class="help-block" style="color: red;">* Verifique se há novos anexos na aba de anexos do
-                  processo.</span>
-              </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_TPDEFICIENTE_DESC_AD" class="control-label">Tipo De Deficiencia
+                Descrição:</label>
+              <input type="text" name="FUN_TPDEFICIENTE_DESC_AD" id="FUN_TPDEFICIENTE_DESC_AD" class="form-control">
             </div>
-          </div>
-        </div>
-      </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_TPLOGRADOURO_DESC_AD" class="control-label">Tipo Logradouro
+                Descrição:</label>
+              <input type="text" name="FUN_TPLOGRADOURO_DESC_AD" id="FUN_TPLOGRADOURO_DESC_AD" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_CNHCAT_DESC_AD" class="control-label">Letra da Categoria do CNH:</label>
+              <input type="text" name="FUN_CNHCAT_DESC_AD" id="FUN_CNHCAT_DESC_AD" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_CODMUNASC_DESC_AD" class="control-label">Nome Município de
+                Nascimento:</label>
+              <input type="text" name="FUN_CODMUNASC_DESC_AD" id="FUN_CODMUNASC_DESC_AD" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_COMPLEMENTO_CONTRATO_ID" class="control-label">Id Complemento
+                Contrato:</label>
+              <input type="text" name="FUN_COMPLEMENTO_CONTRATO_ID" id="FUN_COMPLEMENTO_CONTRATO_ID"
+                class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_COMPLEMENTO_CONTRATO1_AD" class="control-label">Complemento Contrato
+                1:</label>
+              <input type="text" name="FUN_COMPLEMENTO_CONTRATO1_AD" id="FUN_COMPLEMENTO_CONTRATO1_AD"
+                class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_COMPLEMENTO_CONTRATO2_AD" class="control-label">Complemento Contrato
+                2:</label>
+              <input type="text" name="FUN_COMPLEMENTO_CONTRATO2_AD" id="FUN_COMPLEMENTO_CONTRATO2_AD"
+                class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_COMPLEMENTO_CONTRATO3_AD" class="control-label">Complemento Contrato
+                3:</label>
+              <input type="text" name="FUN_COMPLEMENTO_CONTRATO3_AD" id="FUN_COMPLEMENTO_CONTRATO3_AD"
+                class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_COMPLEMENTO_CONTRATO4_AD" class="control-label">Complemento Contrato
+                4:</label>
+              <input type="text" name="FUN_COMPLEMENTO_CONTRATO4_AD" id="FUN_COMPLEMENTO_CONTRATO4_AD"
+                class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_COMPLEMENTO_CONTRATO5_AD" class="control-label">Complemento Contrato
+                5:</label>
+              <input type="text" name="FUN_COMPLEMENTO_CONTRATO5_AD" id="FUN_COMPLEMENTO_CONTRATO5_AD"
+                class="form-control">
+            </div>
 
-      <div class="panel panel-default" id="divDadosOcultos" style="display: none;">
-        <div class="panel-heading">
-          <h4 class="panel-title">Dados Ocultos</h4>
-        </div>
-        <div class="panel-body">
-          <div class="form-group col-sm-4">
-            <label for="FUN_TPDEFICIENTESOC_DESC_AD" class="control-label">Tipo De Deficiencia
-              eSocial Descrição:</label>
-            <input type="text" name="FUN_TPDEFICIENTESOC_DESC_AD" id="FUN_TPDEFICIENTESOC_DESC_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_TPDEFICIENTE_DESC_AD" class="control-label">Tipo De Deficiencia
-              Descrição:</label>
-            <input type="text" name="FUN_TPDEFICIENTE_DESC_AD" id="FUN_TPDEFICIENTE_DESC_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_TPLOGRADOURO_DESC_AD" class="control-label">Tipo Logradouro
-              Descrição:</label>
-            <input type="text" name="FUN_TPLOGRADOURO_DESC_AD" id="FUN_TPLOGRADOURO_DESC_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_CNHCAT_DESC_AD" class="control-label">Letra da Categoria do CNH:</label>
-            <input type="text" name="FUN_CNHCAT_DESC_AD" id="FUN_CNHCAT_DESC_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_CODMUNASC_DESC_AD" class="control-label">Nome Município de
-              Nascimento:</label>
-            <input type="text" name="FUN_CODMUNASC_DESC_AD" id="FUN_CODMUNASC_DESC_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_COMPLEMENTO_CONTRATO_ID" class="control-label">Id Complemento
-              Contrato:</label>
-            <input type="text" name="FUN_COMPLEMENTO_CONTRATO_ID" id="FUN_COMPLEMENTO_CONTRATO_ID" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_COMPLEMENTO_CONTRATO1_AD" class="control-label">Complemento Contrato
-              1:</label>
-            <input type="text" name="FUN_COMPLEMENTO_CONTRATO1_AD" id="FUN_COMPLEMENTO_CONTRATO1_AD"
-              class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_COMPLEMENTO_CONTRATO2_AD" class="control-label">Complemento Contrato
-              2:</label>
-            <input type="text" name="FUN_COMPLEMENTO_CONTRATO2_AD" id="FUN_COMPLEMENTO_CONTRATO2_AD"
-              class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_COMPLEMENTO_CONTRATO3_AD" class="control-label">Complemento Contrato
-              3:</label>
-            <input type="text" name="FUN_COMPLEMENTO_CONTRATO3_AD" id="FUN_COMPLEMENTO_CONTRATO3_AD"
-              class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_COMPLEMENTO_CONTRATO4_AD" class="control-label">Complemento Contrato
-              4:</label>
-            <input type="text" name="FUN_COMPLEMENTO_CONTRATO4_AD" id="FUN_COMPLEMENTO_CONTRATO4_AD"
-              class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_COMPLEMENTO_CONTRATO5_AD" class="control-label">Complemento Contrato
-              5:</label>
-            <input type="text" name="FUN_COMPLEMENTO_CONTRATO5_AD" id="FUN_COMPLEMENTO_CONTRATO5_AD"
-              class="form-control">
+            <div class="form-group col-sm-4">
+              <label for="FUN_FILIAL" class="control-label">Código Filial:</label>
+              <input type="text" class="form-control" id="FUN_FILIAL" name="FUN_FILIAL">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_FILIAL_DESC_AD" class="control-label">Descrição Filial:</label>
+              <input type="text" class="form-control" id="FUN_FILIAL_DESC_AD" name="FUN_FILIAL_DESC_AD">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_CNPJ_FILIAL" class="control-label">CNPJ Filial:</label>
+              <input type="text" class="form-control" id="FUN_CNPJ_FILIAL" name="FUN_CNPJ_FILIAL">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_LOGRADOURO_FILIAL" class="control-label">Logradouro Filial:</label>
+              <input type="text" class="form-control" id="FUN_LOGRADOURO_FILIAL" name="FUN_LOGRADOURO_FILIAL">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BAIRRO_FILIAL" class="control-label">Bairro Filial:</label>
+              <input type="text" class="form-control" id="FUN_BAIRRO_FILIAL" name="FUN_BAIRRO_FILIAL">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_CIDADE_FILIAL" class="control-label">Município Filial:</label>
+              <input type="text" class="form-control" id="FUN_CIDADE_FILIAL" name="FUN_CIDADE_FILIAL">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_ESTADO_FILIAL" class="control-label">Estado Filial:</label>
+              <input type="text" class="form-control" id="FUN_ESTADO_FILIAL" name="FUN_ESTADO_FILIAL">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_CEP_FILIAL" class="control-label">CEP Filial:</label>
+              <input type="text" class="form-control" id="FUN_CEP_FILIAL" name="FUN_CEP_FILIAL">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_NUMERO_FILIAL" class="control-label">Número Filial:</label>
+              <input type="text" class="form-control" id="FUN_NUMERO_FILIAL" name="FUN_NUMERO_FILIAL">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_COMPLEMENTO_FILIAL" class="control-label">Complemento Filial:</label>
+              <input type="text" class="form-control" id="FUN_COMPLEMENTO_FILIAL" name="FUN_COMPLEMENTO_FILIAL">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_PAIS_FILIAL" class="control-label">País Filial:</label>
+              <input type="text" class="form-control" id="FUN_PAIS_FILIAL" name="FUN_PAIS_FILIAL">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_IDDESC_EMPFILIALCOM">EMPFILIALCOM da Filial</label>
+              <input type="text" name="FUN_IDDESC_EMPFILIALCOM" id="FUN_IDDESC_EMPFILIALCOM" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_VLRSALARIO_EXTENSO_AD" class="control-label">Vl Salário por
+                Extenso:</label>
+              <input type="text" name="FUN_VLRSALARIO_EXTENSO_AD" id="FUN_VLRSALARIO_EXTENSO_AD" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_ADMISSAO_EXTENSO_AD" class="control-label">Data Admissão por
+                Extenso:</label>
+              <input type="text" name="FUN_ADMISSAO_EXTENSO_AD" id="FUN_ADMISSAO_EXTENSO_AD" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_CODIBGE_DESC_AD" class="control-label">Endereço - Nome
+                Município:</label>
+              <input type="text" class="form-control" id="FUN_CODIBGE_DESC_AD" name="FUN_CODIBGE_DESC_AD">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_NOMECOMERCIAL" class="control-label">Nome Comercial:</label>
+              <input type="text" name="FUN_NOMECOMERCIAL" id="FUN_NOMECOMERCIAL" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_EMP_END_LOGRADOURO" class="control-label">Logradorou da Empresa:</label>
+              <input type="text" name="FUN_EMP_END_LOGRADOURO" id="FUN_EMP_END_LOGRADOURO" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_EMP_END_BAIRRO" class="control-label">Bairro da Empresa:</label>
+              <input type="text" name="FUN_EMP_END_BAIRRO" id="FUN_EMP_END_BAIRRO" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_EMP_END_CIDADE" class="control-label">Cidade da Empresa:</label>
+              <input type="text" name="FUN_EMP_END_CIDADE" id="FUN_EMP_END_CIDADE" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_EMP_END_ESTADO" class="control-label">Estado da Empresa:</label>
+              <input type="text" name="FUN_EMP_END_ESTADO" id="FUN_EMP_END_ESTADO" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_EMP_END_CEP" class="control-label">Estado da Empresa:</label>
+              <input type="text" name="FUN_EMP_END_CEP" id="FUN_EMP_END_CEP" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_EMP_END_NUMERO" class="control-label">Número da Empresa:</label>
+              <input type="text" name="FUN_EMP_END_NUMERO" id="FUN_EMP_END_NUMERO" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_EMP_END_COMPLEMENTO" class="control-label">Complemento da
+                Empresa:</label>
+              <input type="text" name="FUN_EMP_END_COMPLEMENTO" id="FUN_EMP_END_COMPLEMENTO" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_EMP_END_PAIS" class="control-label">País da Empresa:</label>
+              <input type="text" name="FUN_EMP_END_PAIS" id="FUN_EMP_END_PAIS" class="form-control">
+            </div>
+
+            <div class="form-group col-sm-4">
+              <label for="FUN_CPFNOME" class="control-label">CPF Nome:</label>
+              <input type="text" name="FUN_CPFNOME" id="FUN_CPFNOME" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_CPFNOMECC" class="control-label">CPF Nome Centro de Custo:</label>
+              <input type="text" name="FUN_CPFNOMECC" id="FUN_CPFNOMECC" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_EMPRESA" class="control-label">Código Empresa:</label>
+              <input type="text" name="FUN_EMPRESA" id="FUN_EMPRESA" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_EMPRESA_DESC_AD" class="control-label">Descrição Empresa:</label>
+              <input type="text" name="FUN_EMPRESA_DESC_AD" id="FUN_EMPRESA_DESC_AD" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_CNPJ" class="control-label">CNPJ:</label>
+              <input type="text" name="FUN_CNPJ" id="FUN_CNPJ" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_TPADMISSAO" class="control-label">Tipo de Admissão:</label>
+              <input type="text" name="FUN_TPADMISSAO" id="FUN_TPADMISSAO" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_CATEGORIA" class="control-label">Categoria do Funcionário:</label>
+              <input type="text" name="FUN_CATEGORIA" id="FUN_CATEGORIA" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_FUNCAO" class="control-label">Código da Função:</label>
+              <input type="text" name="FUN_FUNCAO" id="FUN_FUNCAO" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_CODSIND" class="control-label">Código Sindicato:</label>
+              <input type="text" name="FUN_CODSIND" id="FUN_CODSIND" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_CODTURN" class="control-label">Código Turno de Trabalho:</label>
+              <input type="text" name="FUN_CODTURN" id="FUN_CODTURN" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="codJornada" class="control-label">Código Jornada:</label>
+              <input name="codJornada" id="codJornada" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="CA_CURRICULO" class="control-label">CA_CURRICULO:</label>
+              <input name="CA_CURRICULO" id="CA_CURRICULO" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="idProcessoFluig" class="control-label">Id Processo Fluig:</label>
+              <input name="idProcessoFluig" id="idProcessoFluig" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="codEtapaPublic" class="control-label">Código Etapa Public:</label>
+              <input name="codEtapaPublic" id="codEtapaPublic" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="descEtapaPublic" class="control-label">Descrição Etapa Public:</label>
+              <input name="descEtapaPublic" id="descEtapaPublic" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="percConclusaoJornada" class="control-label">Percentual Conclusão
+                Jornada:</label>
+              <input name="percConclusaoJornada" id="percConclusaoJornada" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="descConclusaoJornada" class="control-label">Desc Conclusão Jornada:</label>
+              <input name="descConclusaoJornada" id="descConclusaoJornada" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="codAtividade" class="control-label">Código Atividade:</label>
+              <input name="codAtividade" id="codAtividade" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="code_consulta" class="control-label">Código Consulta eSocial:</label>
+              <input name="code_consulta" id="code_consulta" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="code_message_consulta" class="control-label">Mensagem Consulta
+                eSocial:</label>
+              <input name="code_message_consulta" id="code_message_consulta" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_IDADE_AD" class="control-label">Idade:</label>
+              <input type="text" name="FUN_IDADE_AD" id="FUN_IDADE_AD" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BANCO" class="control-label">Banco Depósito Salário:</label>
+              <input type="text" name="FUN_BANCO" id="FUN_BANCO" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BANCO2" class="control-label">Banco Depósito Alternivo:</label>
+              <input type="text" name="FUN_BANCO2" id="FUN_BANCO2" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_AGENCIA" class="control-label">Agência Depósito Salário:</label>
+              <input type="text" id="FUN_AGENCIA" name="FUN_AGENCIA" class="form-control" />
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_AGENCIA2" class="control-label">Agência Depósito Alternativa:</label>
+              <input type="text" id="FUN_AGENCIA2" name="FUN_AGENCIA2" class="form-control" />
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="numLote" class="control-label">Lote:</label>
+              <input type="text" name="numLote" id="numLote" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_FOTO" class="control-label">Foto:</label>
+              <input type="text" name="FUN_FOTO" id="FUN_FOTO" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="quantidadeDependentes" class="control-label">Quantidade Dependentes</label>
+              <input type="text" name="quantidadeDependentes" id="quantidadeDependentes" class="form-control" value="0">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_SEQTURN" class="control-label">Sequência Turno:</label>
+              <input type="text" name="FUN_SEQTURN" id="FUN_SEQTURN" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_TERMO_LGPD_AD_1" class="control-label">LGPD1</label>
+              <textarea name="FUN_TERMO_LGPD_AD_1" id="FUN_TERMO_LGPD_AD_1" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_TERMO_LGPD_AD_2" class="control-label">LGPD2</label>
+              <textarea name="FUN_TERMO_LGPD_AD_2" id="FUN_TERMO_LGPD_AD_2" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_TERMO_LGPD_AD_3" class="control-label">LGPD3</label>
+              <textarea name="FUN_TERMO_LGPD_AD_3" id="FUN_TERMO_LGPD_AD_3" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_ESTINST" class="control-label">Código Entidade Ensino</label>
+              <input type="text" name="FUN_ESTINST" id="FUN_ESTINST" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_ESTINTAG" class="control-label">Código Agente Integração</label>
+              <input type="text" name="FUN_ESTINTAG" id="FUN_ESTINTAG" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_SECAO" class="control-label">Código Seção</label>
+              <input type="text" name="FUN_SECAO" id="FUN_SECAO" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO1_DESC_AD" class="control-label">Descrição Benefício 1</label>
+              <input type="text" name="FUN_BENEFICIO1_DESC_AD" id="FUN_BENEFICIO1_DESC_AD" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO2_DESC_AD" class="control-label">Descrição Benefício 2</label>
+              <input type="text" name="FUN_BENEFICIO2_DESC_AD" id="FUN_BENEFICIO2_DESC_AD" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO3_DESC_AD" class="control-label">Descrição Benefício 3</label>
+              <input type="text" name="FUN_BENEFICIO3_DESC_AD" id="FUN_BENEFICIO3_DESC_AD" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO4_DESC_AD" class="control-label">Descrição Benefício 4</label>
+              <input type="text" name="FUN_BENEFICIO4_DESC_AD" id="FUN_BENEFICIO4_DESC_AD" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO5_DESC_AD" class="control-label">Descrição Benefício 5</label>
+              <input type="text" name="FUN_BENEFICIO5_DESC_AD" id="FUN_BENEFICIO5_DESC_AD" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO1_BENEFICIARIO" class="control-label">Benefício 1
+                Beficioário</label>
+              <input type="text" name="FUN_BENEFICIO1_BENEFICIARIO" id="FUN_BENEFICIO1_BENEFICIARIO"
+                class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO2_BENEFICIARIO" class="control-label">Benefício 2
+                Beficioário</label>
+              <input type="text" name="FUN_BENEFICIO2_BENEFICIARIO" id="FUN_BENEFICIO2_BENEFICIARIO"
+                class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO3_BENEFICIARIO" class="control-label">Benefício 3
+                Beficioário</label>
+              <input type="text" name="FUN_BENEFICIO3_BENEFICIARIO" id="FUN_BENEFICIO3_BENEFICIARIO"
+                class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO4_BENEFICIARIO" class="control-label">Benefício 4
+                Beficioário</label>
+              <input type="text" name="FUN_BENEFICIO4_BENEFICIARIO" id="FUN_BENEFICIO4_BENEFICIARIO"
+                class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO5_BENEFICIARIO" class="control-label">Benefício 5
+                Beficioário</label>
+              <input type="text" name="FUN_BENEFICIO5_BENEFICIARIO" id="FUN_BENEFICIO5_BENEFICIARIO"
+                class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO1_DESCRICAO" class="control-label">Descrição Benefício
+                1</label>
+              <textarea name="FUN_BENEFICIO1_DESCRICAO" id="FUN_BENEFICIO1_DESCRICAO" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO2_DESCRICAO" class="control-label">Descrição Benefício
+                2</label>
+              <textarea name="FUN_BENEFICIO2_DESCRICAO" id="FUN_BENEFICIO2_DESCRICAO" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO3_DESCRICAO" class="control-label">Descrição Benefício
+                3</label>
+              <textarea name="FUN_BENEFICIO3_DESCRICAO" id="FUN_BENEFICIO3_DESCRICAO" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO4_DESCRICAO" class="control-label">Descrição Benefício
+                4</label>
+              <textarea name="FUN_BENEFICIO4_DESCRICAO" id="FUN_BENEFICIO4_DESCRICAO" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO5_DESCRICAO" class="control-label">Descrição Benefício
+                5</label>
+              <textarea name="FUN_BENEFICIO5_DESCRICAO" id="FUN_BENEFICIO5_DESCRICAO" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO1_LINK_FORM1" class="control-label">Link Formulário 1 Benefício
+                1</label>
+              <textarea name="FUN_BENEFICIO1_LINK_FORM1" id="FUN_BENEFICIO1_LINK_FORM1" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO1_LINK_FORM2" class="control-label">Link Formulário 2 Benefício
+                1</label>
+              <textarea name="FUN_BENEFICIO1_LINK_FORM2" id="FUN_BENEFICIO1_LINK_FORM2" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO1_LINK_FORM3" class="control-label">Link Formulário 3 Benefício
+                1</label>
+              <textarea name="FUN_BENEFICIO1_LINK_FORM3" id="FUN_BENEFICIO1_LINK_FORM3" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO2_LINK_FORM1" class="control-label">Link Formulário 1 Benefício
+                2</label>
+              <textarea name="FUN_BENEFICIO2_LINK_FORM1" id="FUN_BENEFICIO2_LINK_FORM1" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO2_LINK_FORM2" class="control-label">Link Formulário 2 Benefício
+                2</label>
+              <textarea name="FUN_BENEFICIO2_LINK_FORM2" id="FUN_BENEFICIO2_LINK_FORM2" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO2_LINK_FORM3" class="control-label">Link Formulário 3 Benefício
+                2</label>
+              <textarea name="FUN_BENEFICIO2_LINK_FORM3" id="FUN_BENEFICIO2_LINK_FORM3" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO3_LINK_FORM1" class="control-label">Link Formulário 1 Benefício
+                3</label>
+              <textarea name="FUN_BENEFICIO3_LINK_FORM1" id="FUN_BENEFICIO3_LINK_FORM1" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO3_LINK_FORM2" class="control-label">Link Formulário 2 Benefício
+                3</label>
+              <textarea name="FUN_BENEFICIO3_LINK_FORM2" id="FUN_BENEFICIO3_LINK_FORM2" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO3_LINK_FORM3" class="control-label">Link Formulário 3 Benefício
+                3</label>
+              <textarea name="FUN_BENEFICIO3_LINK_FORM3" id="FUN_BENEFICIO3_LINK_FORM3" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO4_LINK_FORM1" class="control-label">Link Formulário 1 Benefício
+                4</label>
+              <textarea name="FUN_BENEFICIO4_LINK_FORM1" id="FUN_BENEFICIO4_LINK_FORM1" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO4_LINK_FORM2" class="control-label">Link Formulário 2 Benefício
+                4</label>
+              <textarea name="FUN_BENEFICIO4_LINK_FORM2" id="FUN_BENEFICIO4_LINK_FORM2" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO4_LINK_FORM3" class="control-label">Link Formulário 3 Benefício
+                4</label>
+              <textarea name="FUN_BENEFICIO4_LINK_FORM3" id="FUN_BENEFICIO4_LINK_FORM3" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO5_LINK_FORM1" class="control-label">Link Formulário 1 Benefício
+                4</label>
+              <textarea name="FUN_BENEFICIO5_LINK_FORM1" id="FUN_BENEFICIO5_LINK_FORM1" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO5_LINK_FORM2" class="control-label">Link Formulário 2 Benefício
+                4</label>
+              <textarea name="FUN_BENEFICIO5_LINK_FORM2" id="FUN_BENEFICIO5_LINK_FORM2" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_BENEFICIO5_LINK_FORM3" class="control-label">Link Formulário 3 Benefício
+                4</label>
+              <textarea name="FUN_BENEFICIO5_LINK_FORM3" id="FUN_BENEFICIO5_LINK_FORM3" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="FUN_TURNO_JORNADA" class="control-label">Descrição Jornada de Trabalho do
+                Turno</label>
+              <textarea name="FUN_TURNO_JORNADA" id="FUN_TURNO_JORNADA" class="form-control"></textarea>
+            </div>
+            <input type="hidden" name="json_ids_primeiro_link" id="json_ids_primeiro_link">
+            <input type="hidden" id="json_ids_segundo_link" name="json_ids_segundo_link">
+            <input type="hidden" name="json_ids_kit_admissao" id="json_ids_kit_admissao">
+
           </div>
 
-          <div class="form-group col-sm-4">
-            <label for="FUN_FILIAL" class="control-label">Código Filial:</label>
-            <input type="text" class="form-control" id="FUN_FILIAL" name="FUN_FILIAL">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_FILIAL_DESC_AD" class="control-label">Descrição Filial:</label>
-            <input type="text" class="form-control" id="FUN_FILIAL_DESC_AD" name="FUN_FILIAL_DESC_AD">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_CNPJ_FILIAL" class="control-label">CNPJ Filial:</label>
-            <input type="text" class="form-control" id="FUN_CNPJ_FILIAL" name="FUN_CNPJ_FILIAL">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_LOGRADOURO_FILIAL" class="control-label">Logradouro Filial:</label>
-            <input type="text" class="form-control" id="FUN_LOGRADOURO_FILIAL" name="FUN_LOGRADOURO_FILIAL">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BAIRRO_FILIAL" class="control-label">Bairro Filial:</label>
-            <input type="text" class="form-control" id="FUN_BAIRRO_FILIAL" name="FUN_BAIRRO_FILIAL">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_CIDADE_FILIAL" class="control-label">Município Filial:</label>
-            <input type="text" class="form-control" id="FUN_CIDADE_FILIAL" name="FUN_CIDADE_FILIAL">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_ESTADO_FILIAL" class="control-label">Estado Filial:</label>
-            <input type="text" class="form-control" id="FUN_ESTADO_FILIAL" name="FUN_ESTADO_FILIAL">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_CEP_FILIAL" class="control-label">CEP Filial:</label>
-            <input type="text" class="form-control" id="FUN_CEP_FILIAL" name="FUN_CEP_FILIAL">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_NUMERO_FILIAL" class="control-label">Número Filial:</label>
-            <input type="text" class="form-control" id="FUN_NUMERO_FILIAL" name="FUN_NUMERO_FILIAL">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_COMPLEMENTO_FILIAL" class="control-label">Complemento Filial:</label>
-            <input type="text" class="form-control" id="FUN_COMPLEMENTO_FILIAL" name="FUN_COMPLEMENTO_FILIAL">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_PAIS_FILIAL" class="control-label">País Filial:</label>
-            <input type="text" class="form-control" id="FUN_PAIS_FILIAL" name="FUN_PAIS_FILIAL">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_IDDESC_EMPFILIALCOM">EMPFILIALCOM da Filial</label>
-            <input type="text" name="FUN_IDDESC_EMPFILIALCOM" id="FUN_IDDESC_EMPFILIALCOM" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_VLRSALARIO_EXTENSO_AD" class="control-label">Vl Salário por
-              Extenso:</label>
-            <input type="text" name="FUN_VLRSALARIO_EXTENSO_AD" id="FUN_VLRSALARIO_EXTENSO_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_ADMISSAO_EXTENSO_AD" class="control-label">Data Admissão por
-              Extenso:</label>
-            <input type="text" name="FUN_ADMISSAO_EXTENSO_AD" id="FUN_ADMISSAO_EXTENSO_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_CODIBGE_DESC_AD" class="control-label">Endereço - Nome
-              Município:</label>
-            <input type="text" class="form-control" id="FUN_CODIBGE_DESC_AD" name="FUN_CODIBGE_DESC_AD">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_NOMECOMERCIAL" class="control-label">Nome Comercial:</label>
-            <input type="text" name="FUN_NOMECOMERCIAL" id="FUN_NOMECOMERCIAL" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_EMP_END_LOGRADOURO" class="control-label">Logradorou da Empresa:</label>
-            <input type="text" name="FUN_EMP_END_LOGRADOURO" id="FUN_EMP_END_LOGRADOURO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_EMP_END_BAIRRO" class="control-label">Bairro da Empresa:</label>
-            <input type="text" name="FUN_EMP_END_BAIRRO" id="FUN_EMP_END_BAIRRO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_EMP_END_CIDADE" class="control-label">Cidade da Empresa:</label>
-            <input type="text" name="FUN_EMP_END_CIDADE" id="FUN_EMP_END_CIDADE" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_EMP_END_ESTADO" class="control-label">Estado da Empresa:</label>
-            <input type="text" name="FUN_EMP_END_ESTADO" id="FUN_EMP_END_ESTADO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_EMP_END_CEP" class="control-label">Estado da Empresa:</label>
-            <input type="text" name="FUN_EMP_END_CEP" id="FUN_EMP_END_CEP" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_EMP_END_NUMERO" class="control-label">Número da Empresa:</label>
-            <input type="text" name="FUN_EMP_END_NUMERO" id="FUN_EMP_END_NUMERO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_EMP_END_COMPLEMENTO" class="control-label">Complemento da
-              Empresa:</label>
-            <input type="text" name="FUN_EMP_END_COMPLEMENTO" id="FUN_EMP_END_COMPLEMENTO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_EMP_END_PAIS" class="control-label">País da Empresa:</label>
-            <input type="text" name="FUN_EMP_END_PAIS" id="FUN_EMP_END_PAIS" class="form-control">
-          </div>
+          <!-- Etapas do processo -->
 
-          <div class="form-group col-sm-4">
-            <label for="FUN_CPFNOME" class="control-label">CPF Nome:</label>
-            <input type="text" name="FUN_CPFNOME" id="FUN_CPFNOME" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_CPFNOMECC" class="control-label">CPF Nome Centro de Custo:</label>
-            <input type="text" name="FUN_CPFNOMECC" id="FUN_CPFNOMECC" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_EMPRESA" class="control-label">Código Empresa:</label>
-            <input type="text" name="FUN_EMPRESA" id="FUN_EMPRESA" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_EMPRESA_DESC_AD" class="control-label">Descrição Empresa:</label>
-            <input type="text" name="FUN_EMPRESA_DESC_AD" id="FUN_EMPRESA_DESC_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_CNPJ" class="control-label">CNPJ:</label>
-            <input type="text" name="FUN_CNPJ" id="FUN_CNPJ" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_TPADMISSAO" class="control-label">Tipo de Admissão:</label>
-            <input type="text" name="FUN_TPADMISSAO" id="FUN_TPADMISSAO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_CATEGORIA" class="control-label">Categoria do Funcionário:</label>
-            <input type="text" name="FUN_CATEGORIA" id="FUN_CATEGORIA" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_FUNCAO" class="control-label">Código da Função:</label>
-            <input type="text" name="FUN_FUNCAO" id="FUN_FUNCAO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_CODSIND" class="control-label">Código Sindicato:</label>
-            <input type="text" name="FUN_CODSIND" id="FUN_CODSIND" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_CODTURN" class="control-label">Código Turno de Trabalho:</label>
-            <input type="text" name="FUN_CODTURN" id="FUN_CODTURN" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="codJornada" class="control-label">Código Jornada:</label>
-            <input name="codJornada" id="codJornada" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="CA_CURRICULO" class="control-label">CA_CURRICULO:</label>
-            <input name="CA_CURRICULO" id="CA_CURRICULO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="idProcessoFluig" class="control-label">Id Processo Fluig:</label>
-            <input name="idProcessoFluig" id="idProcessoFluig" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="codEtapaPublic" class="control-label">Código Etapa Public:</label>
-            <input name="codEtapaPublic" id="codEtapaPublic" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="descEtapaPublic" class="control-label">Descrição Etapa Public:</label>
-            <input name="descEtapaPublic" id="descEtapaPublic" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="percConclusaoJornada" class="control-label">Percentual Conclusão
-              Jornada:</label>
-            <input name="percConclusaoJornada" id="percConclusaoJornada" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="descConclusaoJornada" class="control-label">Desc Conclusão Jornada:</label>
-            <input name="descConclusaoJornada" id="descConclusaoJornada" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="codAtividade" class="control-label">Código Atividade:</label>
-            <input name="codAtividade" id="codAtividade" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="code_consulta" class="control-label">Código Consulta eSocial:</label>
-            <input name="code_consulta" id="code_consulta" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="code_message_consulta" class="control-label">Mensagem Consulta
-              eSocial:</label>
-            <input name="code_message_consulta" id="code_message_consulta" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_IDADE_AD" class="control-label">Idade:</label>
-            <input type="text" name="FUN_IDADE_AD" id="FUN_IDADE_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BANCO" class="control-label">Banco Depósito Salário:</label>
-            <input type="text" name="FUN_BANCO" id="FUN_BANCO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BANCO2" class="control-label">Banco Depósito Alternivo:</label>
-            <input type="text" name="FUN_BANCO2" id="FUN_BANCO2" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_AGENCIA" class="control-label">Agência Depósito Salário:</label>
-            <input type="text" id="FUN_AGENCIA" name="FUN_AGENCIA" class="form-control" />
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_AGENCIA2" class="control-label">Agência Depósito Alternativa:</label>
-            <input type="text" id="FUN_AGENCIA2" name="FUN_AGENCIA2" class="form-control" />
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="numLote" class="control-label">Lote:</label>
-            <input type="text" name="numLote" id="numLote" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_FOTO" class="control-label">Foto:</label>
-            <input type="text" name="FUN_FOTO" id="FUN_FOTO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="quantidadeDependentes" class="control-label">Quantidade Dependentes</label>
-            <input type="text" name="quantidadeDependentes" id="quantidadeDependentes" class="form-control" value="0">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_SEQTURN" class="control-label">Sequência Turno:</label>
-            <input type="text" name="FUN_SEQTURN" id="FUN_SEQTURN" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_TERMO_LGPD_AD_1" class="control-label">LGPD1</label>
-            <textarea name="FUN_TERMO_LGPD_AD_1" id="FUN_TERMO_LGPD_AD_1" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_TERMO_LGPD_AD_2" class="control-label">LGPD2</label>
-            <textarea name="FUN_TERMO_LGPD_AD_2" id="FUN_TERMO_LGPD_AD_2" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_TERMO_LGPD_AD_3" class="control-label">LGPD3</label>
-            <textarea name="FUN_TERMO_LGPD_AD_3" id="FUN_TERMO_LGPD_AD_3" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_ESTINST" class="control-label">Código Entidade Ensino</label>
-            <input type="text" name="FUN_ESTINST" id="FUN_ESTINST" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_ESTINTAG" class="control-label">Código Agente Integração</label>
-            <input type="text" name="FUN_ESTINTAG" id="FUN_ESTINTAG" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_SECAO" class="control-label">Código Seção</label>
-            <input type="text" name="FUN_SECAO" id="FUN_SECAO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO1_DESC_AD" class="control-label">Descrição Benefício 1</label>
-            <input type="text" name="FUN_BENEFICIO1_DESC_AD" id="FUN_BENEFICIO1_DESC_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO2_DESC_AD" class="control-label">Descrição Benefício 2</label>
-            <input type="text" name="FUN_BENEFICIO2_DESC_AD" id="FUN_BENEFICIO2_DESC_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO3_DESC_AD" class="control-label">Descrição Benefício 3</label>
-            <input type="text" name="FUN_BENEFICIO3_DESC_AD" id="FUN_BENEFICIO3_DESC_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO4_DESC_AD" class="control-label">Descrição Benefício 4</label>
-            <input type="text" name="FUN_BENEFICIO4_DESC_AD" id="FUN_BENEFICIO4_DESC_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO5_DESC_AD" class="control-label">Descrição Benefício 5</label>
-            <input type="text" name="FUN_BENEFICIO5_DESC_AD" id="FUN_BENEFICIO5_DESC_AD" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO1_BENEFICIARIO" class="control-label">Benefício 1
-              Beficioário</label>
-            <input type="text" name="FUN_BENEFICIO1_BENEFICIARIO" id="FUN_BENEFICIO1_BENEFICIARIO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO2_BENEFICIARIO" class="control-label">Benefício 2
-              Beficioário</label>
-            <input type="text" name="FUN_BENEFICIO2_BENEFICIARIO" id="FUN_BENEFICIO2_BENEFICIARIO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO3_BENEFICIARIO" class="control-label">Benefício 3
-              Beficioário</label>
-            <input type="text" name="FUN_BENEFICIO3_BENEFICIARIO" id="FUN_BENEFICIO3_BENEFICIARIO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO4_BENEFICIARIO" class="control-label">Benefício 4
-              Beficioário</label>
-            <input type="text" name="FUN_BENEFICIO4_BENEFICIARIO" id="FUN_BENEFICIO4_BENEFICIARIO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO5_BENEFICIARIO" class="control-label">Benefício 5
-              Beficioário</label>
-            <input type="text" name="FUN_BENEFICIO5_BENEFICIARIO" id="FUN_BENEFICIO5_BENEFICIARIO" class="form-control">
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO1_DESCRICAO" class="control-label">Descrição Benefício
-              1</label>
-            <textarea name="FUN_BENEFICIO1_DESCRICAO" id="FUN_BENEFICIO1_DESCRICAO" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO2_DESCRICAO" class="control-label">Descrição Benefício
-              2</label>
-            <textarea name="FUN_BENEFICIO2_DESCRICAO" id="FUN_BENEFICIO2_DESCRICAO" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO3_DESCRICAO" class="control-label">Descrição Benefício
-              3</label>
-            <textarea name="FUN_BENEFICIO3_DESCRICAO" id="FUN_BENEFICIO3_DESCRICAO" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO4_DESCRICAO" class="control-label">Descrição Benefício
-              4</label>
-            <textarea name="FUN_BENEFICIO4_DESCRICAO" id="FUN_BENEFICIO4_DESCRICAO" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO5_DESCRICAO" class="control-label">Descrição Benefício
-              5</label>
-            <textarea name="FUN_BENEFICIO5_DESCRICAO" id="FUN_BENEFICIO5_DESCRICAO" class="form-control"></textarea>
-          </div>
+          <div style="display:none;">
+            <textarea name="cand_doc_rg_base64" id="cand_doc_rg_base64"></textarea>
+            <input type="hidden" name="cand_doc_rg_nome" id="cand_doc_rg_nome">
 
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO1_LINK_FORM1" class="control-label">Link Formulário 1 Benefício
-              1</label>
-            <textarea name="FUN_BENEFICIO1_LINK_FORM1" id="FUN_BENEFICIO1_LINK_FORM1" class="form-control"></textarea>
+            <textarea name="cand_doc_cpf_base64" id="cand_doc_cpf_base64"></textarea>
+            <input type="hidden" name="cand_doc_cpf_nome" id="cand_doc_cpf_nome">
+
+            <textarea name="cand_doc_titulo_base64" id="cand_doc_titulo_base64"></textarea>
+            <input type="hidden" name="cand_doc_titulo_nome" id="cand_doc_titulo_nome">
+
+            <textarea name="cand_doc_residencia_base64" id="cand_doc_residencia_base64"></textarea>
+            <input type="hidden" name="cand_doc_residencia_nome" id="cand_doc_residencia_nome">
+
+            <input type="hidden" name="cand_doc_escolaridade_base64" id="cand_doc_escolaridade_base64">
+            <input type="hidden" name="cand_doc_escolaridade_nome" id="cand_doc_escolaridade_nome">
+
+            <input type="hidden" name="origem_dados" id="origem_dados">
+
+            <input type="hidden" name="cpIdPastaGedJornada" id="cpIdPastaGedJornada">
+            <input type="hidden" name="cpIdPastaGedCandidato" id="cpIdPastaGedCandidato">
+
+            <input type="hidden" name="cpIdPastaDocsCandidato" id="cpIdPastaDocsCandidato">
+            <input type="hidden" name="cpIdPastaDocsGerados" id="cpIdPastaDocsGerados">
+            <input type="hidden" name="cpIdPastaDocsAssinados" id="cpIdPastaDocsAssinados">
+
+            <input type="hidden" name="cpCpfPastaGedRef" id="cpCpfPastaGedRef">
+            <input type="hidden" name="cpJornadaPastaGedRef" id="cpJornadaPastaGedRef">
+
           </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO1_LINK_FORM2" class="control-label">Link Formulário 2 Benefício
-              1</label>
-            <textarea name="FUN_BENEFICIO1_LINK_FORM2" id="FUN_BENEFICIO1_LINK_FORM2" class="form-control"></textarea>
+          <div style="display: none;">
+            <input type="hidden" name="cand_email" id="cand_email"> <input type="hidden" name="cand_naturalidade"
+              id="cand_naturalidade">
+            <input type="hidden" name="cand_estado_natal" id="cand_estado_natal">
+            <input type="hidden" name="cand_estado_civil" id="cand_estado_civil">
+            <input type="hidden" name="cand_sexo" id="cand_sexo">
+            <input type="hidden" name="cand_nacionalidade" id="cand_nacionalidade">
+            <input type="hidden" name="cand_raca" id="cand_raca">
+            <input type="hidden" name="cand_rg" id="cand_rg">
+            <input type="hidden" name="cand_titulo_eleitor" id="cand_titulo_eleitor">
+
+            <input type="hidden" name="cand_cep" id="cand_cep">
+            <input type="hidden" name="cand_endereco" id="cand_endereco">
+
+            <input type="hidden" name="cand_deficiencia" id="cand_deficiencia">
+            <input type="hidden" name="cand_tamanho_calcado" id="cand_tamanho_calcado">
+            <input type="hidden" name="cand_tamanho_camisa" id="cand_tamanho_camisa">
+
+            <input type="hidden" name="cand_banco" id="cand_banco">
+            <input type="hidden" name="cand_agencia" id="cand_agencia">
+            <input type="hidden" name="cand_conta_corrente" id="cand_conta_corrente">
+            <input type="hidden" name="cand_tipo_conta" id="cand_tipo_conta">
+
+            <input type="hidden" name="cand_emergencia_nome" id="cand_emergencia_nome">
+            <!--<input type="hidden" name="cand_emergencia_telefone" id="cand_emergencia_telefone">-->
+
+            <input type="hidden" name="cand_grau_instrucao" id="cand_grau_instrucao">
+            <input type="hidden" name="cand_curso" id="cand_curso">
+            <input type="hidden" name="cand_instituicao" id="cand_instituicao">
+            <input type="hidden" name="cand_ano_conclusao" id="cand_ano_conclusao">
+
+            <textarea name="json_dependentes" id="json_dependentes" style="display:none"></textarea>
+
+            <input type="hidden" name="cand_doc_cnh_nome" id="cand_doc_cnh_nome">
+            <textarea name="cand_doc_cnh_base64" id="cand_doc_cnh_base64" style="display:none"></textarea>
+
+            <input type="hidden" name="cand_doc_reservista_nome" id="cand_doc_reservista_nome">
+            <textarea name="cand_doc_reservista_base64" id="cand_doc_reservista_base64" style="display:none"></textarea>
+
+            <input type="hidden" name="cand_doc_pis_nome" id="cand_doc_pis_nome">
+            <textarea name="cand_doc_pis_base64" id="cand_doc_pis_base64" style="display:none"></textarea>
+
+            <input type="hidden" name="cand_foto_nome" id="cand_foto_nome">
+            <textarea name="cand_foto_base64" id="cand_foto_base64" style="display:none"></textarea>
+
+            <input type="hidden" name="txtAtividadeAtual" id="txtAtividadeAtual">
           </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO1_LINK_FORM3" class="control-label">Link Formulário 3 Benefício
-              1</label>
-            <textarea name="FUN_BENEFICIO1_LINK_FORM3" id="FUN_BENEFICIO1_LINK_FORM3" class="form-control"></textarea>
-          </div>
-
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO2_LINK_FORM1" class="control-label">Link Formulário 1 Benefício
-              2</label>
-            <textarea name="FUN_BENEFICIO2_LINK_FORM1" id="FUN_BENEFICIO2_LINK_FORM1" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO2_LINK_FORM2" class="control-label">Link Formulário 2 Benefício
-              2</label>
-            <textarea name="FUN_BENEFICIO2_LINK_FORM2" id="FUN_BENEFICIO2_LINK_FORM2" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO2_LINK_FORM3" class="control-label">Link Formulário 3 Benefício
-              2</label>
-            <textarea name="FUN_BENEFICIO2_LINK_FORM3" id="FUN_BENEFICIO2_LINK_FORM3" class="form-control"></textarea>
-          </div>
-
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO3_LINK_FORM1" class="control-label">Link Formulário 1 Benefício
-              3</label>
-            <textarea name="FUN_BENEFICIO3_LINK_FORM1" id="FUN_BENEFICIO3_LINK_FORM1" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO3_LINK_FORM2" class="control-label">Link Formulário 2 Benefício
-              3</label>
-            <textarea name="FUN_BENEFICIO3_LINK_FORM2" id="FUN_BENEFICIO3_LINK_FORM2" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO3_LINK_FORM3" class="control-label">Link Formulário 3 Benefício
-              3</label>
-            <textarea name="FUN_BENEFICIO3_LINK_FORM3" id="FUN_BENEFICIO3_LINK_FORM3" class="form-control"></textarea>
-          </div>
-
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO4_LINK_FORM1" class="control-label">Link Formulário 1 Benefício
-              4</label>
-            <textarea name="FUN_BENEFICIO4_LINK_FORM1" id="FUN_BENEFICIO4_LINK_FORM1" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO4_LINK_FORM2" class="control-label">Link Formulário 2 Benefício
-              4</label>
-            <textarea name="FUN_BENEFICIO4_LINK_FORM2" id="FUN_BENEFICIO4_LINK_FORM2" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO4_LINK_FORM3" class="control-label">Link Formulário 3 Benefício
-              4</label>
-            <textarea name="FUN_BENEFICIO4_LINK_FORM3" id="FUN_BENEFICIO4_LINK_FORM3" class="form-control"></textarea>
-          </div>
-
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO5_LINK_FORM1" class="control-label">Link Formulário 1 Benefício
-              4</label>
-            <textarea name="FUN_BENEFICIO5_LINK_FORM1" id="FUN_BENEFICIO5_LINK_FORM1" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO5_LINK_FORM2" class="control-label">Link Formulário 2 Benefício
-              4</label>
-            <textarea name="FUN_BENEFICIO5_LINK_FORM2" id="FUN_BENEFICIO5_LINK_FORM2" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_BENEFICIO5_LINK_FORM3" class="control-label">Link Formulário 3 Benefício
-              4</label>
-            <textarea name="FUN_BENEFICIO5_LINK_FORM3" id="FUN_BENEFICIO5_LINK_FORM3" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-sm-4">
-            <label for="FUN_TURNO_JORNADA" class="control-label">Descrição Jornada de Trabalho do
-              Turno</label>
-            <textarea name="FUN_TURNO_JORNADA" id="FUN_TURNO_JORNADA" class="form-control"></textarea>
-          </div>
-          <input type="hidden" name="json_ids_primeiro_link" id="json_ids_primeiro_link">
-          <input type="hidden" id="json_ids_segundo_link" name="json_ids_segundo_link">
-          <input type="hidden" name="json_ids_kit_admissao" id="json_ids_kit_admissao">
-
-        </div>
-
-        <!-- Etapas do processo -->
-
-        <div style="display:none;">
-          <textarea name="cand_doc_rg_base64" id="cand_doc_rg_base64"></textarea>
-          <input type="hidden" name="cand_doc_rg_nome" id="cand_doc_rg_nome">
-
-          <textarea name="cand_doc_cpf_base64" id="cand_doc_cpf_base64"></textarea>
-          <input type="hidden" name="cand_doc_cpf_nome" id="cand_doc_cpf_nome">
-
-          <textarea name="cand_doc_titulo_base64" id="cand_doc_titulo_base64"></textarea>
-          <input type="hidden" name="cand_doc_titulo_nome" id="cand_doc_titulo_nome">
-
-          <textarea name="cand_doc_residencia_base64" id="cand_doc_residencia_base64"></textarea>
-          <input type="hidden" name="cand_doc_residencia_nome" id="cand_doc_residencia_nome">
-
-          <input type="hidden" name="cand_doc_escolaridade_base64" id="cand_doc_escolaridade_base64">
-          <input type="hidden" name="cand_doc_escolaridade_nome" id="cand_doc_escolaridade_nome">
-
-          <input type="hidden" name="origem_dados" id="origem_dados">
-
-          <input type="hidden" name="cpIdPastaGedJornada" id="cpIdPastaGedJornada">
-          <input type="hidden" name="cpIdPastaGedCandidato" id="cpIdPastaGedCandidato">
-
-          <input type="hidden" name="cpIdPastaDocsCandidato" id="cpIdPastaDocsCandidato">
-          <input type="hidden" name="cpIdPastaDocsGerados" id="cpIdPastaDocsGerados">
-          <input type="hidden" name="cpIdPastaDocsAssinados" id="cpIdPastaDocsAssinados">
-
-          <input type="hidden" name="cpCpfPastaGedRef" id="cpCpfPastaGedRef">
-          <input type="hidden" name="cpJornadaPastaGedRef" id="cpJornadaPastaGedRef">
-
-        </div>
-        <div style="display: none;">
-          <input type="hidden" name="cand_email" id="cand_email"> <input type="hidden" name="cand_naturalidade"
-            id="cand_naturalidade">
-          <input type="hidden" name="cand_estado_natal" id="cand_estado_natal">
-          <input type="hidden" name="cand_estado_civil" id="cand_estado_civil">
-          <input type="hidden" name="cand_sexo" id="cand_sexo">
-          <input type="hidden" name="cand_nacionalidade" id="cand_nacionalidade">
-          <input type="hidden" name="cand_raca" id="cand_raca">
-          <input type="hidden" name="cand_rg" id="cand_rg">
-          <input type="hidden" name="cand_titulo_eleitor" id="cand_titulo_eleitor">
-
-          <input type="hidden" name="cand_cep" id="cand_cep">
-          <input type="hidden" name="cand_endereco" id="cand_endereco">
-
-          <input type="hidden" name="cand_deficiencia" id="cand_deficiencia">
-          <input type="hidden" name="cand_tamanho_calcado" id="cand_tamanho_calcado">
-          <input type="hidden" name="cand_tamanho_camisa" id="cand_tamanho_camisa">
-
-          <input type="hidden" name="cand_banco" id="cand_banco">
-          <input type="hidden" name="cand_agencia" id="cand_agencia">
-          <input type="hidden" name="cand_conta_corrente" id="cand_conta_corrente">
-          <input type="hidden" name="cand_tipo_conta" id="cand_tipo_conta">
-
-          <input type="hidden" name="cand_emergencia_nome" id="cand_emergencia_nome">
-          <!--<input type="hidden" name="cand_emergencia_telefone" id="cand_emergencia_telefone">-->
-
-          <input type="hidden" name="cand_grau_instrucao" id="cand_grau_instrucao">
-          <input type="hidden" name="cand_curso" id="cand_curso">
-          <input type="hidden" name="cand_instituicao" id="cand_instituicao">
-          <input type="hidden" name="cand_ano_conclusao" id="cand_ano_conclusao">
-
-          <textarea name="json_dependentes" id="json_dependentes" style="display:none"></textarea>
-
-          <input type="hidden" name="cand_doc_cnh_nome" id="cand_doc_cnh_nome">
-          <textarea name="cand_doc_cnh_base64" id="cand_doc_cnh_base64" style="display:none"></textarea>
-
-          <input type="hidden" name="cand_doc_reservista_nome" id="cand_doc_reservista_nome">
-          <textarea name="cand_doc_reservista_base64" id="cand_doc_reservista_base64" style="display:none"></textarea>
-
-          <input type="hidden" name="cand_doc_pis_nome" id="cand_doc_pis_nome">
-          <textarea name="cand_doc_pis_base64" id="cand_doc_pis_base64" style="display:none"></textarea>
-
-          <input type="hidden" name="cand_foto_nome" id="cand_foto_nome">
-          <textarea name="cand_foto_base64" id="cand_foto_base64" style="display:none"></textarea>
-
-          <input type="hidden" name="txtAtividadeAtual" id="txtAtividadeAtual">
-        </div>
     </form>
   </div>
 
@@ -4947,91 +4949,7 @@
       });
     }
   </script>
-  <script type="text/javascript">
-    $(document).ready(function () {
-      // Adiciona o botão de teste apenas se o painel do RH estiver visível na tela
-      setTimeout(function () {
-        if ($("#divPreenchimentoRH").length > 0) {
-          var btnMockRH = '<button type="button" class="btn btn-warning btn-sm pull-right" id="btn_mock_rh" style="margin-top: -5px;">' +
-            '<i class="flaticon flaticon-science"></i> Preencher Dados RH (Teste)' +
-            '</button>';
-
-          // Adiciona o botão no cabeçalho do painel do RH
-          $("#divPreenchimentoRH .panel-title").append(" " + btnMockRH);
-
-          // Evento de clique no botão
-          $("#btn_mock_rh").on("click", function (e) {
-            e.preventDefault();
-            console.log("Preenchendo Mock do RH...");
-
-            // 1. Integração e Contrato
-            $("#zoom_sindicato").val("1 - Sindicato Teste");
-            $("#cod_sindicato").val("1");
-            $("#zoom_categoriaEsocial").val("101 - Empregado Geral");
-            $("#FUN_CATESOCIAL").val("101");
-            $("#FUN_NATATIV").val("1");
-            $("#FUN_INDADMISSAO").val("1");
-            $("#FUN_CONTRATOPARCIAL").val("0");
-            $("#FUN_TPJORNADA").val("1");
-            $("#FUN_SEQTURN_IDDESC_AD").val("01"); // Ex: Código do turno
-
-            // 2. Jornada e Remuneração
-            $("#FUN_TIPOPGTO_IDDESC_AD").val("Mensalista");
-            $("#cpUsaSalarioComposto").val("Nao");
-            $("#FUN_SALARIOBASE").val("3.500,00");
-            $("#FUN_PADT").val("40");
-            $("#cpArredondamento").val("Sim");
-            $("#FUN_AJUDACUSTO").val("0,00");
-            $("#cpQtdHorasMes").val("220");
-            $("#cpQtdHorasSemana").val("44");
-            $("#cpQtdHorasDia").val("8");
-
-            // 3. SEFIP, RAIS, Regimes
-            $("#FUN_INSS").val("1");
-            $("#FUN_IRRF").val("1");
-            $("#FUN_ALTFGTS").val("1"); // Optante
-            $("#cpDataUltimoSaldoFGTS").val("2023-01-01");
-            $("#cpRegimePrevidenciario").val("1");
-            $("#cpRegimeTrabalhista").val("CLT");
-            $("#FUN_CODDESCSINDICATOFILIACAO").val("01");
-            $("#FUN_PGCTSIN_IDDESC_AD").val("X");
-            $("#FUN_CODOCORRENCIA_IDDESC").val("01");
-            $("#FUN_CATSEFIP_IDDESC").val("01");
-            $("#cpSituacaoRais").val("1");
-            $("#FUN_VINCEMPREG_IDDESC_AD").val("10");
-
-            // 4. Portal e Quiosque
-            $("#FUN_CODQUIOSQUE_IDDESC").val("01");
-            $("#cpCodigoEquipe").val("001");
-
-            // 5. Horário e Dados Contábeis
-            $("#cpIndiceInicioHorario").val("1");
-            $("#zoom_centroCusto").val("1.01.01 - Diretoria");
-            $("#FUN_CC").val("1.01.01"); // Hidden do Centro de Custo
-            $("#FUN_INTEGRCONTABIL_IDDESC").val("S");
-            $("#FUN_INTEGRGERENCIAL_IDDESC").val("S");
-
-            // 6. Motivos
-            $("#zoom_motivoAdmissao").val("01 - Contratação");
-            $("#zoom_motivoMudancaSalario").val("01 - Admissão");
-            $("#zoom_motivoMudancaFuncao").val("01 - Admissão");
-            $("#zoom_motivoMudancaSecao").val("01 - Admissão");
-            $("#zoom_motivoMudancaSituacao").val("01 - Admissão");
-
-            // 7. Aprovação Final
-            $("#cpAprovacaoAdmissao").val("1"); // Integrar Funcionário
-            $("#cpParecerAprovaAdmissao").val("Aprovado via Mock de Testes.");
-
-            FLUIGC.toast({
-              title: 'Mock RH:',
-              message: 'Todos os campos do RH foram preenchidos!',
-              type: 'success'
-            });
-          });
-        }
-      }, 1500); // Aguarda 1.5s para garantir que o DOM do Fluig carregou
-    });
-  </script>
+  
 </body>
 
 </html>

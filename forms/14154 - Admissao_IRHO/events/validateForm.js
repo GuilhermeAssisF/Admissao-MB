@@ -84,8 +84,6 @@ function validateForm(form) {
             { id: "zoom_categoriaEsocial", nome: "Categoria eSocial" },
             { id: "cpRegimeTrabalhista", nome: "Tipo de Regime Trabalhista" },
             { id: "zoom_sindicato", nome: "Sindicato" },
-            { id: "zoom_sindicato_filiacao", nome: "Sindicato Filiação" },
-            { id: "zoom_contribuicao_sindical", nome: "Contribuição Sindical" },
             { id: "FUN_INSS", nome: "INSS" },
             { id: "FUN_IRRF", nome: "IRRF" },
             { id: "zoom_ocorrencia_sefip", nome: "Cód. Ocorrência SEFIP" },
@@ -124,7 +122,7 @@ function validateForm(form) {
 
                 // --- INÍCIO DA NOVA REGRA: BYPASS PARA ESTÁGIO ---
                 var camposExclusivosCLT = [
-                    "zoom_sindicato", "zoom_sindicato_filiacao", "zoom_contribuicao_sindical",
+                    "zoom_sindicato", "zoom_sindicato_filiacao",
                     "FUN_INSS", "FUN_IRRF", "FUN_ALTFGTS", "cpDataUltimoSaldoFGTS",
                     "zoom_ocorrencia_sefip", "zoom_categoria_sefip", "zoom_situacao_rais", "zoom_vinculo_rais"
                 ];
@@ -167,31 +165,60 @@ function validateForm(form) {
             }
         }
 
-        if (getSafeValue("cpUpFront") == "sim") {
-            if (getSafeValue("cpUpFrontValor") == "") {
-                msg += "O campo <b>Valor do UP Front</b> é obrigatório quando UP Front for Sim.<br/>";
+        var jornadaEventos = getSafeValue("cpJornadaAdmissao")
+            .replace(/^\s+|\s+$/g, "")
+            .toLowerCase();
+
+        var upFrontSelecionado = getSafeValue("cpUpFront");
+        var hiringBonusSelecionado = getSafeValue("cpHiringBonus");
+
+        var permiteUpFront =
+            jornadaEventos == "associado";
+
+        var permiteHiringBonus =
+            !permiteUpFront &&
+            jornadaEventos.indexOf("clt") >= 0;
+
+        if (
+            upFrontSelecionado == "sim" &&
+            hiringBonusSelecionado == "sim"
+        ) {
+            msg += "Os campos <b>UP Front</b> e <b>Hiring Bonus</b> não podem ser habilitados simultaneamente.<br/>";
+        } else {
+            if (upFrontSelecionado == "sim") {
+                if (!permiteUpFront) {
+                    msg += "O campo <b>UP Front</b> só pode ser informado quando a Jornada de Admissão for Associado.<br/>";
+                } else {
+                    if (getSafeValue("cpUpFrontValor") == "") {
+                        msg += "O campo <b>Valor do UP Front</b> é obrigatório quando UP Front for Sim.<br/>";
+                    }
+
+                    if (getSafeValue("cpUpFrontDataInicio") == "") {
+                        msg += "O campo <b>Data Início do UP Front</b> é obrigatório quando UP Front for Sim.<br/>";
+                    }
+
+                    if (getSafeValue("cpUpFrontObservacao") == "") {
+                        msg += "O campo <b>Observação do UP Front</b> é obrigatório quando UP Front for Sim.<br/>";
+                    }
+                }
             }
 
-            if (getSafeValue("cpUpFrontDataInicio") == "") {
-                msg += "O campo <b>Data Início do UP Front</b> é obrigatório quando UP Front for Sim.<br/>";
-            }
+            if (hiringBonusSelecionado == "sim") {
+                if (!permiteHiringBonus) {
+                    msg += "O campo <b>Hiring Bonus</b> só pode ser informado quando a Jornada de Admissão contiver CLT.<br/>";
+                } else {
+                    if (getSafeValue("cpHiringBonusValor") == "") {
+                        msg += "O campo <b>Valor do Hiring Bonus</b> é obrigatório quando Hiring Bonus for Sim.<br/>";
+                    }
 
-            if (getSafeValue("cpUpFrontObservacao") == "") {
-                msg += "O campo <b>Observação do UP Front</b> é obrigatório quando UP Front for Sim.<br/>";
-            }
-        }
+                    if (getSafeValue("cpHiringBonusDataInicio") == "") {
+                        msg += "O campo <b>Data Início do Hiring Bonus</b> é obrigatório quando Hiring Bonus for Sim.<br/>";
+                    }
 
-        if (getSafeValue("cpHiringBonus") == "sim") {
-            if (getSafeValue("cpHiringBonusValor") == "") {
-                msg += "O campo <b>Valor do Hiring Bonus</b> é obrigatório quando Hiring Bonus for Sim.<br/>";
-            }
-
-            if (getSafeValue("cpHiringBonusDataInicio") == "") {
-                msg += "O campo <b>Data Início do Hiring Bonus</b> é obrigatório quando Hiring Bonus for Sim.<br/>";
-            }
-
-            if (getSafeValue("cpHiringBonusObservacao") == "") {
-                msg += "O campo <b>Observação do Hiring Bonus</b> é obrigatório quando Hiring Bonus for Sim.<br/>";
+                    if (getSafeValue("cpHiringBonusObservacao") == "") {
+                        msg += "O campo <b>Observação do Hiring Bonus</b> é obrigatório quando Hiring Bonus for Sim.<br/>";
+                    }
+                }
             }
         }
 

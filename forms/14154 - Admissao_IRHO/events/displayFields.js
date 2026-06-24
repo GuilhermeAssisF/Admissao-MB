@@ -15,6 +15,10 @@ function displayFields(form, customHTML) {
     var atividade = (wkNumState != null && wkNumState != "") ? parseInt(wkNumState) : 0;
     var modo = form.getFormMode();
 
+    // Contribuição Sindical fixa para integração com o RM.
+    form.setValue("FUN_PGCTSIN", "X");
+    form.setValue("FUN_PGCTSIN_IDDESC_AD", "X - Não Optante");
+
     // =========================================================================
     // 2. REGRAS DE BACKEND (Setar valores e Responsaveis)
     // =========================================================================
@@ -39,7 +43,7 @@ function displayFields(form, customHTML) {
     if (atividade == 74) { form.setValue("cpRespRH", getValue("WKUser")); }
     if (atividade == 89) { form.setValue("cpAnalistaBPO", getValue("WKUser")); }
     if (atividade == 135) { form.setValue("cpRespGerarKit", getValue("WKUser")); }
-    if (atividade == 128) { 
+    if (atividade == 128) {
         form.setValue("cpRespValidaKit", getValue("WKUser"));
         var decisaoAtual = form.getValue("cpAprovacaoKit");
         if (decisaoAtual == "3" || decisaoAtual == "Corrigir") {
@@ -84,7 +88,7 @@ function displayFields(form, customHTML) {
     // Oculta todos os painéis condicionais por padrão para evitar piscar tela
     customHTML.append("  $('#panelAtividade_7, #panelAtividade_8, #panelAtividade_74, #panelAtividade_89, #panelAtividade_97').hide(); ");
     customHTML.append("  $('#painelGerarKit, #divValidarKit, #divReenviarEmailCandidato, #painelAnexarASO, #painelAprovacaoRH, #painelCorrecaoCandidato').hide(); ");
-    
+
     // Regras de Atividades (Aprovações)
     if (atividade == 7 || atividade == 8 || atividade == 74 || atividade == 97) { customHTML.append("  $('#panelAtividade_7').show(); "); }
     if (atividade == 8 || atividade == 74 || atividade == 97) { customHTML.append("  $('#panelAtividade_8').show(); "); }
@@ -94,8 +98,8 @@ function displayFields(form, customHTML) {
 
     // Regras Específicas
     if (atividade == 122 || atividade == 150 || atividade == 129) { customHTML.append("  $('#divReenviarEmailCandidato').show(); "); }
-    if (atividade == 97) { 
-        customHTML.append("  $('#divReabertura').hide(); "); 
+    if (atividade == 97) {
+        customHTML.append("  $('#divReabertura').hide(); ");
         customHTML.append("  $('#painelAprovacaoRH').show(); ");
     }
     if (atividade == 128) { customHTML.append("  $('#divValidarKit').show(); "); }

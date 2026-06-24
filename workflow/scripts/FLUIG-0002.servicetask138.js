@@ -776,7 +776,7 @@ function servicetask138(attempt, message) {
 
             for (var i = 0; i < indexesDep.length; i++) {
                 var idx = indexesDep[i];
-                var nomeDep = getStr("txtNomDepen___" + idx);
+                var nomeDep = String(getStr("txtNomDepen___" + idx) || "").trim();
 
                 if (nomeDep !== "") {
                     nroDepend++;

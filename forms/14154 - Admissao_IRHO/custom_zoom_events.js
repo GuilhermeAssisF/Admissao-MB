@@ -247,10 +247,6 @@ window.setSelectedZoomItem = function (selectedItem) {
             $("#FUN_SEQTURN").val(seqTurno);
             $("#FUN_SEQTURN_DESC_AD").val(seqTurno);
         }
-        if (inputId == "zoom_contribuicao_sindical") {
-            $("#FUN_PGCTSIN").val(selectedItem.CODCLIENTE);
-            $("#FUN_PGCTSIN_IDDESC_AD").val(selectedItem.IDDESC_CONTRIBUICAO);
-        }
         if (inputId == "zoom_equipe") $("#cpCodigoEquipe").val(selectedItem.CODIGO);
         if (inputId == "zoom_quiosque") $("#FUN_CODQUIOSQUE_IDDESC").val(selectedItem.CODGRUPO);
         if (inputId == "zoom_centroCusto") $("#FUN_CC").val(selectedItem.CODIGO);
@@ -422,7 +418,6 @@ window.removedZoomItem = function (removedItem) {
         if (inputId == "FUN_SEQTURN_IDDESC_AD") $("#FUN_SEQTURN, #FUN_SEQTURN_DESC_AD").val("");
         if (inputId == "zoom_municipio") $("#txtCODMUNICIPIO, #txtNOMEMUNICIPIO").val("");
         if (inputId == "zoom_estado_natal") $("#ESTADONatalCod, #ESTADO").val("");
-        if (inputId == "zoom_contribuicao_sindical") $("#FUN_PGCTSIN, #FUN_PGCTSIN_IDDESC_AD").val("");
         if (inputId == "zoom_equipe") $("#cpCodigoEquipe").val("");
         if (inputId == "zoom_quiosque") $("#FUN_CODQUIOSQUE_IDDESC").val("");
         if (inputId == "zoom_centroCusto") $("#FUN_CC").val("");

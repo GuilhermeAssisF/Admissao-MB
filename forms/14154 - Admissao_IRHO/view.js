@@ -437,6 +437,84 @@ $(document).ready(function () {
     toggleEventoProgramado("cpHiringBonus");
   }
 
+  function definirDisponibilidadeEventoPorJornada(prefixo, permitido) {
+    var $seletor = $("#" + prefixo);
+    var $camposRelacionados = $(
+      "#" + prefixo + "Valor, " +
+      "#" + prefixo + "DataInicio, " +
+      "#" + prefixo + "Observacao"
+    );
+
+    if (!permitido) {
+      $seletor.val("nao");
+
+      $camposRelacionados
+        .val("")
+        .removeAttr("data-auto-admissao");
+    }
+
+    $seletor
+      .prop("disabled", !permitido)
+      .css({
+        "background-color": permitido ? "#fff" : "#f3f4f6",
+        "cursor": permitido ? "pointer" : "not-allowed"
+      });
+
+    if (!permitido) {
+      $camposRelacionados
+        .prop("disabled", true)
+        .prop("readonly", true)
+        .css({
+          "pointer-events": "none",
+          "background-color": "#f3f4f6",
+          "cursor": "not-allowed"
+        });
+
+      return;
+    }
+
+    // Mantém a regra já existente de habilitar os detalhes somente quando for "Sim".
+    toggleEventoProgramado(prefixo);
+  }
+
+  function aplicarRegraEventosProgramadosPorJornada() {
+    // Os eventos programados são editados somente na atividade do RH.
+    if (String(atividade) !== "97") {
+      return;
+    }
+
+    var $jornada = $("#cpJornadaAdmissao");
+
+    var valorJornada = normalizarValorComparacao(
+      $jornada.val()
+    );
+
+    var descricaoJornada = normalizarValorComparacao(
+      $jornada.find("option:selected").text()
+    );
+
+    var permiteUpFront =
+      valorJornada === "associado" ||
+      descricaoJornada === "associado";
+
+    var permiteHiringBonus =
+      !permiteUpFront &&
+      (
+        valorJornada.indexOf("clt") !== -1 ||
+        descricaoJornada.indexOf("clt") !== -1
+      );
+
+    definirDisponibilidadeEventoPorJornada(
+      "cpUpFront",
+      permiteUpFront
+    );
+
+    definirDisponibilidadeEventoPorJornada(
+      "cpHiringBonus",
+      permiteHiringBonus
+    );
+  }
+
   function preencherDatasValoresAssociados(forcarAtualizacao) {
     preencherDataInicioPadrao("cpDataPLR", forcarAtualizacao === true);
   }
@@ -455,18 +533,28 @@ $(document).ready(function () {
     preencherDataInicioPadrao("cpHiringBonusDataInicio", true);
   });
 
+  $("#cpJornadaAdmissao")
+    .off("change.eventosProgramadosJornada")
+    .on("change.eventosProgramadosJornada", function () {
+      aplicarRegraEventosProgramadosPorJornada();
+    });
+
   $("#FUN_ADMISSAO, #cpDataPrevisaoAdmissao")
     .off("change.valoresAssociados blur.valoresAssociados")
     .on("change.valoresAssociados blur.valoresAssociados", function () {
       preencherDataInicioPadrao("cpUpFrontDataInicio", true);
       preencherDataInicioPadrao("cpHiringBonusDataInicio", true);
       preencherDatasValoresAssociados(true);
+
+      aplicarRegraEventosProgramadosPorJornada();
     });
 
   setTimeout(function () {
     preencherDataInicioPadrao("cpUpFrontDataInicio", true);
     preencherDataInicioPadrao("cpHiringBonusDataInicio", true);
     preencherDatasValoresAssociados(true);
+
+    aplicarRegraEventosProgramadosPorJornada();
   }, 500);
 
   // 1. Cria uma regra onde o primeiro dígito da hora é opcional (permitindo HH:MM ou HHH:MM)
@@ -1027,8 +1115,11 @@ $(document).ready(function () {
       if (jornadaAtual) {
         aplicarParametrosJornadaAdmissao(jornadaAtual);
       }
-    });
 
+      setTimeout(function () {
+        aplicarRegraEventosProgramadosPorJornada();
+      }, 300);
+    });
 
   }
 
@@ -4857,26 +4948,27 @@ $(document).ready(function () {
   }
 
   function preencherNomeUsuarioPortalPonto() {
-    var nomeAtual = $.trim(String($("#cpNomeUsuarioPortalPonto").val() || ""));
+    var emailCorporativo = $.trim(
+      String($("#FUN_EMAIL_CORPORATIVO").val() || "")
+    ).toLowerCase();
 
-    if (nomeAtual) {
+    var posicaoArroba = emailCorporativo.indexOf("@");
+
+    if (posicaoArroba <= 0) {
+      $("#cpNomeUsuarioPortalPonto").val("");
       return;
     }
 
-    var nome = $.trim(String($("#txtNomeColaborador").val() || $("#txtNomeSocial").val() || ""));
+    var nomeUsuario = emailCorporativo.substring(0, posicaoArroba);
 
-    if (nome) {
-      $("#cpNomeUsuarioPortalPonto").val(nome);
-    }
+    $("#cpNomeUsuarioPortalPonto").val(nomeUsuario);
   }
 
-  $("#cpfcnpj").on("change blur", function () {
-    preencherCodigoUsuarioPortalPonto();
-  });
-
-  $("#txtNomeColaborador, #txtNomeSocial").on("change blur", function () {
-    preencherNomeUsuarioPortalPonto();
-  });
+  $("#FUN_EMAIL_CORPORATIVO")
+    .off("input.nomeUsuarioPortal change.nomeUsuarioPortal blur.nomeUsuarioPortal")
+    .on("input.nomeUsuarioPortal change.nomeUsuarioPortal blur.nomeUsuarioPortal", function () {
+      preencherNomeUsuarioPortalPonto();
+    });
 
   preencherCodigoUsuarioPortalPonto();
   preencherNomeUsuarioPortalPonto();
@@ -5862,6 +5954,68 @@ function validarPrimeiroLinkObrigatorioAntesAvancar(numState, nextState) {
   return false;
 }
 
+var correcoesRHPendentes = false;
+var monitorarCorrecoesRH = false;
+
+function atividadeAtualEhAdmissaoRH() {
+  var atividadeAtual = typeof getWKNumState === "function"
+    ? String(getWKNumState())
+    : "";
+
+  return atividadeAtual === "97";
+}
+
+function estaSalvandoSemAvancar(numState, nextState) {
+  var atividadeAtual = String(
+    numState ||
+    (
+      typeof getWKNumState === "function"
+        ? getWKNumState()
+        : ""
+    )
+  );
+
+  var proximaAtividade =
+    nextState === undefined || nextState === null
+      ? ""
+      : String(nextState);
+
+  return (
+    proximaAtividade !== "" &&
+    proximaAtividade === atividadeAtual
+  );
+}
+
+$(document).ready(function () {
+  if (!atividadeAtualEhAdmissaoRH()) {
+    return;
+  }
+
+  // Aguarda datasets, zooms e regras de jornada terminarem
+  // de preencher campos automaticamente.
+  setTimeout(function () {
+    monitorarCorrecoesRH = true;
+    correcoesRHPendentes = false;
+  }, 2500);
+
+  $(document)
+    .off(
+      "input.correcoesRH change.correcoesRH",
+      "input[name], select[name], textarea[name]"
+    )
+    .on(
+      "input.correcoesRH change.correcoesRH",
+      "input[name], select[name], textarea[name]",
+      function () {
+        if (!monitorarCorrecoesRH) {
+          return;
+        }
+
+        correcoesRHPendentes = true;
+      }
+    );
+});
+
 // ========================================================================
 // EVENTO NATIVO FLUIG: Dispara imediatamente antes de salvar ou avançar
 // ========================================================================
@@ -5870,11 +6024,43 @@ var beforeSendValidate = function (numState, nextState) {
     return false;
   }
 
-  // Libera TODOS os campos bloqueados 1 milissegundo antes de enviar para o Fluig salvar tudo
-  $("select, input, textarea").prop("disabled", false).prop("readonly", false);
+  var salvandoSemAvancar = estaSalvandoSemAvancar(
+    numState,
+    nextState
+  );
+
+  if (
+    atividadeAtualEhAdmissaoRH() &&
+    correcoesRHPendentes &&
+    !salvandoSemAvancar
+  ) {
+    FLUIGC.toast({
+      title: "Salve as correções:",
+      message:
+        "Foram identificadas alterações no formulário. " +
+        "Clique primeiro em Salvar e, depois que o salvamento for concluído, tente integrar novamente.",
+      type: "warning"
+    });
+
+    return false;
+  }
+
+  // Libera os campos antes do salvamento do card.
+  $("select, input, textarea")
+    .prop("disabled", false)
+    .prop("readonly", false)
+    .removeAttr("disabled")
+    .removeAttr("readonly");
+
+  if (
+    atividadeAtualEhAdmissaoRH() &&
+    salvandoSemAvancar
+  ) {
+    correcoesRHPendentes = false;
+  }
 
   return true;
-}
+};
 
 // Coloque esta chamada dentro do seu $(document).ready para bloquear logo que a tela abrir
 $(document).ready(function () {

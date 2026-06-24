@@ -29,7 +29,7 @@
     <processDefinitionVersionPK>
       <companyId>1</companyId>
       <processId>Admissão IRHO</processId>
-      <version>221</version>
+      <version>252</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
     <formId>14154</formId>
@@ -283,8 +283,8 @@
       <notifyAuthorityFollowUp>false</notifyAuthorityFollowUp>
       <notifyRequisitionerFollowUp>false</notifyRequisitionerFollowUp>
       <automatic>false</automatic>
-      <positionX>1060</positionX>
-      <positionY>460</positionY>
+      <positionX>840</positionX>
+      <positionY>450</positionY>
       <forecastedEffortType>0</forecastedEffortType>
       <forecastedEffort>0</forecastedEffort>
       <notifyManagerFollowUp>false</notifyManagerFollowUp>
@@ -704,6 +704,100 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <version>1</version>
+        <sequence>177</sequence>
+      </processStatePK>
+      <stateName>Intermediário</stateName>
+      <stateDescription>Intermediário</stateDescription>
+      <instruction>Evento intermediário do processo</instruction>
+      <deadlineTime>0</deadlineTime>
+      <joint>false</joint>
+      <agreementPercentage>0</agreementPercentage>
+      <engineAllocationId></engineAllocationId>
+      <engineAllocationConfiguration></engineAllocationConfiguration>
+      <selectColleague>0</selectColleague>
+      <initialState>false</initialState>
+      <notifyAuthorityDelay>true</notifyAuthorityDelay>
+      <notifyRequisitionerDelay>false</notifyRequisitionerDelay>
+      <allowanceAuthorityTime>1</allowanceAuthorityTime>
+      <frequenceAuthorityTime>1</frequenceAuthorityTime>
+      <allowanceRequisitionerTime>0</allowanceRequisitionerTime>
+      <frequenceRequisitionerTime>0</frequenceRequisitionerTime>
+      <transferAttachments>false</transferAttachments>
+      <subProcessId></subProcessId>
+      <formFolder>0</formFolder>
+      <notifyAuthorityFollowUp>true</notifyAuthorityFollowUp>
+      <notifyRequisitionerFollowUp>false</notifyRequisitionerFollowUp>
+      <automatic>false</automatic>
+      <positionX>1190</positionX>
+      <positionY>400</positionY>
+      <forecastedEffortType>0</forecastedEffortType>
+      <forecastedEffort>0</forecastedEffort>
+      <notifyManagerFollowUp>false</notifyManagerFollowUp>
+      <notifyManagerDelay>false</notifyManagerDelay>
+      <frequenceManagerTime>0</frequenceManagerTime>
+      <inhibitTransfer>false</inhibitTransfer>
+      <periodId></periodId>
+      <stateType>0</stateType>
+      <bpmnType>42</bpmnType>
+      <signalId>0</signalId>
+      <counterSign>false</counterSign>
+      <openInstances>0</openInstances>
+      <destinationStates/>
+      <digitalSignature>false</digitalSignature>
+      <parentSequence>0</parentSequence>
+    </ProcessState>
+    <ProcessState>
+      <processStatePK>
+        <companyId>1</companyId>
+        <processId>FLUIG-0002</processId>
+        <version>1</version>
+        <sequence>179</sequence>
+      </processStatePK>
+      <stateName>Intermediário</stateName>
+      <stateDescription>Intermediário</stateDescription>
+      <instruction>Evento intermediário do processo</instruction>
+      <deadlineTime>0</deadlineTime>
+      <joint>false</joint>
+      <agreementPercentage>0</agreementPercentage>
+      <engineAllocationId></engineAllocationId>
+      <engineAllocationConfiguration></engineAllocationConfiguration>
+      <selectColleague>0</selectColleague>
+      <initialState>false</initialState>
+      <notifyAuthorityDelay>true</notifyAuthorityDelay>
+      <notifyRequisitionerDelay>false</notifyRequisitionerDelay>
+      <allowanceAuthorityTime>1</allowanceAuthorityTime>
+      <frequenceAuthorityTime>1</frequenceAuthorityTime>
+      <allowanceRequisitionerTime>0</allowanceRequisitionerTime>
+      <frequenceRequisitionerTime>0</frequenceRequisitionerTime>
+      <transferAttachments>false</transferAttachments>
+      <subProcessId></subProcessId>
+      <formFolder>0</formFolder>
+      <notifyAuthorityFollowUp>true</notifyAuthorityFollowUp>
+      <notifyRequisitionerFollowUp>false</notifyRequisitionerFollowUp>
+      <automatic>false</automatic>
+      <positionX>740</positionX>
+      <positionY>470</positionY>
+      <forecastedEffortType>0</forecastedEffortType>
+      <forecastedEffort>0</forecastedEffort>
+      <notifyManagerFollowUp>false</notifyManagerFollowUp>
+      <notifyManagerDelay>false</notifyManagerDelay>
+      <frequenceManagerTime>0</frequenceManagerTime>
+      <inhibitTransfer>false</inhibitTransfer>
+      <periodId></periodId>
+      <stateType>0</stateType>
+      <bpmnType>36</bpmnType>
+      <signalId>0</signalId>
+      <counterSign>false</counterSign>
+      <openInstances>0</openInstances>
+      <destinationStates/>
+      <digitalSignature>false</digitalSignature>
+      <parentSequence>0</parentSequence>
+    </ProcessState>
+    <ProcessState>
+      <processStatePK>
+        <companyId>1</companyId>
+        <processId>FLUIG-0002</processId>
+        <version>1</version>
         <sequence>151</sequence>
       </processStatePK>
       <stateName>Exclusivo</stateName>
@@ -778,7 +872,7 @@
       <notifyAuthorityFollowUp>false</notifyAuthorityFollowUp>
       <notifyRequisitionerFollowUp>false</notifyRequisitionerFollowUp>
       <automatic>false</automatic>
-      <positionX>1250</positionX>
+      <positionX>1190</positionX>
       <positionY>480</positionY>
       <forecastedEffortType>0</forecastedEffortType>
       <forecastedEffort>0</forecastedEffort>
@@ -803,7 +897,7 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>1</expressionOrder>
-        <version>221</version>
+        <version>252</version>
         <sequence>151</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoAdmissao&quot;) == &quot;1&quot;</condition>
@@ -817,12 +911,11 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>2</expressionOrder>
-        <version>221</version>
+        <version>252</version>
         <sequence>151</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoAdmissao&quot;) == &quot;3&quot;</condition>
       <destinationSequenceId>156</destinationSequenceId>
-      <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;User&gt;app.candidato&lt;/User&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
       <conditionType>0</conditionType>
     </ConditionProcessState>
     <ConditionProcessState>
@@ -830,11 +923,11 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>3</expressionOrder>
-        <version>221</version>
+        <version>252</version>
         <sequence>151</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoAdmissao&quot;) == &quot;4&quot;</condition>
-      <destinationSequenceId>135</destinationSequenceId>
+      <destinationSequenceId>179</destinationSequenceId>
       <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;User&gt;admin&lt;/User&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
       <engineAllocationId>Usuário</engineAllocationId>
       <conditionType>0</conditionType>
@@ -844,7 +937,7 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>1</expressionOrder>
-        <version>221</version>
+        <version>252</version>
         <sequence>170</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoKit&quot;) == &quot;1&quot;</condition>
@@ -856,7 +949,7 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>2</expressionOrder>
-        <version>221</version>
+        <version>252</version>
         <sequence>170</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoKit&quot;) == &quot;3&quot;</condition>
@@ -876,23 +969,6 @@
       <returnPermited>false</returnPermited>
       <initialStateSequence>1</initialStateSequence>
       <finalStateSequence>122</finalStateSequence>
-      <returnLabel></returnLabel>
-      <name></name>
-      <automaticLink>false</automaticLink>
-      <defaultLink>false</defaultLink>
-      <type>0</type>
-    </ProcessLink>
-    <ProcessLink>
-      <processLinkPK>
-        <companyId>1</companyId>
-        <processId>FLUIG-0002</processId>
-        <version>1</version>
-        <linkSequence>131</linkSequence>
-      </processLinkPK>
-      <actionLabel></actionLabel>
-      <returnPermited>false</returnPermited>
-      <initialStateSequence>129</initialStateSequence>
-      <finalStateSequence>104</finalStateSequence>
       <returnLabel></returnLabel>
       <name></name>
       <automaticLink>false</automaticLink>
@@ -927,39 +1003,6 @@
       <returnPermited>false</returnPermited>
       <initialStateSequence>138</initialStateSequence>
       <finalStateSequence>139</finalStateSequence>
-      <returnLabel></returnLabel>
-      <name></name>
-      <automaticLink>false</automaticLink>
-      <defaultLink>false</defaultLink>
-      <type>0</type>
-    </ProcessLink>
-    <ProcessLink>
-      <processLinkPK>
-        <companyId>1</companyId>
-        <processId>FLUIG-0002</processId>
-        <version>1</version>
-        <linkSequence>143</linkSequence>
-      </processLinkPK>
-      <actionLabel></actionLabel>
-      <returnPermited>false</returnPermited>
-      <initialStateSequence>139</initialStateSequence>
-      <finalStateSequence>135</finalStateSequence>
-      <returnLabel></returnLabel>
-      <name></name>
-      <automaticLink>false</automaticLink>
-      <defaultLink>false</defaultLink>
-      <type>0</type>
-    </ProcessLink>
-    <ProcessLink>
-      <processLinkPK>
-        <companyId>1</companyId>
-        <processId>FLUIG-0002</processId>
-        <version>1</version>
-        <linkSequence>148</linkSequence>
-      </processLinkPK>
-      <actionLabel></actionLabel>
-      <returnPermited>false</returnPermited>
-      <finalStateSequence>97</finalStateSequence>
       <returnLabel></returnLabel>
       <name></name>
       <automaticLink>false</automaticLink>
@@ -1090,23 +1133,6 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <version>1</version>
-        <linkSequence>169</linkSequence>
-      </processLinkPK>
-      <actionLabel></actionLabel>
-      <returnPermited>false</returnPermited>
-      <initialStateSequence>151</initialStateSequence>
-      <finalStateSequence>135</finalStateSequence>
-      <returnLabel></returnLabel>
-      <name></name>
-      <automaticLink>false</automaticLink>
-      <defaultLink>false</defaultLink>
-      <type>0</type>
-    </ProcessLink>
-    <ProcessLink>
-      <processLinkPK>
-        <companyId>1</companyId>
-        <processId>FLUIG-0002</processId>
-        <version>1</version>
         <linkSequence>171</linkSequence>
       </processLinkPK>
       <actionLabel></actionLabel>
@@ -1162,6 +1188,74 @@
       </processLinkPK>
       <actionLabel></actionLabel>
       <returnPermited>false</returnPermited>
+      <initialStateSequence>129</initialStateSequence>
+      <finalStateSequence>104</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>FLUIG-0002</processId>
+        <version>1</version>
+        <linkSequence>178</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>177</initialStateSequence>
+      <finalStateSequence>104</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>FLUIG-0002</processId>
+        <version>1</version>
+        <linkSequence>180</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>139</initialStateSequence>
+      <finalStateSequence>179</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>FLUIG-0002</processId>
+        <version>1</version>
+        <linkSequence>181</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>151</initialStateSequence>
+      <finalStateSequence>179</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>FLUIG-0002</processId>
+        <version>1</version>
+        <linkSequence>182</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
       <initialStateSequence>156</initialStateSequence>
       <finalStateSequence>158</finalStateSequence>
       <returnLabel></returnLabel>
@@ -1174,12 +1268,44 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <version>1</version>
-        <linkSequence>175</linkSequence>
+        <linkSequence>183</linkSequence>
       </processLinkPK>
       <actionLabel></actionLabel>
       <returnPermited>false</returnPermited>
       <initialStateSequence>160</initialStateSequence>
       <finalStateSequence>162</finalStateSequence>
+      <returnLabel></returnLabel>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>FLUIG-0002</processId>
+        <version>1</version>
+        <linkSequence>184</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>179</initialStateSequence>
+      <finalStateSequence>177</finalStateSequence>
+      <returnLabel></returnLabel>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>FLUIG-0002</processId>
+        <version>1</version>
+        <linkSequence>185</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>179</initialStateSequence>
+      <finalStateSequence>177</finalStateSequence>
       <returnLabel></returnLabel>
       <automaticLink>false</automaticLink>
       <defaultLink>false</defaultLink>
@@ -1285,7 +1411,7 @@ function AprovaKit(){&#xd;
       <eventDescription>function afterProcessCreate(processId) {&#xd;
     // Grava o número do processo no formulário para referência futura&#xd;
     hAPI.setCardValue(&quot;idProcessoFluig&quot;, processId);&#xd;
-    hAPI.setCardValue(&quot;cpNumeroSolicitacao&quot;, processId); &#xd;
+    hAPI.setCardValue(&quot;cpNumeroSolicitacao&quot;, processId);&#xd;
 &#xd;
     log.info(&quot;&gt;&gt;&gt; ADMISSAO (AFTER PROCESS CREATE): Iniciando envio de E-mail de Boas Vindas. ID: &quot; + processId);&#xd;
 &#xd;
@@ -1293,7 +1419,7 @@ function AprovaKit(){&#xd;
         var nomeCandidato = hAPI.getCardValue(&quot;txtNomeColaborador&quot;);&#xd;
         var emailRaw = hAPI.getCardValue(&quot;txtEmail&quot;);&#xd;
         var emailCandidato = (emailRaw != null) ? String(emailRaw).trim() : &quot;&quot;;&#xd;
-        &#xd;
+&#xd;
         // =========================================================================&#xd;
         // ENVIO DO E-MAIL DE BOAS VINDAS COM O LINK DO PORTAL&#xd;
         // =========================================================================&#xd;
@@ -1303,24 +1429,38 @@ function AprovaKit(){&#xd;
         var assuntoEmail = hAPI.getCardValue(&quot;hidden_mail_assunto&quot;);&#xd;
         var corpoEmail = hAPI.getCardValue(&quot;hidden_mail_corpo&quot;);&#xd;
 &#xd;
-        if (corpoEmail == null || corpoEmail == &quot;&quot;) {&#xd;
-            corpoEmail = &quot;Olá! Seja bem-vindo(a). Por favor, acesse o portal para enviar seus documentos.&quot;;&#xd;
-        } else {&#xd;
-            corpoEmail = String(corpoEmail).replace(/\n/g, &quot;&lt;br&gt;&quot;);&#xd;
+        if (assuntoEmail == null || assuntoEmail == &quot;&quot;) {&#xd;
+            assuntoEmail = &quot;Processo de Admissão - Monte Bravo&quot;;&#xd;
         }&#xd;
-&#xd;
-        if (assuntoEmail == null || assuntoEmail == &quot;&quot;) assuntoEmail = &quot;Processo de Admissão - Monte Bravo&quot;;&#xd;
 &#xd;
         var baseUrl = getUrlConfiguracao(&quot;URL_PAGINA_CANDIDATO&quot;);&#xd;
         var linkPortal = baseUrl + &quot;?id_origem=&quot; + processId;&#xd;
 &#xd;
+        if (corpoEmail == null || corpoEmail == &quot;&quot;) {&#xd;
+            corpoEmail = &quot;Seja bem-vindo(a)! Para seguir com o processo admissional, acesse o portal pelo botão abaixo e conclua as etapas solicitadas.&quot;;&#xd;
+        } else {&#xd;
+            corpoEmail = String(corpoEmail);&#xd;
+        }&#xd;
+&#xd;
+        corpoEmail = aplicarVariaveisTemplateEmail(corpoEmail, {&#xd;
+            &quot;NOME&quot;: nomeCandidato,&#xd;
+            &quot;NOME_CANDIDATO&quot;: nomeCandidato,&#xd;
+            &quot;LINK_ADMISSAO&quot;: linkPortal,&#xd;
+            &quot;DATA_EXAME&quot;: dataExame ? dataExame : &quot;A ser agendado&quot;,&#xd;
+            &quot;LOCAL_EXAME&quot;: localExame ? localExame : &quot;A ser informado&quot;,&#xd;
+            &quot;ENDERECO_EXAME&quot;: endExame ? endExame : &quot;A ser informado&quot;,&#xd;
+            &quot;NUMERO_SOLICITACAO&quot;: processId&#xd;
+        });&#xd;
+&#xd;
+        corpoEmail = normalizarCorpoEmailConfigurado(corpoEmail);&#xd;
+&#xd;
         if (emailCandidato != null &amp;&amp; emailCandidato != &quot;&quot;) {&#xd;
             var parametros = new java.util.HashMap();&#xd;
             parametros.put(&quot;NOME_CANDIDATO&quot;, nomeCandidato);&#xd;
-            &#xd;
+&#xd;
             // Link para subir documentos no portal&#xd;
-            parametros.put(&quot;LINK_ADMISSAO&quot;, linkPortal); &#xd;
-            &#xd;
+            parametros.put(&quot;LINK_ADMISSAO&quot;, linkPortal);&#xd;
+&#xd;
             parametros.put(&quot;DATA_EXAME&quot;, dataExame ? dataExame : &quot;A ser agendado&quot;);&#xd;
             parametros.put(&quot;LOCAL_EXAME&quot;, localExame ? localExame : &quot;A ser informado&quot;);&#xd;
             parametros.put(&quot;ENDERECO_EXAME&quot;, endExame ? endExame : &quot;A ser informado&quot;);&#xd;
@@ -1330,7 +1470,7 @@ function AprovaKit(){&#xd;
 &#xd;
             var destinatarios = new java.util.ArrayList();&#xd;
             destinatarios.add(emailCandidato);&#xd;
-            &#xd;
+&#xd;
             notifier.notify(&quot;admin&quot;, &quot;TPL_ADMISSAO_MASTER&quot;, parametros, destinatarios, &quot;text/html&quot;);&#xd;
             log.info(&quot;&gt;&gt;&gt; ADMISSAO: E-mail enviado com sucesso para: &quot; + emailCandidato);&#xd;
         } else {&#xd;
@@ -1353,6 +1493,43 @@ function getUrlConfiguracao(campo) {&#xd;
         if (ds &amp;&amp; ds.rowsCount &gt; 0) return ds.getValue(0, campo);&#xd;
     } catch (e) { log.error(&quot;Erro config: &quot; + e); }&#xd;
     return &quot;URL_NAO_CONFIGURADA&quot;;&#xd;
+}&#xd;
+&#xd;
+function aplicarVariaveisTemplateEmail(texto, variaveis) {&#xd;
+    var resultado = String(texto || &quot;&quot;);&#xd;
+&#xd;
+    for (var chave in variaveis) {&#xd;
+        if (variaveis.hasOwnProperty(chave)) {&#xd;
+            var valor = variaveis[chave] == null ? &quot;&quot; : String(variaveis[chave]);&#xd;
+&#xd;
+            resultado = resultado.split(&quot;${&quot; + chave + &quot;}&quot;).join(valor);&#xd;
+            resultado = resultado.split(&quot;{{&quot; + chave + &quot;}}&quot;).join(valor);&#xd;
+        }&#xd;
+    }&#xd;
+&#xd;
+    return resultado;&#xd;
+}&#xd;
+&#xd;
+function normalizarCorpoEmailConfigurado(corpoEmail) {&#xd;
+    var corpo = String(corpoEmail || &quot;&quot;);&#xd;
+&#xd;
+    // Se o corpo já vier como HTML, não converte quebras de linha em &lt;br&gt;.&#xd;
+    // Isso evita espaçamentos enormes causados pela indentação do HTML salvo no dataset.&#xd;
+    var contemHtml = /&lt;\/?[a-z][\s\S]*&gt;/i.test(corpo);&#xd;
+&#xd;
+    if (contemHtml) {&#xd;
+        return corpo&#xd;
+            .replace(/\r/g, &quot;&quot;)&#xd;
+            .replace(/\n\s*\n/g, &quot;\n&quot;)&#xd;
+            .replace(/&gt;\s+&lt;/g, &quot;&gt;&lt;&quot;)&#xd;
+            .trim();&#xd;
+    }&#xd;
+&#xd;
+    // Se for texto puro, aí sim converte quebra de linha em &lt;br&gt;.&#xd;
+    return corpo&#xd;
+        .replace(/\r/g, &quot;&quot;)&#xd;
+        .replace(/\n/g, &quot;&lt;br&gt;&quot;)&#xd;
+        .trim();&#xd;
 }</eventDescription>
     </WorkflowProcessEvent>
     <WorkflowProcessEvent>
@@ -1811,13 +1988,69 @@ function getUrlConfiguracao(campo) {&#xd;
             return String(v).trim();&#xd;
         };&#xd;
 &#xd;
+        function removerAcentosIntegracao(texto) {&#xd;
+            var mapa = {&#xd;
+                &quot;Á&quot;: &quot;A&quot;, &quot;À&quot;: &quot;A&quot;, &quot;Â&quot;: &quot;A&quot;, &quot;Ã&quot;: &quot;A&quot;, &quot;Ä&quot;: &quot;A&quot;,&#xd;
+                &quot;É&quot;: &quot;E&quot;, &quot;È&quot;: &quot;E&quot;, &quot;Ê&quot;: &quot;E&quot;, &quot;Ë&quot;: &quot;E&quot;,&#xd;
+                &quot;Í&quot;: &quot;I&quot;, &quot;Ì&quot;: &quot;I&quot;, &quot;Î&quot;: &quot;I&quot;, &quot;Ï&quot;: &quot;I&quot;,&#xd;
+                &quot;Ó&quot;: &quot;O&quot;, &quot;Ò&quot;: &quot;O&quot;, &quot;Ô&quot;: &quot;O&quot;, &quot;Õ&quot;: &quot;O&quot;, &quot;Ö&quot;: &quot;O&quot;,&#xd;
+                &quot;Ú&quot;: &quot;U&quot;, &quot;Ù&quot;: &quot;U&quot;, &quot;Û&quot;: &quot;U&quot;, &quot;Ü&quot;: &quot;U&quot;,&#xd;
+                &quot;Ç&quot;: &quot;C&quot;, &quot;Ñ&quot;: &quot;N&quot;&#xd;
+            };&#xd;
+&#xd;
+            return String(texto || &quot;&quot;).replace(/[ÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇÑ]/g, function (letra) {&#xd;
+                return mapa[letra] || letra;&#xd;
+            });&#xd;
+        }&#xd;
+&#xd;
+        function normalizarTextoIntegracao(v) {&#xd;
+            if (v === null || v === undefined) return &quot;&quot;;&#xd;
+&#xd;
+            var texto = String(v).trim();&#xd;
+&#xd;
+            if (texto === &quot;&quot;) return &quot;&quot;;&#xd;
+&#xd;
+            texto = texto.toUpperCase();&#xd;
+            texto = removerAcentosIntegracao(texto);&#xd;
+&#xd;
+            texto = texto&#xd;
+                .replace(/&amp;/g, &quot; E &quot;)&#xd;
+                .replace(/[ªº°]/g, &quot;&quot;)&#xd;
+                .replace(/[´`&apos;&quot;]/g, &quot;&quot;)&#xd;
+                .replace(/[“”‘’]/g, &quot;&quot;)&#xd;
+                .replace(/[–—]/g, &quot;-&quot;)&#xd;
+                .replace(/[^A-Z0-9 @._,\-\/:;]+/g, &quot; &quot;)&#xd;
+                .replace(/\s+/g, &quot; &quot;)&#xd;
+                .trim();&#xd;
+&#xd;
+            return texto;&#xd;
+        }&#xd;
+&#xd;
         function tag(n, v) {&#xd;
+            var texto = normalizarTextoIntegracao(v);&#xd;
+            if (texto === &quot;&quot;) return &quot;&quot;;&#xd;
+            return &quot;&lt;&quot; + n + &quot;&gt;&quot; + escapeXML(texto) + &quot;&lt;/&quot; + n + &quot;&gt;&quot;;&#xd;
+        }&#xd;
+&#xd;
+        function tagRaw(n, v) {&#xd;
             if (v === null || v === undefined || String(v).trim() === &quot;&quot;) return &quot;&quot;;&#xd;
-            return &quot;&lt;&quot; + n + &quot;&gt;&quot; + escapeXML(v) + &quot;&lt;/&quot; + n + &quot;&gt;&quot;;&#xd;
+            return &quot;&lt;&quot; + n + &quot;&gt;&quot; + escapeXML(String(v).trim()) + &quot;&lt;/&quot; + n + &quot;&gt;&quot;;&#xd;
         }&#xd;
 &#xd;
         function escapeXML(str) {&#xd;
             return String(str || &quot;&quot;).replace(/&amp;/g, &apos;&amp;amp;&apos;).replace(/&lt;/g, &apos;&amp;lt;&apos;).replace(/&gt;/g, &apos;&amp;gt;&apos;);&#xd;
+        }&#xd;
+&#xd;
+        function formatarDataRM(d) {&#xd;
+            if (!d || d == &quot;&quot;) return &quot;&quot;;&#xd;
+&#xd;
+            var p = String(d).split(&quot;/&quot;);&#xd;
+&#xd;
+            if (p.length == 3) {&#xd;
+                return p[2] + &quot;-&quot; + p[1] + &quot;-&quot; + p[0] + &quot;T00:00:00&quot;;&#xd;
+            }&#xd;
+&#xd;
+            return d;&#xd;
         }&#xd;
 &#xd;
         // =========================================================================&#xd;
@@ -1847,19 +2080,126 @@ function getUrlConfiguracao(campo) {&#xd;
 &#xd;
         if (!COLIGADA || COLIGADA === &quot;&quot;) throw &quot;Coligada não informada.&quot;;&#xd;
         if (!CHAPA || CHAPA === &quot;&quot;) throw &quot;Chapa não informada. A integração principal (138) falhou ou não gerou a chapa.&quot;;&#xd;
-        if (!CODPESSOA || CODPESSOA === &quot;&quot;) throw &quot;Código da Pessoa (CODPESSOA) não foi gravado pela etapa 138. É obrigatório para atualizar a tabela de emergência (VPCOMPL).&quot;;&#xd;
-&#xd;
         var RM_CONTEXTO = &quot;CODCOLIGADA=&quot; + COLIGADA + &quot;;CODSISTEMA=&quot; + SISTEMA + &quot;;CODUSUARIO=&quot; + RM_USER;&#xd;
 &#xd;
-        var tamanhoCamisa = getStr(&quot;txtTamanhoCamisa&quot;);&#xd;
-        var tamanhoCalcado = getStr(&quot;txtTamanhoCalcado&quot;);&#xd;
-        &#xd;
         var nomeEmergencia = getStr(&quot;txtNomeEmergencia&quot;);&#xd;
         var parentescoEmergencia = getStr(&quot;txtParentescoEmergencia&quot;);&#xd;
         var telefoneEmergencia = getStr(&quot;txtTelefoneEmergencia&quot;);&#xd;
 &#xd;
         // Se todos os campos estiverem vazios, não há necessidade de chamar o RM&#xd;
-        if (tamanhoCamisa === &quot;&quot; &amp;&amp; tamanhoCalcado === &quot;&quot; &amp;&amp; nomeEmergencia === &quot;&quot; &amp;&amp; parentescoEmergencia === &quot;&quot; &amp;&amp; telefoneEmergencia === &quot;&quot;) {&#xd;
+        function extrairCodigoPlano(valor) {&#xd;
+            var texto = String(valor || &quot;&quot;).trim();&#xd;
+&#xd;
+            if (!texto) return &quot;&quot;;&#xd;
+&#xd;
+            var textoNormalizado = texto.toLowerCase();&#xd;
+&#xd;
+            if (&#xd;
+                textoNormalizado.indexOf(&quot;selecione&quot;) &gt; -1 ||&#xd;
+                textoNormalizado.indexOf(&quot;não opto&quot;) &gt; -1 ||&#xd;
+                textoNormalizado.indexOf(&quot;nao opto&quot;) &gt; -1 ||&#xd;
+                textoNormalizado === &quot;000000&quot;&#xd;
+            ) {&#xd;
+                return &quot;&quot;;&#xd;
+            }&#xd;
+&#xd;
+            if (texto.indexOf(&quot; - &quot;) &gt; -1) {&#xd;
+                texto = texto.split(&quot; - &quot;)[0].trim();&#xd;
+            }&#xd;
+&#xd;
+            // Proteção: códigos de plano no RM devem ser curtos.&#xd;
+            // Evita mandar descrições como &quot;Selecione o plano odontológico...&quot;&#xd;
+            if (texto.length &gt; 10) {&#xd;
+                return &quot;&quot;;&#xd;
+            }&#xd;
+&#xd;
+            return texto;&#xd;
+        }&#xd;
+&#xd;
+        function normalizarTextoComplementar(valor) {&#xd;
+            var texto = String(valor || &quot;&quot;).trim();&#xd;
+&#xd;
+            if (!texto) return &quot;&quot;;&#xd;
+&#xd;
+            var textoNormalizado = texto.toLowerCase();&#xd;
+&#xd;
+            if (&#xd;
+                textoNormalizado.indexOf(&quot;selecione&quot;) &gt; -1 ||&#xd;
+                textoNormalizado === &quot;null&quot; ||&#xd;
+                textoNormalizado === &quot;undefined&quot;&#xd;
+            ) {&#xd;
+                return &quot;&quot;;&#xd;
+            }&#xd;
+&#xd;
+            return texto;&#xd;
+        }&#xd;
+&#xd;
+        function normalizarModeloTrabalho(valor) {&#xd;
+            var texto = String(valor || &quot;&quot;).trim();&#xd;
+&#xd;
+            if (!texto) return &quot;&quot;;&#xd;
+&#xd;
+            if (texto.indexOf(&quot; - &quot;) &gt; -1) {&#xd;
+                texto = texto.split(&quot; - &quot;)[0].trim();&#xd;
+            }&#xd;
+&#xd;
+            var normalizado = texto.toLowerCase();&#xd;
+&#xd;
+            try {&#xd;
+                normalizado = normalizado.normalize(&quot;NFD&quot;).replace(/[\u0300-\u036f]/g, &quot;&quot;);&#xd;
+            } catch (e) { }&#xd;
+&#xd;
+            if (normalizado.indexOf(&quot;selecione&quot;) &gt; -1) return &quot;&quot;;&#xd;
+&#xd;
+            if (normalizado === &quot;1&quot; || normalizado === &quot;presencial&quot;) return &quot;1&quot;;&#xd;
+            if (normalizado === &quot;2&quot; || normalizado === &quot;hibrido&quot;) return &quot;2&quot;;&#xd;
+            if (normalizado === &quot;3&quot; || normalizado === &quot;home office&quot; || normalizado === &quot;homeoffice&quot;) return &quot;3&quot;;&#xd;
+&#xd;
+            return &quot;&quot;;&#xd;
+        }&#xd;
+&#xd;
+        var planoAM = extrairCodigoPlano(&#xd;
+            getStr(&quot;cpPlanoAM&quot;) ||&#xd;
+            getStr(&quot;TxtIncPlanoSaudeTipoCod&quot;)&#xd;
+        );&#xd;
+&#xd;
+        var planoAO = extrairCodigoPlano(&#xd;
+            getStr(&quot;cpPlanoAO&quot;) ||&#xd;
+            getStr(&quot;TxtIncPlanoOdontoTipoCod&quot;)&#xd;
+        );&#xd;
+&#xd;
+        var dataInclusaoAM = getStr(&quot;cpDataInclusaoAM&quot;);&#xd;
+        var dataInclusaoAO = getStr(&quot;cpDataInclusaoAO&quot;);&#xd;
+&#xd;
+        var clawback = getStr(&quot;cpPrazoClawback&quot;);&#xd;
+        // var nivelIngles = getStr(&quot;cpNivelIngles&quot;);&#xd;
+&#xd;
+        var modeloTrabalho = normalizarModeloTrabalho(&#xd;
+            getStr(&quot;cpModeloTrabalho&quot;) ||&#xd;
+            getStr(&quot;cpModeloDeTrabalho&quot;) ||&#xd;
+            getStr(&quot;MODELODETRABALHO&quot;)&#xd;
+        );&#xd;
+&#xd;
+        var formacaoFuncionario = normalizarTextoComplementar(&#xd;
+            getStr(&quot;cpFormacaoFuncionario&quot;) ||&#xd;
+            getStr(&quot;cpFormacao&quot;) ||&#xd;
+            getStr(&quot;FORMACAO&quot;)&#xd;
+        );&#xd;
+&#xd;
+        // Se todos os campos estiverem vazios, não há necessidade de chamar o RM&#xd;
+        if (&#xd;
+            nomeEmergencia === &quot;&quot; &amp;&amp;&#xd;
+            parentescoEmergencia === &quot;&quot; &amp;&amp;&#xd;
+            telefoneEmergencia === &quot;&quot; &amp;&amp;&#xd;
+            planoAM === &quot;&quot; &amp;&amp;&#xd;
+            planoAO === &quot;&quot; &amp;&amp;&#xd;
+            dataInclusaoAM === &quot;&quot; &amp;&amp;&#xd;
+            dataInclusaoAO === &quot;&quot; &amp;&amp;&#xd;
+            clawback === &quot;&quot; &amp;&amp;&#xd;
+            // nivelIngles === &quot;&quot; &amp;&amp;&#xd;
+            modeloTrabalho === &quot;&quot; &amp;&amp;&#xd;
+            formacaoFuncionario === &quot;&quot;&#xd;
+        ) {&#xd;
             log.info(&quot;### NENHUM DADO COMPLEMENTAR PARA INTEGRAR. IGNORANDO TASK 139...&quot;);&#xd;
             return true;&#xd;
         }&#xd;
@@ -1869,36 +2209,82 @@ function getUrlConfiguracao(campo) {&#xd;
         // =========================================================================&#xd;
         var xmlCompl = &quot;&quot;;&#xd;
         xmlCompl += &quot;&lt;FopFunc&gt;\n&quot;;&#xd;
-        &#xd;
+&#xd;
+        var possuiBlocoComplementar = false;&#xd;
+&#xd;
         // A tag PFunc é enviada apenas com as chaves para que o RM saiba qual funcionário atualizar&#xd;
         xmlCompl += &quot;  &lt;PFunc&gt;\n&quot;;&#xd;
         xmlCompl += tag(&quot;CODCOLIGADA&quot;, COLIGADA);&#xd;
         xmlCompl += tag(&quot;CHAPA&quot;, CHAPA);&#xd;
         xmlCompl += &quot;  &lt;/PFunc&gt;\n&quot;;&#xd;
 &#xd;
-        // Tabela PFCOMPL (Tamanhos e Fardamento) - Ligação por Coligada e Chapa&#xd;
-        if (tamanhoCamisa !== &quot;&quot; || tamanhoCalcado !== &quot;&quot;) {&#xd;
+        if (&#xd;
+            planoAM !== &quot;&quot; ||&#xd;
+            planoAO !== &quot;&quot; ||&#xd;
+            dataInclusaoAM !== &quot;&quot; ||&#xd;
+            dataInclusaoAO !== &quot;&quot; ||&#xd;
+            clawback !== &quot;&quot; ||&#xd;
+            // nivelIngles !== &quot;&quot; ||&#xd;
+            modeloTrabalho !== &quot;&quot; ||&#xd;
+            formacaoFuncionario !== &quot;&quot;&#xd;
+        ) {&#xd;
             xmlCompl += &quot;  &lt;PFCOMPL&gt;\n&quot;;&#xd;
             xmlCompl += tag(&quot;CODCOLIGADA&quot;, COLIGADA);&#xd;
             xmlCompl += tag(&quot;CHAPA&quot;, CHAPA);&#xd;
-            &#xd;
-            if (tamanhoCamisa !== &quot;&quot;) xmlCompl += tag(&quot;TAMANHO_CAMISA&quot;, tamanhoCamisa);&#xd;
-            if (tamanhoCalcado !== &quot;&quot;) xmlCompl += tag(&quot;CALCADO&quot;, tamanhoCalcado);&#xd;
-            &#xd;
+&#xd;
+            if (planoAM !== &quot;&quot;) {&#xd;
+                xmlCompl += tag(&quot;ASSMEDICA&quot;, planoAM);&#xd;
+            }&#xd;
+&#xd;
+            if (dataInclusaoAM !== &quot;&quot;) {&#xd;
+                xmlCompl += tag(&quot;DTINCASSITMED&quot;, formatarDataRM(dataInclusaoAM));&#xd;
+            }&#xd;
+&#xd;
+            if (planoAO !== &quot;&quot;) {&#xd;
+                xmlCompl += tag(&quot;ASSODONTO&quot;, planoAO);&#xd;
+            }&#xd;
+&#xd;
+            if (dataInclusaoAO !== &quot;&quot;) {&#xd;
+                xmlCompl += tag(&quot;DTINCASSITODO&quot;, formatarDataRM(dataInclusaoAO));&#xd;
+            }&#xd;
+&#xd;
+            if (clawback !== &quot;&quot;) {&#xd;
+                xmlCompl += tag(&quot;CLAWBACK&quot;, formatarDataRM(clawback));&#xd;
+            }&#xd;
+&#xd;
+            // if (nivelIngles !== &quot;&quot;) {&#xd;
+            //     xmlCompl += tag(&quot;NIVEL_INGLES&quot;, nivelIngles);&#xd;
+            // }&#xd;
+&#xd;
+            if (modeloTrabalho !== &quot;&quot;) {&#xd;
+                xmlCompl += tag(&quot;MODELODETRABALHO&quot;, modeloTrabalho);&#xd;
+            }&#xd;
+&#xd;
+            if (formacaoFuncionario !== &quot;&quot;) {&#xd;
+                xmlCompl += tag(&quot;FORMACAO&quot;, formacaoFuncionario);&#xd;
+            }&#xd;
+&#xd;
             xmlCompl += &quot;  &lt;/PFCOMPL&gt;\n&quot;;&#xd;
+&#xd;
+            possuiBlocoComplementar = true;&#xd;
         }&#xd;
 &#xd;
         // // Tabela VPCOMPL (Emergência) - Ligação EXCLUSIVA por CODPESSOA (conforme documentação do RM)&#xd;
         // if (nomeEmergencia !== &quot;&quot; || parentescoEmergencia !== &quot;&quot; || telefoneEmergencia !== &quot;&quot;) {&#xd;
         //     xmlCompl += &quot;  &lt;VPCOMPL&gt;\n&quot;;&#xd;
         //     xmlCompl += tag(&quot;CODPESSOA&quot;, CODPESSOA); &#xd;
-            &#xd;
+&#xd;
         //     if (nomeEmergencia !== &quot;&quot;) xmlCompl += tag(&quot;CONTATO_EMERGENCIA&quot;, nomeEmergencia);&#xd;
         //     if (parentescoEmergencia !== &quot;&quot;) xmlCompl += tag(&quot;GRAU_PAR_EMER&quot;, parentescoEmergencia);&#xd;
         //     if (telefoneEmergencia !== &quot;&quot;) xmlCompl += tag(&quot;TELEFONE_EMERGENCIA&quot;, telefoneEmergencia);&#xd;
-            &#xd;
+&#xd;
         //     xmlCompl += &quot;  &lt;/VPCOMPL&gt;\n&quot;;&#xd;
         // }&#xd;
+&#xd;
+        if (!possuiBlocoComplementar) {&#xd;
+            log.info(&quot;### TASK 139 SEM BLOCOS COMPLEMENTARES ATIVOS. INTEGRAÇÃO IGNORADA.&quot;);&#xd;
+            return true;&#xd;
+        }&#xd;
 &#xd;
         xmlCompl += &quot;&lt;/FopFunc&gt;&quot;;&#xd;
 &#xd;
@@ -1959,9 +2345,53 @@ function getUrlConfiguracao(campo) {&#xd;
             return String(v).trim();&#xd;
         };&#xd;
 &#xd;
+        function removerAcentosIntegracao(texto) {&#xd;
+            var mapa = {&#xd;
+                &quot;Á&quot;: &quot;A&quot;, &quot;À&quot;: &quot;A&quot;, &quot;Â&quot;: &quot;A&quot;, &quot;Ã&quot;: &quot;A&quot;, &quot;Ä&quot;: &quot;A&quot;,&#xd;
+                &quot;É&quot;: &quot;E&quot;, &quot;È&quot;: &quot;E&quot;, &quot;Ê&quot;: &quot;E&quot;, &quot;Ë&quot;: &quot;E&quot;,&#xd;
+                &quot;Í&quot;: &quot;I&quot;, &quot;Ì&quot;: &quot;I&quot;, &quot;Î&quot;: &quot;I&quot;, &quot;Ï&quot;: &quot;I&quot;,&#xd;
+                &quot;Ó&quot;: &quot;O&quot;, &quot;Ò&quot;: &quot;O&quot;, &quot;Ô&quot;: &quot;O&quot;, &quot;Õ&quot;: &quot;O&quot;, &quot;Ö&quot;: &quot;O&quot;,&#xd;
+                &quot;Ú&quot;: &quot;U&quot;, &quot;Ù&quot;: &quot;U&quot;, &quot;Û&quot;: &quot;U&quot;, &quot;Ü&quot;: &quot;U&quot;,&#xd;
+                &quot;Ç&quot;: &quot;C&quot;, &quot;Ñ&quot;: &quot;N&quot;&#xd;
+            };&#xd;
+&#xd;
+            return String(texto || &quot;&quot;).replace(/[ÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇÑ]/g, function (letra) {&#xd;
+                return mapa[letra] || letra;&#xd;
+            });&#xd;
+        }&#xd;
+&#xd;
+        function normalizarTextoIntegracao(v) {&#xd;
+            if (v === null || v === undefined) return &quot;&quot;;&#xd;
+&#xd;
+            var texto = String(v).trim();&#xd;
+&#xd;
+            if (texto === &quot;&quot;) return &quot;&quot;;&#xd;
+&#xd;
+            texto = texto.toUpperCase();&#xd;
+            texto = removerAcentosIntegracao(texto);&#xd;
+&#xd;
+            texto = texto&#xd;
+                .replace(/&amp;/g, &quot; E &quot;)&#xd;
+                .replace(/[ªº°]/g, &quot;&quot;)&#xd;
+                .replace(/[´`&apos;&quot;]/g, &quot;&quot;)&#xd;
+                .replace(/[“”‘’]/g, &quot;&quot;)&#xd;
+                .replace(/[–—]/g, &quot;-&quot;)&#xd;
+                .replace(/[^A-Z0-9 @._,\-\/:;]+/g, &quot; &quot;)&#xd;
+                .replace(/\s+/g, &quot; &quot;)&#xd;
+                .trim();&#xd;
+&#xd;
+            return texto;&#xd;
+        }&#xd;
+&#xd;
         function tag(n, v) {&#xd;
+            var texto = normalizarTextoIntegracao(v);&#xd;
+            if (texto === &quot;&quot;) return &quot;&quot;;&#xd;
+            return &quot;&lt;&quot; + n + &quot;&gt;&quot; + escapeXML(texto) + &quot;&lt;/&quot; + n + &quot;&gt;&quot;;&#xd;
+        }&#xd;
+&#xd;
+        function tagRaw(n, v) {&#xd;
             if (v === null || v === undefined || String(v).trim() === &quot;&quot;) return &quot;&quot;;&#xd;
-            return &quot;&lt;&quot; + n + &quot;&gt;&quot; + escapeXML(v) + &quot;&lt;/&quot; + n + &quot;&gt;&quot;;&#xd;
+            return &quot;&lt;&quot; + n + &quot;&gt;&quot; + escapeXML(String(v).trim()) + &quot;&lt;/&quot; + n + &quot;&gt;&quot;;&#xd;
         }&#xd;
 &#xd;
         function tagInt(n, v) {&#xd;
@@ -1998,6 +2428,147 @@ function getUrlConfiguracao(campo) {&#xd;
                 } else {&#xd;
                     return limpo + &quot;,00&quot;;&#xd;
                 }&#xd;
+            }&#xd;
+        }&#xd;
+&#xd;
+        function isSim(v) {&#xd;
+            var valor = String(v || &quot;&quot;).trim().toLowerCase();&#xd;
+            return valor === &quot;sim&quot; || valor === &quot;s&quot; || valor === &quot;1&quot;;&#xd;
+        }&#xd;
+&#xd;
+        function extrairMesAnoDataBR(data) {&#xd;
+            var valor = String(data || &quot;&quot;).trim();&#xd;
+&#xd;
+            if (valor === &quot;&quot;) {&#xd;
+                return {&#xd;
+                    mes: &quot;&quot;,&#xd;
+                    ano: &quot;&quot;&#xd;
+                };&#xd;
+            }&#xd;
+&#xd;
+            var partes = valor.split(&quot;/&quot;);&#xd;
+&#xd;
+            if (partes.length === 3) {&#xd;
+                return {&#xd;
+                    mes: partes[1],&#xd;
+                    ano: partes[2]&#xd;
+                };&#xd;
+            }&#xd;
+&#xd;
+            return {&#xd;
+                mes: &quot;&quot;,&#xd;
+                ano: &quot;&quot;&#xd;
+            };&#xd;
+        }&#xd;
+&#xd;
+        function montarEventoProgramadoXml(nomeControle, nomeValor, nomeDataInicio, nomeObservacao, descricaoLog, chapaFinal, codEvento) {&#xd;
+            if (!isSim(getStr(nomeControle))) {&#xd;
+                return &quot;&quot;;&#xd;
+            }&#xd;
+&#xd;
+            var valorEvento = getStr(nomeValor);&#xd;
+            var dataEvento = extrairMesAnoDataBR(getStr(nomeDataInicio));&#xd;
+            var observacaoEvento = getStr(nomeObservacao);&#xd;
+&#xd;
+            if (valorEvento === &quot;&quot; || dataEvento.mes === &quot;&quot; || dataEvento.ano === &quot;&quot;) {&#xd;
+                throw &quot;ERRO: Evento programado &quot; + descricaoLog + &quot; marcado como Sim, mas sem Valor ou Data Início.&quot;;&#xd;
+            }&#xd;
+&#xd;
+            if (!codEvento) {&#xd;
+                throw &quot;ERRO: Evento programado &quot; + descricaoLog + &quot; sem CODEVENTO configurado.&quot;;&#xd;
+            }&#xd;
+&#xd;
+            var xmlEvento = &quot;&quot;;&#xd;
+            xmlEvento += &quot;  &lt;PFEVENTOSPROG&gt;\n&quot;;&#xd;
+            xmlEvento += tag(&quot;ID&quot;, &quot;-1&quot;);&#xd;
+            xmlEvento += tag(&quot;CODCOLIGADA&quot;, COLIGADA);&#xd;
+            xmlEvento += tag(&quot;CHAPA&quot;, chapaFinal);&#xd;
+            xmlEvento += tag(&quot;CODEVENTO&quot;, codEvento);&#xd;
+            xmlEvento += tag(&quot;TIPO&quot;, &quot;04&quot;);&#xd;
+            xmlEvento += tag(&quot;VALOR&quot;, formatarSalario(valorEvento));&#xd;
+            xmlEvento += tag(&quot;MESINIC&quot;, dataEvento.mes);&#xd;
+            xmlEvento += tag(&quot;ANOINIC&quot;, dataEvento.ano);&#xd;
+            xmlEvento += tag(&quot;COMPLEMENTO1&quot;, observacaoEvento);&#xd;
+            xmlEvento += tag(&quot;SEMPREVALIDO&quot;, &quot;1&quot;);&#xd;
+            xmlEvento += &quot;  &lt;/PFEVENTOSPROG&gt;\n&quot;;&#xd;
+&#xd;
+            return xmlEvento;&#xd;
+        }&#xd;
+&#xd;
+        function integrarEventosProgramados(authService, RM_CONTEXTO, chapaFinal) {&#xd;
+            var xmlEventos = &quot;&quot;;&#xd;
+&#xd;
+            xmlEventos += montarEventoProgramadoXml(&#xd;
+                &quot;cpUpFront&quot;,&#xd;
+                &quot;cpUpFrontValor&quot;,&#xd;
+                &quot;cpUpFrontDataInicio&quot;,&#xd;
+                &quot;cpUpFrontObservacao&quot;,&#xd;
+                &quot;UP Front&quot;,&#xd;
+                chapaFinal,&#xd;
+                &quot;8980&quot;&#xd;
+            );&#xd;
+&#xd;
+            xmlEventos += montarEventoProgramadoXml(&#xd;
+                &quot;cpHiringBonus&quot;,&#xd;
+                &quot;cpHiringBonusValor&quot;,&#xd;
+                &quot;cpHiringBonusDataInicio&quot;,&#xd;
+                &quot;cpHiringBonusObservacao&quot;,&#xd;
+                &quot;Hiring Bonus&quot;,&#xd;
+                chapaFinal,&#xd;
+                &quot;1535&quot;&#xd;
+            );&#xd;
+&#xd;
+            if (xmlEventos === &quot;&quot;) {&#xd;
+                log.info(&quot;### Nenhum evento programado para integrar.&quot;);&#xd;
+                return;&#xd;
+            }&#xd;
+&#xd;
+            var xmlEventosFull = &quot;&lt;FopEventoProgramado&gt;\n&quot;;&#xd;
+            xmlEventosFull += xmlEventos;&#xd;
+            xmlEventosFull += &quot;&lt;/FopEventoProgramado&gt;&quot;;&#xd;
+&#xd;
+            log.info(&quot;### XML EVENTOS PROGRAMADOS: \n&quot; + xmlEventosFull);&#xd;
+&#xd;
+            var resultEventos = authService.saveRecord(&quot;FopEventoProgramadoData&quot;, xmlEventosFull, RM_CONTEXTO);&#xd;
+            log.info(&quot;### RETORNO RM EVENTOS PROGRAMADOS: &quot; + resultEventos);&#xd;
+&#xd;
+            if (resultEventos &amp;&amp; resultEventos.indexOf(&quot;===&quot;) != -1) {&#xd;
+                throw &quot;Erro ao integrar Eventos Programados: &quot; + resultEventos;&#xd;
+            }&#xd;
+        }&#xd;
+&#xd;
+        function integrarValoresAssociados(authService, RM_CONTEXTO, chapaFinal) {&#xd;
+            var tipoPLR = getStr(&quot;cpTipoPLR&quot;);&#xd;
+&#xd;
+            if (tipoPLR === &quot;&quot;) {&#xd;
+                log.info(&quot;### Nenhum valor associado para integrar.&quot;);&#xd;
+                return;&#xd;
+            }&#xd;
+&#xd;
+            if (getStr(&quot;cpValorPLR&quot;) === &quot;&quot; || getStr(&quot;cpDataPLR&quot;) === &quot;&quot;) {&#xd;
+                throw &quot;ERRO: Para integrar Valores Associados, preencha Tipo PLR, Valor PLR e Data.&quot;;&#xd;
+            }&#xd;
+&#xd;
+            var xmlValores = &quot;&lt;FopFuncVal&gt;\n&quot;;&#xd;
+&#xd;
+            xmlValores += &quot;  &lt;PFUNCVAL&gt;\n&quot;;&#xd;
+            xmlValores += tag(&quot;CODCOLIGADA&quot;, COLIGADA);&#xd;
+            xmlValores += tag(&quot;CHAPA&quot;, chapaFinal);&#xd;
+            xmlValores += tag(&quot;CODVALOR&quot;, tipoPLR);&#xd;
+            xmlValores += tag(&quot;VALOR&quot;, formatarSalario(getStr(&quot;cpValorPLR&quot;)));&#xd;
+            xmlValores += tag(&quot;DTVALOR&quot;, formatarDataRM(getStr(&quot;cpDataPLR&quot;)));&#xd;
+            xmlValores += tag(&quot;OBSERVACAO&quot;, getStr(&quot;cpObservacaoPLR&quot;));&#xd;
+            xmlValores += &quot;  &lt;/PFUNCVAL&gt;\n&quot;;&#xd;
+&#xd;
+            xmlValores += &quot;&lt;/FopFuncVal&gt;&quot;;&#xd;
+&#xd;
+            log.info(&quot;### XML VALORES ASSOCIADOS: \n&quot; + xmlValores);&#xd;
+&#xd;
+            var resultValores = authService.saveRecord(&quot;FopFuncValData&quot;, xmlValores, RM_CONTEXTO);&#xd;
+            log.info(&quot;### RETORNO RM VALORES ASSOCIADOS: &quot; + resultValores);&#xd;
+&#xd;
+            if (resultValores &amp;&amp; resultValores.indexOf(&quot;===&quot;) != -1) {&#xd;
+                throw &quot;Erro ao integrar Valores Associados: &quot; + resultValores;&#xd;
             }&#xd;
         }&#xd;
 &#xd;
@@ -2162,7 +2733,14 @@ function getUrlConfiguracao(campo) {&#xd;
         var dtAdmissaoXML = formatarDataRM(getStr(&quot;FUN_ADMISSAO&quot;));&#xd;
         if (!dtAdmissaoXML) throw &quot;ERRO: Data de Admissão obrigatória não preenchida.&quot;;&#xd;
 &#xd;
-        var salario = formatarSalario(getStr(&quot;FUN_VLRSALARIO&quot;));&#xd;
+        var salarioBruto = getStr(&quot;FUN_VLRSALARIO&quot;);&#xd;
+&#xd;
+        if (salarioBruto === &quot;&quot;) {&#xd;
+            throw &quot;ERRO: O campo Salário (FUN_VLRSALARIO) está vazio. Verifique se a parametrização da jornada não limpou o campo antes da integração.&quot;;&#xd;
+        }&#xd;
+&#xd;
+        var salario = formatarSalario(salarioBruto);&#xd;
+&#xd;
         var horasMensaisNum = parseFloat(getStr(&quot;cpQtdHorasMes&quot;) || getStr(&quot;FUN_HRMENSAIS&quot;) || &quot;220&quot;);&#xd;
         var usaSalComposto = getStr(&quot;cpUsaSalarioComposto&quot;) === &quot;Sim&quot; ? &quot;1&quot; : &quot;0&quot;;&#xd;
 &#xd;
@@ -2223,10 +2801,10 @@ function getUrlConfiguracao(campo) {&#xd;
         xmlFunc += tag(&quot;DTMUDANCAHORARIO&quot;, dtAdmissaoXML);&#xd;
         xmlFunc += tag(&quot;HSTSIT_DATAMUDANCA&quot;, dtAdmissaoXML);&#xd;
         xmlFunc += tag(&quot;HSTSIT_MOTIVO&quot;, cleanId(getStr(&quot;zoom_motivoMudancaSituacao&quot;)) || &quot;01&quot;);&#xd;
-        &#xd;
+&#xd;
         // O RM exige a data de SEFIP na inclusão para todos, não podemos bloquear&#xd;
         xmlFunc += tag(&quot;HSTSEFIP_DTMUDANCA&quot;, dtAdmissaoXML);&#xd;
-        &#xd;
+&#xd;
         // MANTÉM A PROTEÇÃO APENAS NO SINDICATO (Que era o erro original)&#xd;
         if (codSindicato &amp;&amp; codSindicato !== &quot;&quot;) {&#xd;
             xmlFunc += tag(&quot;DTMUDANCACONTRIBSINDICAL&quot;, dtAdmissaoXML);&#xd;
@@ -2279,8 +2857,22 @@ function getUrlConfiguracao(campo) {&#xd;
         if (vinculoEmpreg) xmlFunc += tag(&quot;VINCULORAIS&quot;, vinculoEmpreg);&#xd;
 &#xd;
         xmlFunc += tag(&quot;SITUACAORAIS&quot;, getStr(&quot;cpSituacaoRais&quot;) || &quot;1&quot;);&#xd;
+&#xd;
         xmlFunc += tag(&quot;SITUACAOFGTS&quot;, getStr(&quot;FUN_ALTFGTS&quot;));&#xd;
         xmlFunc += tag(&quot;DTSALDOFGTS&quot;, formatarDataRM(getStr(&quot;cpDataUltimoSaldoFGTS&quot;)));&#xd;
+&#xd;
+        if (getStr(&quot;cpDataOpcaoFGTS&quot;) !== &quot;&quot;) {&#xd;
+            xmlFunc += tag(&quot;DTOPCAOFGTS&quot;, formatarDataRM(getStr(&quot;cpDataOpcaoFGTS&quot;)));&#xd;
+        }&#xd;
+&#xd;
+        if (getStr(&quot;cpValorSaldoFGTS&quot;) !== &quot;&quot;) {&#xd;
+            xmlFunc += tag(&quot;SALDOFGTSREAL&quot;, formatarSalario(getStr(&quot;cpValorSaldoFGTS&quot;)));&#xd;
+        }&#xd;
+&#xd;
+        if (getStr(&quot;cpSaldoFGTSFinsRescisorios&quot;) !== &quot;&quot;) {&#xd;
+            xmlFunc += tag(&quot;SALDOFGTS&quot;, formatarSalario(getStr(&quot;cpSaldoFGTSFinsRescisorios&quot;)));&#xd;
+        }&#xd;
+&#xd;
         xmlFunc += tag(&quot;ESOCIALNATATIVIDADE&quot;, getStr(&quot;FUN_NATATIV&quot;));&#xd;
 &#xd;
         if (indicativoAdmissao &amp;&amp; indicativoAdmissao !== &quot;S&quot; &amp;&amp; indicativoAdmissao !== &quot;N&quot;) xmlFunc += tag(&quot;INDADMISSAO&quot;, indicativoAdmissao);&#xd;
@@ -2295,11 +2887,17 @@ function getUrlConfiguracao(campo) {&#xd;
         var codOcorrencia = cleanId(getStr(&quot;FUN_CODOCORRENCIA_IDDESC&quot;));&#xd;
         if (codOcorrencia) xmlFunc += tag(&quot;CODOCORRENCIA&quot;, codOcorrencia);&#xd;
 &#xd;
-        // var codEquipe = getStr(&quot;cpCodigoEquipe&quot;);&#xd;
-        // if (codEquipe) xmlFunc += tag(&quot;CODEQUIPE&quot;, codEquipe);&#xd;
+        var codEquipe = getStr(&quot;cpCodigoEquipe&quot;);&#xd;
+        if (codEquipe) xmlFunc += tag(&quot;CODEQUIPE&quot;, codEquipe);&#xd;
 &#xd;
         var codQuiosque = cleanId(getStr(&quot;FUN_CODQUIOSQUE_IDDESC&quot;));&#xd;
         if (codQuiosque) xmlFunc += tag(&quot;CODGRPQUIOSQUE&quot;, codQuiosque);&#xd;
+&#xd;
+        // xmlFunc += tag(&quot;UTILIZAPONTOWEB&quot;, getStr(&quot;MarcaPonto&quot;));&#xd;
+        // xmlFunc += tag(&quot;HABILITAPORTAL&quot;, getStr(&quot;cpHabilitaPortalRM&quot;));&#xd;
+        // xmlFunc += tag(&quot;CODUSUARIOPORTAL&quot;, getStr(&quot;cpCodigoUsuarioPortalPonto&quot;));&#xd;
+        // xmlFunc += tag(&quot;NOMEUSUARIOPORTAL&quot;, getStr(&quot;cpNomeUsuarioPortalPonto&quot;));&#xd;
+        // xmlFunc += tag(&quot;CATEGORIAPONTO&quot;, getStr(&quot;CatPonto&quot;));&#xd;
 &#xd;
         xmlFunc += tagInt(&quot;USAVALETRANSP&quot;, getStr(&quot;ValeTransp&quot;) === &quot;1&quot; ? &quot;1&quot; : &quot;0&quot;);&#xd;
         xmlFunc += tagInt(&quot;TEMPOPARCIAL&quot;, getStr(&quot;FUN_CONTRATOPARCIAL&quot;) || &quot;0&quot;);&#xd;
@@ -2320,8 +2918,8 @@ function getUrlConfiguracao(campo) {&#xd;
         xmlFunc += tag(&quot;CODNATURALIDADE&quot;, getStr(&quot;txtNaturalidadeCod&quot;));&#xd;
         xmlFunc += tag(&quot;ESTADONATAL&quot;, getUF(getStr(&quot;ESTADO&quot;)));&#xd;
 &#xd;
-        var tpSanguineo = cleanId(getStr(&quot;TipoSanguineo&quot;));&#xd;
-        if (tpSanguineo) xmlFunc += tag(&quot;TIPOSANG&quot;, tpSanguineo);&#xd;
+        // var tpSanguineo = cleanId(getStr(&quot;TipoSanguineo&quot;));&#xd;
+        // if (tpSanguineo) xmlFunc += tag(&quot;TIPOSANG&quot;, tpSanguineo);&#xd;
 &#xd;
         // Endereço&#xd;
         xmlFunc += tag(&quot;CEP&quot;, limparPontuacao(getStr(&quot;txtCEP&quot;)));&#xd;
@@ -2405,12 +3003,6 @@ function getUrlConfiguracao(campo) {&#xd;
             xmlFunc += tag(&quot;TPCONTABANCARIA&quot;, getStr(&quot;TipodeContPagto&quot;));&#xd;
             xmlFunc += tag(&quot;HSTBANCO_DTMUDANCA&quot;, dtAdmissaoXML);&#xd;
 &#xd;
-            var bancoFGTS = cleanId(getStr(&quot;FUN_BANCOFGTS&quot;));&#xd;
-            if (bancoFGTS) xmlFunc += tag(&quot;CODBANCOFGTS&quot;, bancoFGTS);&#xd;
-&#xd;
-            var contaFGTS = getStr(&quot;cpContaFGTS&quot;);&#xd;
-            if (contaFGTS) xmlFunc += tag(&quot;CONTAFGTS&quot;, contaFGTS);&#xd;
-&#xd;
             var bancoPIS = cleanId(getStr(&quot;FUN_CODBANCOPIS&quot;));&#xd;
             if (bancoPIS) xmlFunc += tag(&quot;CODBANCOPIS&quot;, bancoPIS);&#xd;
 &#xd;
@@ -2418,13 +3010,24 @@ function getUrlConfiguracao(campo) {&#xd;
             if (opBancaria) xmlFunc += tag(&quot;OPBANCARIA&quot;, opBancaria);&#xd;
         }&#xd;
 &#xd;
+        var bancoFGTS = cleanId(getStr(&quot;FUN_BANCOFGTS&quot;));&#xd;
+        if (bancoFGTS) {&#xd;
+            xmlFunc += tag(&quot;CODBANCOFGTS&quot;, bancoFGTS);&#xd;
+        }&#xd;
+&#xd;
+        var contaFGTS = getStr(&quot;cpContaFGTS&quot;);&#xd;
+        if (contaFGTS) {&#xd;
+            xmlFunc += tag(&quot;CONTAFGTS&quot;, contaFGTS);&#xd;
+        }&#xd;
+&#xd;
         xmlFunc += tag(&quot;PERCENTADIANT&quot;, getStr(&quot;FUN_PADT&quot;));&#xd;
         xmlFunc += tag(&quot;AJUDACUSTO&quot;, formatarSalario(getStr(&quot;FUN_AJUDACUSTO&quot;)));&#xd;
         var arredondamento = getStr(&quot;cpArredondamento&quot;) === &quot;Sim&quot; ? &quot;1&quot; : &quot;0&quot;;&#xd;
         xmlFunc += tag(&quot;ARREDONDAMENTO&quot;, arredondamento);&#xd;
 &#xd;
+        xmlFunc += &quot;  &lt;/PFunc&gt;\n&quot;;&#xd;
 &#xd;
-        xmlFunc += &quot;  &lt;/PFunc&gt;\n&lt;/FopFunc&gt;&quot;;&#xd;
+        xmlFunc += &quot;&lt;/FopFunc&gt;&quot;;&#xd;
 &#xd;
         log.info(&quot;### XML DE INTEGRAÇÃO MONTADO (FUNCIONÁRIO): \n&quot; + xmlFunc);&#xd;
 &#xd;
@@ -2476,6 +3079,10 @@ function getUrlConfiguracao(campo) {&#xd;
             hAPI.setCardValue(&quot;TxtChapa&quot;, chapaFinal);&#xd;
             log.info(&quot;### SUCESSO! CHAPA GERADA: &quot; + chapaFinal);&#xd;
 &#xd;
+            // Integra tabelas filhas do funcionário somente depois da chapa existir no RM.&#xd;
+            integrarEventosProgramados(authService, RM_CONTEXTO, chapaFinal);&#xd;
+            integrarValoresAssociados(authService, RM_CONTEXTO, chapaFinal);&#xd;
+&#xd;
             // Captura o CodPessoa gerado pelo RM (Se for pessoa nova)&#xd;
             try {&#xd;
                 if (!getStr(&quot;FUN_CODPESSOA&quot;)) {&#xd;
@@ -2503,9 +3110,9 @@ function getUrlConfiguracao(campo) {&#xd;
 &#xd;
             for (var i = 0; i &lt; indexesDep.length; i++) {&#xd;
                 var idx = indexesDep[i];&#xd;
-                var nomeDep = getStr(&quot;txtNomDepen___&quot; + idx);&#xd;
-&#xd;
-                if (nomeDep !== &quot;&quot;) {&#xd;
+                var nomeDep = String(getStr(&quot;txtNomDepen___&quot; + idx) || &quot;&quot;).trim();
+
+                if (nomeDep !== &quot;&quot;) {
                     nroDepend++;&#xd;
                     var cpfDep = limparPontuacao(getStr(&quot;TxtCPFDep___&quot; + idx));&#xd;
                     var dtNascDep = formatarDataRM(getStr(&quot;cpDataNascimentoDep___&quot; + idx));&#xd;
@@ -2525,11 +3132,12 @@ function getUrlConfiguracao(campo) {&#xd;
                     xmlDepend += tag(&quot;NUMEROCARTAOSUS&quot;, limparPontuacao(getStr(&quot;TxtCartaoSusDep___&quot; + idx)));&#xd;
                     xmlDepend += tag(&quot;OBSERVACAO&quot;, getStr(&quot;TxtObsDep___&quot; + idx));&#xd;
 &#xd;
-&#xd;
                     xmlDepend += tag(&quot;INCIRRF&quot;, getStr(&quot;TxtIncIRRF___&quot; + idx) || &quot;0&quot;);&#xd;
                     xmlDepend += tag(&quot;INCINSS&quot;, getStr(&quot;TxtIncINSS___&quot; + idx) || &quot;0&quot;);&#xd;
                     xmlDepend += tag(&quot;INCASSISTMEDICA&quot;, getStr(&quot;TxtIncMedica___&quot; + idx) || &quot;0&quot;);&#xd;
+                    xmlDepend += tag(&quot;INCASSISTODONTO&quot;, getStr(&quot;TxtIncOdonto___&quot; + idx) || &quot;0&quot;);&#xd;
                     xmlDepend += tag(&quot;INCPENSAO&quot;, getStr(&quot;TxtIncPensao___&quot; + idx) || &quot;0&quot;);&#xd;
+&#xd;
                     if (grauParentesco !== &quot;&quot;) xmlDepend += tag(&quot;GRAUPARENTESCO&quot;, grauParentesco);&#xd;
 &#xd;
                     xmlDepend += tag(&quot;PERCENTUAL&quot;, &quot;0.00&quot;);&#xd;
@@ -2547,6 +3155,36 @@ function getUrlConfiguracao(campo) {&#xd;
                     if (folha !== &quot;&quot;) xmlDepend += tag(&quot;NROFOLHA&quot;, folha);&#xd;
 &#xd;
                     xmlDepend += &quot;  &lt;/PFDepend&gt;\n&quot;;&#xd;
+&#xd;
+                    var incMedicaDep = getStr(&quot;TxtIncMedica___&quot; + idx) || &quot;0&quot;;&#xd;
+                    var incOdontoDep = getStr(&quot;TxtIncOdonto___&quot; + idx) || &quot;0&quot;;&#xd;
+&#xd;
+                    var dataAMDep = formatarDataRM(&#xd;
+                        getStr(&quot;cpDataInclusaoAMDep___&quot; + idx) ||&#xd;
+                        getStr(&quot;cpDataInclusaoAM&quot;)&#xd;
+                    );&#xd;
+&#xd;
+                    var dataAODep = formatarDataRM(&#xd;
+                        getStr(&quot;cpDataInclusaoAODep___&quot; + idx) ||&#xd;
+                        getStr(&quot;cpDataInclusaoAO&quot;)&#xd;
+                    );&#xd;
+&#xd;
+                    if (incMedicaDep === &quot;1&quot; || incOdontoDep === &quot;1&quot;) {&#xd;
+                        xmlDepend += &quot;  &lt;PFDEPENDCOMPL&gt;\n&quot;;&#xd;
+                        xmlDepend += tag(&quot;CODCOLIGADA&quot;, COLIGADA);&#xd;
+                        xmlDepend += tag(&quot;CHAPA&quot;, chapaFinal);&#xd;
+                        xmlDepend += tag(&quot;NRODEPEND&quot;, nroDepend.toString());&#xd;
+&#xd;
+                        if (incMedicaDep === &quot;1&quot; &amp;&amp; dataAMDep !== &quot;&quot;) {&#xd;
+                            xmlDepend += tag(&quot;DTASSMED&quot;, dataAMDep);&#xd;
+                        }&#xd;
+&#xd;
+                        if (incOdontoDep === &quot;1&quot; &amp;&amp; dataAODep !== &quot;&quot;) {&#xd;
+                            xmlDepend += tag(&quot;DTASSODO&quot;, dataAODep);&#xd;
+                        }&#xd;
+&#xd;
+                        xmlDepend += &quot;  &lt;/PFDEPENDCOMPL&gt;\n&quot;;&#xd;
+                    }&#xd;
                 }&#xd;
             }&#xd;
 &#xd;
@@ -2561,7 +3199,8 @@ function getUrlConfiguracao(campo) {&#xd;
         log.error(&quot;### ERRO FATAL NA INTEGRAÇÃO RM: &quot; + e);&#xd;
         throw e;&#xd;
     }&#xd;
-}</eventDescription>
+}
+</eventDescription>
     </WorkflowProcessEvent>
     <WorkflowProcessEvent>
       <workflowProcessEventPK>
@@ -3221,6 +3860,22 @@ function montaXMLDependente() {&#xd;
   <list/>
   <list>
     <SwimLane>
+      <color>EAF793</color>
+      <height>234</height>
+      <width>1310</width>
+      <positionX>11</positionX>
+      <positionY>187</positionY>
+      <stateName>DP</stateName>
+      <type>1</type>
+      <parentSequence>0</parentSequence>
+      <swimLanePK>
+        <companyId>1</companyId>
+        <processId>FLUIG-0002</processId>
+        <version>1</version>
+        <sequence>1</sequence>
+      </swimLanePK>
+    </SwimLane>
+    <SwimLane>
       <color>E7E7E7</color>
       <height>178</height>
       <width>1310</width>
@@ -3252,22 +3907,6 @@ function montaXMLDependente() {&#xd;
         <sequence>3</sequence>
       </swimLanePK>
     </SwimLane>
-    <SwimLane>
-      <color>EAF793</color>
-      <height>234</height>
-      <width>1310</width>
-      <positionX>11</positionX>
-      <positionY>187</positionY>
-      <stateName>DP</stateName>
-      <type>1</type>
-      <parentSequence>0</parentSequence>
-      <swimLanePK>
-        <companyId>1</companyId>
-        <processId>FLUIG-0002</processId>
-        <version>1</version>
-        <sequence>4</sequence>
-      </swimLanePK>
-    </SwimLane>
   </list>
   <list>
     <ProcessComponGraf>
@@ -3295,19 +3934,7 @@ function montaXMLDependente() {&#xd;
       <finalStateSequence>1</finalStateSequence>
     </ProcessLinkAssoc>
   </list>
-  <list>
-    <ProcessLinkBend>
-      <processLinkBendPK>
-        <companyId>1</companyId>
-        <processId>FLUIG-0002</processId>
-        <version>221</version>
-        <linkSequence>169</linkSequence>
-        <bendSequence>1</bendSequence>
-      </processLinkBendPK>
-      <positionX>678</positionX>
-      <positionY>106</positionY>
-    </ProcessLinkBend>
-  </list>
+  <list/>
   <list/>
   <list/>
   <list/>

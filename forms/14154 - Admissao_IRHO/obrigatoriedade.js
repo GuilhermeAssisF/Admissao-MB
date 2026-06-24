@@ -28,8 +28,6 @@ var REGRAS_OBRIGATORIEDADE = {
         "zoom_categoriaEsocial",
         "cpRegimeTrabalhista",
         "zoom_sindicato",
-        "zoom_sindicato_filiacao",
-        "zoom_contribuicao_sindical",
         "FUN_INSS",
         "FUN_IRRF",
         "zoom_ocorrencia_sefip",
@@ -62,7 +60,7 @@ function aplicarObrigatoriedadeFrontEnd(atividadeAtual) {
     // --- NOVA REGRA: CAPTURA A JORNADA E MAPEIA CAMPOS CLT ---
     var jornada = $("#cpJornadaAdmissao").val();
     var camposExclusivosCLT = [
-        "zoom_sindicato", "zoom_sindicato_filiacao", "zoom_contribuicao_sindical",
+        "zoom_sindicato", "zoom_sindicato_filiacao",
         "FUN_INSS", "FUN_IRRF", "FUN_ALTFGTS", "cpDataUltimoSaldoFGTS",
         "zoom_ocorrencia_sefip", "zoom_categoria_sefip", "zoom_situacao_rais", "zoom_vinculo_rais"
     ];
