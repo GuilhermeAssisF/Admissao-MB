@@ -3,10 +3,14 @@ window.camposJornadaAdmissaoConfig = window.camposJornadaAdmissaoConfig || [];
 window.parametrosJornadaCarregados = window.parametrosJornadaCarregados || false;
 window.parametrosJornadaCarregando = window.parametrosJornadaCarregando || false;
 window.callbacksParametrosJornada = window.callbacksParametrosJornada || [];
-window.aplicandoParametrosJornada = window.aplicandoParametrosJornada || false;
+window.aplicandoParametrosJornada =
+  window.aplicandoParametrosJornada || false;
+window.codigoJornadaPendente =
+  window.codigoJornadaPendente || "";
 window.camposJornadaAplicados = window.camposJornadaAplicados || {};
 window.timerRecalculoExperienciaJornada = window.timerRecalculoExperienciaJornada || null;
-window.DEBUG_PARAM_JORNADA = window.DEBUG_PARAM_JORNADA !== undefined ? window.DEBUG_PARAM_JORNADA : true;
+window.DEBUG_PARAM_JORNADA =
+  window.DEBUG_PARAM_JORNADA === true;
 
 function logJornadaGrupo(titulo, dados) {
   if (!window.DEBUG_PARAM_JORNADA) {
@@ -153,7 +157,6 @@ $(document).ready(function () {
   window.callbacksParametrosJornada = window.callbacksParametrosJornada || [];
   window.aplicandoParametrosJornada = window.aplicandoParametrosJornada || false;
   window.camposJornadaAplicados = window.camposJornadaAplicados || {};
-  window.DEBUG_PARAM_JORNADA = true;
 
   function logJornadaGrupo(titulo, dados) {
     if (!window.DEBUG_PARAM_JORNADA) {
@@ -236,20 +239,67 @@ $(document).ready(function () {
 
     var campoSeq = "FUN_SEQTURN_IDDESC_AD";
 
-    if (empresa && empresa !== "" && turno && turno !== "") {
-      // 1. DESBLOQUEIA O CAMPO VISUAL E NO HTML
-      try { if (window[campoSeq]) window[campoSeq].disable(false); } catch (e) { }
-      $("#" + campoSeq).prop('disabled', false).removeAttr('disabled');
+    function manterSequenciaParametrizadaOculta(origem) {
+      if (
+        typeof campoFoiAplicadoPorJornada === "function" &&
+        campoFoiAplicadoPorJornada(campoSeq) &&
+        typeof reocultarCamposZoomParametrizadosJornada === "function"
+      ) {
+        reocultarCamposZoomParametrizadosJornada(origem);
+      }
+    }
 
-      // 2. APLICA O FILTRO CORRETO
+    if (empresa && empresa !== "" && turno && turno !== "") {
+      // Mantém o campo real habilitado para persistir no formulário.
+      try {
+        if (window[campoSeq]) {
+          window[campoSeq].disable(false);
+        }
+      } catch (e) { }
+
+      $("#" + campoSeq)
+        .prop("disabled", false)
+        .removeAttr("disabled");
+
+      // Caso já tenha sido parametrizado, não deixa o zoom original reaparecer.
+      manterSequenciaParametrizadaOculta(
+        "sequência do turno liberada"
+      );
+
       setTimeout(function () {
         try {
           if (window.safeReloadZoomFilterValues) {
-            window.safeReloadZoomFilterValues(campoSeq, "ID_EMPRESA," + empresa + ",CODHORARIO," + turno);
+            window.safeReloadZoomFilterValues(
+              campoSeq,
+              "ID_EMPRESA," + empresa + ",CODHORARIO," + turno
+            );
           }
         } catch (e) {
           console.warn("Aviso ao filtrar Sequência:", e);
         }
+
+        // O reloadZoomFilterValues pode redesenhar o Select2.
+        manterSequenciaParametrizadaOculta(
+          "sequência após recarregar filtro"
+        );
+
+        setTimeout(function () {
+          manterSequenciaParametrizadaOculta(
+            "sequência após renderização 50ms"
+          );
+        }, 50);
+
+        setTimeout(function () {
+          manterSequenciaParametrizadaOculta(
+            "sequência após renderização 200ms"
+          );
+        }, 200);
+
+        setTimeout(function () {
+          manterSequenciaParametrizadaOculta(
+            "sequência após renderização 600ms"
+          );
+        }, 600);
       }, 300);
     } else {
       // BLOQUEIA E LIMPA SE O TURNO FOR REMOVIDO OU ESTIVER VAZIO
@@ -412,21 +462,58 @@ $(document).ready(function () {
   }
 
   function toggleEventoProgramado(prefixo) {
-    var isSim = $("#" + prefixo).val() == "sim";
+    var isSim =
+      $("#" + prefixo).val() == "sim";
 
-    prepararCampoBloqueado($("#" + prefixo + "Valor"), !isSim);
-    prepararCampoBloqueado($("#" + prefixo + "Observacao"), !isSim);
+    var $campoValor =
+      $("#" + prefixo + "Valor");
 
-    preencherDataInicioPadrao(prefixo + "DataInicio");
+    var $campoData =
+      $("#" + prefixo + "DataInicio");
 
-    $("#" + prefixo + "DataInicio")
-      .prop("readonly", false)
-      .prop("disabled", false)
+    var $campoObservacao =
+      $("#" + prefixo + "Observacao");
+
+    prepararCampoBloqueado(
+      $campoValor,
+      !isSim
+    );
+
+    prepararCampoBloqueado(
+      $campoData,
+      !isSim
+    );
+
+    prepararCampoBloqueado(
+      $campoObservacao,
+      !isSim
+    );
+
+    var $controleCalendario =
+      $campoData
+        .closest(".input-group")
+        .find(
+          ".input-group-addon, .input-group-btn button, button"
+        );
+
+    $controleCalendario
+      .prop("disabled", !isSim)
       .css({
-        "pointer-events": "auto",
-        "background-color": "#fff",
-        "cursor": "auto"
+        "pointer-events":
+          isSim ? "auto" : "none",
+
+        "background-color":
+          isSim ? "" : "#f3f4f6",
+
+        "cursor":
+          isSim ? "pointer" : "not-allowed"
       });
+
+    if (isSim) {
+      preencherDataInicioPadrao(
+        prefixo + "DataInicio"
+      );
+    }
   }
 
   function toggleUpFrontCampos() {
@@ -485,24 +572,21 @@ $(document).ready(function () {
 
     var $jornada = $("#cpJornadaAdmissao");
 
-    var valorJornada = normalizarValorComparacao(
-      $jornada.val()
-    );
-
-    var descricaoJornada = normalizarValorComparacao(
-      $jornada.find("option:selected").text()
-    );
+    var jornadaCompleta =
+      normalizarValorComparacao(
+        [
+          $jornada.val() || "",
+          $("#cpJornadaAdmissaoDescricao").val() || "",
+          $jornada.find("option:selected").text() || ""
+        ].join(" ")
+      );
 
     var permiteUpFront =
-      valorJornada === "associado" ||
-      descricaoJornada === "associado";
+      jornadaCompleta.indexOf("associado") !== -1;
 
     var permiteHiringBonus =
       !permiteUpFront &&
-      (
-        valorJornada.indexOf("clt") !== -1 ||
-        descricaoJornada.indexOf("clt") !== -1
-      );
+      jornadaCompleta.indexOf("clt") !== -1;
 
     definirDisponibilidadeEventoPorJornada(
       "cpUpFront",
@@ -514,6 +598,8 @@ $(document).ready(function () {
       permiteHiringBonus
     );
   }
+
+  window.aplicarRegraEventosProgramadosPorJornada = aplicarRegraEventosProgramadosPorJornada;
 
   function preencherDatasValoresAssociados(forcarAtualizacao) {
     preencherDataInicioPadrao("cpDataPLR", forcarAtualizacao === true);
@@ -1034,6 +1120,8 @@ $(document).ready(function () {
     $("#cpJornadaAdmissao")
       .off("change.contratoJornada")
       .on("change.contratoJornada", function () {
+        sincronizarDescricaoJornadaSelecionada();
+
         if (typeof aplicarBloqueioDadosContratacaoPorJornada === "function") {
           aplicarBloqueioDadosContratacaoPorJornada();
         }
@@ -1109,12 +1197,9 @@ $(document).ready(function () {
     }, 500);
 
     carregarParametrosJornadaAdmissao(function () {
-      popularJornadasAdmissaoPorColigada($("#FUN_EMPRESA").val());
-
-      var jornadaAtual = $("#cpJornadaAdmissao").val();
-      if (jornadaAtual) {
-        aplicarParametrosJornadaAdmissao(jornadaAtual);
-      }
+      popularJornadasAdmissaoPorColigada(
+        $("#FUN_EMPRESA").val()
+      );
 
       setTimeout(function () {
         aplicarRegraEventosProgramadosPorJornada();
@@ -1773,12 +1858,30 @@ $(document).ready(function () {
   }
 
   function jornadaPermiteContratoEstagioAprendiz() {
-    var jornada = normalizarJornadaContratoEstagio($("#cpJornadaAdmissao").val());
+    var jornada =
+      normalizarJornadaContratoEstagio(
+        (
+          $("#cpJornadaAdmissao").val() ||
+          ""
+        ) +
+        " " +
+        (
+          $("#cpJornadaAdmissaoDescricao").val() ||
+          ""
+        ) +
+        " " +
+        (
+          $("#cpJornadaAdmissao")
+            .find("option:selected")
+            .text() ||
+          ""
+        )
+      );
 
     return (
-      jornada === "estagio" ||
-      jornada === "estagiario" ||
-      jornada === "jovem aprendiz"
+      jornada.indexOf("estagio") !== -1 ||
+      jornada.indexOf("estagiario") !== -1 ||
+      jornada.indexOf("jovem aprendiz") !== -1
     );
   }
 
@@ -2081,8 +2184,8 @@ $(document).ready(function () {
     }, 1200);
   }
 
-  // Reaplica cedo a jornada salva para evitar que os zooms fiquem visíveis apenas com o código
-  // após avançar atividade e recarregar o formulário.
+  // Restaura apenas o código e a descrição visual da jornada.
+  // Os demais campos já foram preenchidos e persistidos nas atividades iniciais.
   if (typeof agendarReaplicacaoJornadaSalvaAoCarregar === "function") {
     agendarReaplicacaoJornadaSalvaAoCarregar();
   }
@@ -2104,8 +2207,8 @@ $(document).ready(function () {
 
     aplicarBloqueioDadosContratacaoPorJornada();
 
-    // Reaplica a parametrização visual da jornada quando a atividade é recarregada.
-    // Isso corrige os zooms que o Fluig reidrata apenas com o código, ex.: U, 0002, 1001.
+    // Garante apenas que a descrição da jornada permaneça visível.
+    // Não reaplica nem limpa os campos parametrizados.
     if (typeof reaplicarJornadaSalvaAoCarregar === "function") {
       reaplicarJornadaSalvaAoCarregar();
     }
@@ -2458,159 +2561,501 @@ function buscarTabelaFilhaParamJornada(docId, tablename, callback) {
   consultar("metadata#id", true);
 }
 
+var CHAVE_CACHE_CONFIG_JORNADA =
+  "admissao.configParametrosJornada.v1";
+
+var TTL_CACHE_CONFIG_JORNADA =
+  5 * 60 * 1000;
+
+function restaurarConfigJornadaCache() {
+  try {
+    var valorCache = sessionStorage.getItem(
+      CHAVE_CACHE_CONFIG_JORNADA
+    );
+
+    if (!valorCache) {
+      return false;
+    }
+
+    var cache = JSON.parse(valorCache);
+
+    var cacheExpirado =
+      !cache ||
+      !cache.timestamp ||
+      Date.now() - cache.timestamp >
+      TTL_CACHE_CONFIG_JORNADA;
+
+    if (
+      cacheExpirado ||
+      !Array.isArray(cache.jornadas) ||
+      !Array.isArray(cache.campos)
+    ) {
+      sessionStorage.removeItem(
+        CHAVE_CACHE_CONFIG_JORNADA
+      );
+
+      return false;
+    }
+
+    window.jornadasAdmissaoConfig =
+      cache.jornadas;
+
+    window.camposJornadaAdmissaoConfig =
+      cache.campos;
+
+    jornadasAdmissaoConfig =
+      window.jornadasAdmissaoConfig;
+
+    camposJornadaAdmissaoConfig =
+      window.camposJornadaAdmissaoConfig;
+
+    return true;
+  } catch (e) {
+    console.warn(
+      "[Jornada] Erro restaurando configuração do cache.",
+      e
+    );
+
+    return false;
+  }
+}
+
+function salvarConfigJornadaCache() {
+  try {
+    sessionStorage.setItem(
+      CHAVE_CACHE_CONFIG_JORNADA,
+      JSON.stringify({
+        timestamp: Date.now(),
+        jornadas:
+          jornadasAdmissaoConfig || [],
+        campos:
+          camposJornadaAdmissaoConfig || []
+      })
+    );
+  } catch (e) {
+    console.warn(
+      "[Jornada] Erro salvando configuração no cache.",
+      e
+    );
+  }
+}
+
 function carregarParametrosJornadaAdmissao(callback) {
-  if (typeof jornadasAdmissaoConfig === "undefined") {
+  if (
+    typeof jornadasAdmissaoConfig ===
+    "undefined"
+  ) {
     window.jornadasAdmissaoConfig = [];
   }
-  if (typeof camposJornadaAdmissaoConfig === "undefined") {
+
+  if (
+    typeof camposJornadaAdmissaoConfig ===
+    "undefined"
+  ) {
     window.camposJornadaAdmissaoConfig = [];
   }
-  if (typeof parametrosJornadaCarregados === "undefined") {
-    window.parametrosJornadaCarregados = false;
+
+  if (
+    typeof parametrosJornadaCarregados ===
+    "undefined"
+  ) {
+    window.parametrosJornadaCarregados =
+      false;
   }
-  if (typeof parametrosJornadaCarregando === "undefined") {
-    window.parametrosJornadaCarregando = false;
+
+  if (
+    typeof parametrosJornadaCarregando ===
+    "undefined"
+  ) {
+    window.parametrosJornadaCarregando =
+      false;
   }
-  if (typeof callbacksParametrosJornada === "undefined") {
+
+  if (
+    typeof callbacksParametrosJornada ===
+    "undefined"
+  ) {
     window.callbacksParametrosJornada = [];
   }
-  if (typeof aplicandoParametrosJornada === "undefined") {
-    window.aplicandoParametrosJornada = false;
+
+  if (
+    typeof aplicandoParametrosJornada ===
+    "undefined"
+  ) {
+    window.aplicandoParametrosJornada =
+      false;
   }
 
+  /*
+   * Todas as chamadas realizadas enquanto o
+   * carregamento estiver em andamento ficam
+   * aguardando nesta fila.
+   */
   if (typeof callback === "function") {
-    callbacksParametrosJornada.push(callback);
+    callbacksParametrosJornada.push(
+      callback
+    );
   }
 
+  /*
+   * Configuração já carregada nesta página.
+   */
   if (parametrosJornadaCarregados) {
     finalizarCarregamentoParametrosJornada();
     return;
   }
 
+  /*
+   * Outra chamada já iniciou o carregamento.
+   * O callback atual já foi colocado na fila.
+   */
   if (parametrosJornadaCarregando) {
     return;
   }
 
+  /*
+   * Antes de consultar o dataset, tenta recuperar
+   * a configuração salva nesta sessão do navegador.
+   */
+  if (
+    typeof restaurarConfigJornadaCache ===
+    "function" &&
+    restaurarConfigJornadaCache()
+  ) {
+    console.log(
+      "[Jornada] Configuração carregada do cache da sessão."
+    );
+
+    finalizarCarregamentoParametrosJornada();
+    return;
+  }
+
   parametrosJornadaCarregando = true;
+  window.parametrosJornadaCarregando = true;
+
   jornadasAdmissaoConfig = [];
   camposJornadaAdmissaoConfig = [];
 
   try {
     var constraints = [
-      DatasetFactory.createConstraint("metadata#active", "true", "true", ConstraintType.MUST)
+      DatasetFactory.createConstraint(
+        "metadata#active",
+        "true",
+        "true",
+        ConstraintType.MUST
+      )
     ];
 
-    logJornadaGrupo("Iniciando carregamento da configuracao de jornada", {
-      dataset: "Form_Configuracoes_Admissao",
-      constraints: [
-        { field: "metadata#active", value: "true" }
-      ]
-    });
+    logJornadaGrupo(
+      "Iniciando carregamento da configuração de jornada",
+      {
+        dataset:
+          "Form_Configuracoes_Admissao",
 
-    DatasetFactory.getDataset("Form_Configuracoes_Admissao", null, constraints, null, {
-      success: function (datasetConfig) {
-        try {
-          var valoresConfig = obterValoresDatasetParamJornada(datasetConfig);
-          logJornadaTabela("Registro(s) ativos de configuracao encontrados", valoresConfig.map(function (item, idx) {
-            return {
-              indice: idx + 1,
-              documentid: item.documentid || item["metadata#id"] || "",
-              titulo: item["documentDescription"] || item["descricao"] || ""
-            };
-          }));
-
-          if (!valoresConfig.length) {
-            console.warn("[Param Jornada] Nenhuma configuracao ativa encontrada.");
-            finalizarCarregamentoParametrosJornada();
-            return;
+        constraints: [
+          {
+            field: "metadata#active",
+            value: "true"
           }
+        ]
+      }
+    );
 
-          var docId = valoresConfig[0]["documentid"] || valoresConfig[0]["metadata#id"];
+    DatasetFactory.getDataset(
+      "Form_Configuracoes_Admissao",
+      null,
+      constraints,
+      null,
+      {
+        success: function (datasetConfig) {
+          try {
+            var valoresConfig =
+              obterValoresDatasetParamJornada(
+                datasetConfig
+              );
 
-          if (!docId) {
-            console.warn("[Param Jornada] Configuracao ativa sem documentid.");
-            finalizarCarregamentoParametrosJornada();
-            return;
-          }
+            logJornadaTabela(
+              "Registro(s) ativos de configuração encontrados",
+              valoresConfig.map(
+                function (item, idx) {
+                  return {
+                    indice: idx + 1,
 
-          logJornadaGrupo("Configuracao ativa selecionada", {
-            documentId: docId,
-            totalRegistros: valoresConfig.length
-          });
+                    documentid:
+                      item.documentid ||
+                      item["metadata#id"] ||
+                      "",
 
-          buscarTabelaFilhaParamJornada(docId, "tbJornadasAdmissao", function (jornadas) {
-            jornadasAdmissaoConfig = [];
+                    titulo:
+                      item.documentDescription ||
+                      item.descricao ||
+                      ""
+                  };
+                }
+              )
+            );
 
-            for (var i = 0; i < jornadas.length; i++) {
-              var jornada = jornadas[i] || {};
+            if (!valoresConfig.length) {
+              console.warn(
+                "[Param Jornada] Nenhuma configuração ativa encontrada."
+              );
 
-              jornadasAdmissaoConfig.push({
-                codigo: jornada.JORNADA_CODIGO || "",
-                descricao: jornada.JORNADA_DESCRICAO || "",
-                coligadas: jornada.JORNADA_COLIGADAS || "*",
-                ativo: jornada.JORNADA_ATIVO || "S",
-                ordem: jornada.JORNADA_ORDEM || ""
-              });
+              finalizarCarregamentoParametrosJornada();
+              return;
             }
 
-            logJornadaTabela("tbJornadasAdmissao carregada", jornadasAdmissaoConfig.map(function (item, idx) {
-              return {
-                indice: idx + 1,
-                codigo: item.codigo || "",
-                descricao: item.descricao || "",
-                coligadas: item.coligadas || "",
-                ativo: item.ativo || "",
-                ordem: item.ordem || ""
-              };
-            }));
+            var docId =
+              valoresConfig[0].documentid ||
+              valoresConfig[0][
+              "metadata#id"
+              ];
 
-            buscarTabelaFilhaParamJornada(docId, "tbCamposJornadaAdmissao", function (campos) {
+            if (!docId) {
+              console.warn(
+                "[Param Jornada] Configuração ativa sem documentid."
+              );
+
+              finalizarCarregamentoParametrosJornada();
+              return;
+            }
+
+            logJornadaGrupo(
+              "Configuração ativa selecionada",
+              {
+                documentId: docId,
+                totalRegistros:
+                  valoresConfig.length
+              }
+            );
+
+            /*
+             * As duas consultas são iniciadas juntas.
+             * Não é mais necessário aguardar jornadas
+             * para depois buscar os campos.
+             */
+            var jornadasRecebidas = null;
+            var camposRecebidos = null;
+            var consultasFinalizadas = 0;
+            var processamentoFinalizado =
+              false;
+
+            function concluirCarregamentoTabelas() {
+              if (
+                processamentoFinalizado ||
+                consultasFinalizadas < 2
+              ) {
+                return;
+              }
+
+              processamentoFinalizado = true;
+
+              jornadasAdmissaoConfig = [];
               camposJornadaAdmissaoConfig = [];
 
-              for (var c = 0; c < campos.length; c++) {
-                var campo = campos[c] || {};
+              jornadasRecebidas =
+                jornadasRecebidas || [];
 
-                camposJornadaAdmissaoConfig.push({
-                  jornadaCodigo: campo.CJ_JORNADA_CODIGO || "",
-                  campoId: campo.CJ_CAMPO_ID || "",
-                  campoLabel: campo.CJ_CAMPO_LABEL || "",
-                  campoTipo: campo.CJ_CAMPO_TIPO || "",
-                  valor: campo.CJ_VALOR || "",
-                  jsonExtra: campo.CJ_JSON_EXTRA || "",
-                  descricao: campo.CJ_DESCRICAO || "",
-                  ativo: campo.CJ_ATIVO || "S",
-                  ordem: campo.CJ_ORDEM || ""
+              camposRecebidos =
+                camposRecebidos || [];
+
+              /*
+               * Monta a lista de jornadas.
+               */
+              for (
+                var i = 0;
+                i < jornadasRecebidas.length;
+                i++
+              ) {
+                var jornada =
+                  jornadasRecebidas[i] || {};
+
+                jornadasAdmissaoConfig.push({
+                  codigo:
+                    jornada.JORNADA_CODIGO ||
+                    "",
+
+                  descricao:
+                    jornada.JORNADA_DESCRICAO ||
+                    "",
+
+                  coligadas:
+                    jornada.JORNADA_COLIGADAS ||
+                    "*",
+
+                  ativo:
+                    jornada.JORNADA_ATIVO ||
+                    "S",
+
+                  ordem:
+                    jornada.JORNADA_ORDEM ||
+                    ""
                 });
               }
 
-              logJornadaTabela("tbCamposJornadaAdmissao carregada", camposJornadaAdmissaoConfig.map(function (item, idx) {
-                return {
-                  indice: idx + 1,
-                  jornadaCodigo: item.jornadaCodigo || "",
-                  campoId: item.campoId || "",
-                  campoTipo: item.campoTipo || "",
-                  valor: item.valor || "",
-                  descricao: item.descricao || "",
-                  ativo: item.ativo || "",
-                  ordem: item.ordem || ""
-                };
-              }));
+              /*
+               * Monta a lista dos campos
+               * parametrizados por jornada.
+               */
+              for (
+                var c = 0;
+                c < camposRecebidos.length;
+                c++
+              ) {
+                var campo =
+                  camposRecebidos[c] || {};
+
+                camposJornadaAdmissaoConfig.push({
+                  jornadaCodigo:
+                    campo.CJ_JORNADA_CODIGO ||
+                    "",
+
+                  campoId:
+                    campo.CJ_CAMPO_ID || "",
+
+                  campoLabel:
+                    campo.CJ_CAMPO_LABEL ||
+                    "",
+
+                  campoTipo:
+                    campo.CJ_CAMPO_TIPO ||
+                    "",
+
+                  valor:
+                    campo.CJ_VALOR || "",
+
+                  jsonExtra:
+                    campo.CJ_JSON_EXTRA || "",
+
+                  descricao:
+                    campo.CJ_DESCRICAO || "",
+
+                  ativo:
+                    campo.CJ_ATIVO || "S",
+
+                  ordem:
+                    campo.CJ_ORDEM || ""
+                });
+              }
+
+              logJornadaTabela(
+                "tbJornadasAdmissao carregada",
+                jornadasAdmissaoConfig.map(
+                  function (item, idx) {
+                    return {
+                      indice: idx + 1,
+                      codigo:
+                        item.codigo || "",
+                      descricao:
+                        item.descricao || "",
+                      coligadas:
+                        item.coligadas || "",
+                      ativo:
+                        item.ativo || "",
+                      ordem:
+                        item.ordem || ""
+                    };
+                  }
+                )
+              );
+
+              logJornadaTabela(
+                "tbCamposJornadaAdmissao carregada",
+                camposJornadaAdmissaoConfig.map(
+                  function (item, idx) {
+                    return {
+                      indice: idx + 1,
+
+                      jornadaCodigo:
+                        item.jornadaCodigo ||
+                        "",
+
+                      campoId:
+                        item.campoId || "",
+
+                      campoTipo:
+                        item.campoTipo || "",
+
+                      valor:
+                        item.valor || "",
+
+                      descricao:
+                        item.descricao || "",
+
+                      ativo:
+                        item.ativo || "",
+
+                      ordem:
+                        item.ordem || ""
+                    };
+                  }
+                )
+              );
+
+              /*
+               * Persiste a configuração para
+               * reaproveitar ao avançar atividades.
+               */
+              if (
+                typeof salvarConfigJornadaCache ===
+                "function"
+              ) {
+                salvarConfigJornadaCache();
+              }
 
               finalizarCarregamentoParametrosJornada();
-            });
-          });
-        } catch (e) {
-          console.warn("[Param Jornada] Erro ao processar configuracao.", e);
+            }
+
+            buscarTabelaFilhaParamJornada(
+              docId,
+              "tbJornadasAdmissao",
+              function (jornadas) {
+                jornadasRecebidas =
+                  jornadas || [];
+
+                consultasFinalizadas++;
+
+                concluirCarregamentoTabelas();
+              }
+            );
+
+            buscarTabelaFilhaParamJornada(
+              docId,
+              "tbCamposJornadaAdmissao",
+              function (campos) {
+                camposRecebidos =
+                  campos || [];
+
+                consultasFinalizadas++;
+
+                concluirCarregamentoTabelas();
+              }
+            );
+          } catch (e) {
+            console.warn(
+              "[Param Jornada] Erro ao processar configuração.",
+              e
+            );
+
+            finalizarCarregamentoParametrosJornada();
+          }
+        },
+
+        error: function (erro) {
+          console.warn(
+            "[Param Jornada] Erro ao buscar configuração ativa.",
+            erro
+          );
+
           finalizarCarregamentoParametrosJornada();
         }
-      },
-      error: function (erro) {
-        console.warn("[Param Jornada] Erro ao buscar configuracao ativa.", erro);
-        finalizarCarregamentoParametrosJornada();
       }
-    });
+    );
   } catch (e) {
-    console.warn("[Param Jornada] Erro ao iniciar carregamento.", e);
+    console.warn(
+      "[Param Jornada] Erro ao iniciar carregamento.",
+      e
+    );
+
     finalizarCarregamentoParametrosJornada();
   }
 }
@@ -2690,7 +3135,23 @@ function obterCamposDaJornada(codigoJornada) {
   for (var i = 0; i < camposJornadaAdmissaoConfig.length; i++) {
     var item = camposJornadaAdmissaoConfig[i];
 
-    if (String(item.jornadaCodigo || "").toLowerCase() === codigoNorm) {
+    var ativoNormalizado =
+      normalizarValorComparacao(
+        item.ativo || "S"
+      );
+
+    var campoAtivo =
+      ativoNormalizado === "s" ||
+      ativoNormalizado === "sim" ||
+      ativoNormalizado === "true" ||
+      ativoNormalizado === "1";
+
+    if (
+      normalizarValorComparacao(
+        item.jornadaCodigo
+      ) === codigoNorm &&
+      campoAtivo
+    ) {
       lista.push(item);
     }
   }
@@ -3018,89 +3479,336 @@ function obterCampoDomParamJornada(campoId) {
   return $(document.getElementById(campoId));
 }
 
-function criarOuAtualizarCampoTextoParametrizado(campoId, texto) {
-  var $campoOriginal = $("#" + campoId);
+function criarOuAtualizarCampoTextoParametrizado(
+  campoId,
+  texto,
+  tentativa
+) {
+  tentativa =
+    typeof tentativa === "number"
+      ? tentativa
+      : 0;
+
+  var $campoOriginal =
+    $("#" + campoId);
 
   if (!$campoOriginal.length) {
-    console.warn("[Jornada] Campo original não encontrado para mirror:", campoId);
+    console.warn(
+      "[Jornada] Campo original não encontrado para mirror:",
+      campoId
+    );
+
     return;
   }
 
-  var valor = $.trim(String(texto == null ? "" : texto));
+  var valor =
+    $.trim(
+      String(
+        texto == null
+          ? ""
+          : texto
+      )
+    );
 
-  // Se não existe texto visual, não cria campo cinza vazio.
-  // Isso evita o caso da Função aparecer com uma caixa vazia abaixo.
+  /*
+   * Não cria um campo visual vazio.
+   */
   if (!valor) {
-    removerCampoTextoParametrizado(campoId);
+    removerCampoTextoParametrizado(
+      campoId
+    );
+
     return;
   }
 
   injetarEstiloCamposParametrizadosJornada();
 
-  var mirrorId = campoId + "_PARAM_JORNADA_TEXT";
-  var $mirror = $("#" + mirrorId);
-  var $containersSelect2 = $();
+  var mirrorId =
+    campoId +
+    "_PARAM_JORNADA_TEXT";
 
-  // Select2 antigo do Fluig.
-  var $select2Antigo = $("#s2id_" + campoId);
-  if ($select2Antigo.length) {
-    $containersSelect2 = $containersSelect2.add($select2Antigo);
+  var $mirror =
+    $("#" + mirrorId);
+
+  var $select2Antigo =
+    $("#s2id_" + campoId);
+
+  var $select2Novo =
+    $campoOriginal
+      .siblings(".select2-container")
+      .first();
+
+  if (!$select2Novo.length) {
+    $select2Novo =
+      $campoOriginal
+        .nextAll(".select2-container")
+        .first();
   }
 
-  // Select2 novo, normalmente renderizado logo após o select original.
-  var $select2Novo = $campoOriginal.nextAll(".select2-container").first();
-  if ($select2Novo.length) {
-    $containersSelect2 = $containersSelect2.add($select2Novo);
+  /*
+   * Procura um container estável pertencente
+   * ao layout original do campo.
+   */
+  var $containerCampo =
+    $campoOriginal.closest(
+      ".form-group"
+    );
+
+  if (
+    !$containerCampo.length &&
+    $select2Antigo.length
+  ) {
+    $containerCampo =
+      $select2Antigo.closest(
+        ".form-group"
+      );
+  }
+
+  if (
+    !$containerCampo.length &&
+    $select2Novo.length
+  ) {
+    $containerCampo =
+      $select2Novo.closest(
+        ".form-group"
+      );
+  }
+
+  /*
+   * Fallback para a coluna original do formulário.
+   * Nunca utiliza o form ou body como container.
+   */
+  if (!$containerCampo.length) {
+    $containerCampo =
+      $campoOriginal.closest(
+        "div[class*='col-']"
+      );
+  }
+
+  /*
+   * O Zoom ainda não terminou de montar seu
+   * container visual. Aguarda sem criar o
+   * espelho solto no topo do formulário.
+   */
+  if (
+    !$containerCampo.length &&
+    tentativa < 6
+  ) {
+    setTimeout(function () {
+      criarOuAtualizarCampoTextoParametrizado(
+        campoId,
+        valor,
+        tentativa + 1
+      );
+    }, 100);
+
+    return;
+  }
+
+  /*
+   * Se mesmo depois das tentativas não houver
+   * container seguro, não cria o campo fora
+   * do layout.
+   */
+  if (!$containerCampo.length) {
+    console.warn(
+      "[Jornada] Container visual não encontrado para o campo:",
+      campoId
+    );
+
+    return;
   }
 
   if (!$mirror.length) {
     $mirror = $("<input>", {
       type: "text",
       id: mirrorId,
-      class: "form-control campo-parametrizado-jornada",
+      class:
+        "form-control campo-parametrizado-jornada",
       readonly: true
     });
 
-    $mirror.attr("data-campo-original", campoId);
+    $mirror.attr(
+      "data-campo-original",
+      campoId
+    );
+  }
 
-    if ($containersSelect2.length) {
-      $mirror.insertAfter($containersSelect2.last());
+  /*
+   * Localiza a melhor âncora visual, mas somente
+   * se ela estiver dentro do mesmo container.
+   */
+  var $ancoraVisual = $();
+
+  if (
+    $select2Antigo.length &&
+    $.contains(
+      $containerCampo[0],
+      $select2Antigo[0]
+    )
+  ) {
+    $ancoraVisual =
+      $select2Antigo;
+  } else if (
+    $select2Novo.length &&
+    $.contains(
+      $containerCampo[0],
+      $select2Novo[0]
+    )
+  ) {
+    $ancoraVisual =
+      $select2Novo;
+  } else if (
+    $.contains(
+      $containerCampo[0],
+      $campoOriginal[0]
+    )
+  ) {
+    $ancoraVisual =
+      $campoOriginal;
+  }
+
+  /*
+   * Se o mirror já existir no lugar errado,
+   * remove-o daquele ponto e reposiciona.
+   */
+  var mirrorEstaNoContainer =
+    $mirror.length &&
+    $.contains(
+      $containerCampo[0],
+      $mirror[0]
+    );
+
+  if (!mirrorEstaNoContainer) {
+    $mirror.detach();
+
+    if ($ancoraVisual.length) {
+      $mirror.insertAfter(
+        $ancoraVisual
+      );
     } else {
-      $mirror.insertAfter($campoOriginal);
+      $containerCampo.append(
+        $mirror
+      );
     }
   }
 
-  $campoOriginal.attr("data-param-jornada-oculto", "S");
-  $mirror.val(valor).prop("readonly", true).show();
+  $campoOriginal.attr(
+    "data-param-jornada-oculto",
+    "S"
+  );
+
+  $mirror
+    .val(valor)
+    .prop("readonly", true)
+    .show();
 
   function ocultarCampoOriginalEZoom() {
-    var $containersAtualizados = $();
+    var $containersAtualizados =
+      $();
 
-    var $select2AntigoAtual = $("#s2id_" + campoId);
-    if ($select2AntigoAtual.length) {
-      $containersAtualizados = $containersAtualizados.add($select2AntigoAtual);
+    var $select2AntigoAtual =
+      $("#s2id_" + campoId);
+
+    if (
+      $select2AntigoAtual.length
+    ) {
+      $containersAtualizados =
+        $containersAtualizados.add(
+          $select2AntigoAtual
+        );
     }
 
-    var $select2NovoAtual = $campoOriginal.nextAll(".select2-container").first();
-    if ($select2NovoAtual.length) {
-      $containersAtualizados = $containersAtualizados.add($select2NovoAtual);
+    var $select2NovoAtual =
+      $campoOriginal
+        .siblings(
+          ".select2-container"
+        )
+        .first();
+
+    if (
+      !$select2NovoAtual.length
+    ) {
+      $select2NovoAtual =
+        $campoOriginal
+          .nextAll(
+            ".select2-container"
+          )
+          .first();
+    }
+
+    if (
+      $select2NovoAtual.length
+    ) {
+      $containersAtualizados =
+        $containersAtualizados.add(
+          $select2NovoAtual
+        );
     }
 
     $campoOriginal.hide();
 
-    if ($containersAtualizados.length) {
+    if (
+      $containersAtualizados.length
+    ) {
       $containersAtualizados
-        .attr("data-param-jornada-container-oculto", "S")
+        .attr(
+          "data-param-jornada-container-oculto",
+          "S"
+        )
         .hide();
     }
+
+    /*
+     * Garante que o mirror permaneça dentro
+     * do container correto mesmo se o Fluig
+     * redesenhar o Zoom.
+     */
+    if (
+      $mirror.length &&
+      !$.contains(
+        $containerCampo[0],
+        $mirror[0]
+      )
+    ) {
+      $mirror.detach();
+
+      if ($ancoraVisual.length) {
+        $mirror.insertAfter(
+          $ancoraVisual
+        );
+      } else {
+        $containerCampo.append(
+          $mirror
+        );
+      }
+    }
+
+    $mirror
+      .show()
+      .prop("readonly", true);
   }
 
-  // Executa agora e depois novamente, porque o Fluig/Select2 pode redesenhar o componente após o change.
+  /*
+   * O Select2 pode ser redesenhado depois do
+   * preenchimento do campo.
+   */
   ocultarCampoOriginalEZoom();
 
-  setTimeout(ocultarCampoOriginalEZoom, 50);
-  setTimeout(ocultarCampoOriginalEZoom, 200);
-  setTimeout(ocultarCampoOriginalEZoom, 600);
+  setTimeout(
+    ocultarCampoOriginalEZoom,
+    50
+  );
+
+  setTimeout(
+    ocultarCampoOriginalEZoom,
+    200
+  );
+
+  setTimeout(
+    ocultarCampoOriginalEZoom,
+    600
+  );
 }
 
 function reocultarCamposZoomParametrizadosJornada(origem) {
@@ -3487,14 +4195,439 @@ function aplicarCampoSimplesJornada(itemCampo) {
   }
 }
 
-function aplicarCampoZoomJornada(itemCampo) {
+var CHAVE_CACHE_LOOKUP_JORNADA =
+  "admissao.lookupParametrosJornada.v1";
+
+var TTL_CACHE_LOOKUP_JORNADA =
+  10 * 60 * 1000;
+
+function exibirCarregamentoParametrosJornada() {
+  if (
+    typeof FLUIGC === "undefined" ||
+    typeof FLUIGC.loading !== "function"
+  ) {
+    return;
+  }
+
+  if (!window.loadingParametrosJornada) {
+    window.loadingParametrosJornada =
+      FLUIGC.loading(window, {
+        textMessage:
+          "Carregando os parâmetros da jornada..."
+      });
+  }
+
+  try {
+    window.loadingParametrosJornada.show();
+  } catch (e) {
+    console.warn(
+      "[Jornada] Não foi possível exibir o loading.",
+      e
+    );
+  }
+}
+
+function ocultarCarregamentoParametrosJornada() {
+  if (!window.loadingParametrosJornada) {
+    return;
+  }
+
+  try {
+    window.loadingParametrosJornada.hide();
+  } catch (e) {
+    console.warn(
+      "[Jornada] Não foi possível ocultar o loading.",
+      e
+    );
+  }
+
+  window.loadingParametrosJornada = null;
+}
+
+function obterCacheLookupJornada() {
+  if (window.cacheLookupJornada) {
+    return window.cacheLookupJornada;
+  }
+
+  window.cacheLookupJornada = {};
+
+  try {
+    var cacheSalvo =
+      sessionStorage.getItem(
+        CHAVE_CACHE_LOOKUP_JORNADA
+      );
+
+    if (cacheSalvo) {
+      var cacheConvertido =
+        JSON.parse(cacheSalvo);
+
+      if (
+        cacheConvertido &&
+        typeof cacheConvertido === "object"
+      ) {
+        window.cacheLookupJornada =
+          cacheConvertido;
+      }
+    }
+  } catch (e) {
+    console.warn(
+      "[Jornada] Não foi possível restaurar o cache.",
+      e
+    );
+  }
+
+  return window.cacheLookupJornada;
+}
+
+function persistirCacheLookupJornada() {
+  try {
+    sessionStorage.setItem(
+      CHAVE_CACHE_LOOKUP_JORNADA,
+      JSON.stringify(
+        obterCacheLookupJornada()
+      )
+    );
+  } catch (e) {
+    console.warn(
+      "[Jornada] Não foi possível persistir o cache.",
+      e
+    );
+  }
+}
+
+function montarChaveCacheLookupJornada(
+  itemCampo,
+  extra
+) {
+  var empresa =
+    $("#FUN_EMPRESA").val() ||
+    $("#txtCodcoligada").val() ||
+    "";
+
+  var filial =
+    $("#FUN_FILIAL").val() || "";
+
+  var turno =
+    $("#FUN_CODTURN").val() || "";
+
+  var funcao =
+    $("#FUN_FUNCAO").val() || "";
+
+  return [
+    extra.datasetId || "",
+    extra.valueField || "",
+    itemCampo.valor || "",
+    empresa,
+    filial,
+    turno,
+    funcao,
+    itemCampo.campoId || "",
+    itemCampo.jsonExtra || ""
+  ].join("||");
+}
+
+function obterItemCacheLookupJornada(chave) {
+  var cache = obterCacheLookupJornada();
+  var registro = cache[chave];
+
+  if (!registro) {
+    return {
+      encontrado: false,
+      item: null
+    };
+  }
+
+  var expirado =
+    !registro.timestamp ||
+    Date.now() - registro.timestamp >
+    TTL_CACHE_LOOKUP_JORNADA;
+
+  if (expirado) {
+    delete cache[chave];
+    persistirCacheLookupJornada();
+
+    return {
+      encontrado: false,
+      item: null
+    };
+  }
+
+  return {
+    encontrado: true,
+    item: registro.item || null
+  };
+}
+
+function salvarItemCacheLookupJornada(
+  chave,
+  item
+) {
+  var cache = obterCacheLookupJornada();
+
+  cache[chave] = {
+    timestamp: Date.now(),
+    item: item || null
+  };
+
+  persistirCacheLookupJornada();
+}
+
+function consultarDatasetParamJornadaAsync(
+  datasetId,
+  constraints
+) {
+  return new Promise(function (resolve) {
+    try {
+      DatasetFactory.getDataset(
+        datasetId,
+        null,
+        constraints,
+        null,
+        {
+          success: function (dataset) {
+            resolve(dataset);
+          },
+          error: function (erro) {
+            console.warn(
+              "[Jornada] Erro consultando dataset " +
+              datasetId,
+              erro
+            );
+
+            resolve(null);
+          }
+        }
+      );
+    } catch (e) {
+      console.warn(
+        "[Jornada] Erro iniciando consulta do dataset " +
+        datasetId,
+        e
+      );
+
+      resolve(null);
+    }
+  });
+}
+
+function buscarItemDatasetParamJornadaAsync(
+  itemCampo
+) {
   var campoId = itemCampo.campoId;
-  var extra = parseJsonSeguroParamJornada(itemCampo.jsonExtra);
-  var valorTecnico = $.trim(String(itemCampo.valor || ""));
-  var textoFallback = $.trim(String(itemCampo.descricao || itemCampo.valor || ""));
-  var itemDataset = null;
+  var extra =
+    parseJsonSeguroParamJornada(
+      itemCampo.jsonExtra
+    );
+
+  var valorTecnico =
+    $.trim(
+      String(itemCampo.valor || "")
+    );
+
+  if (
+    !extra.datasetId ||
+    !extra.valueField ||
+    !valorTecnico ||
+    typeof DatasetFactory === "undefined"
+  ) {
+    return Promise.resolve(null);
+  }
+
+  var chaveCache =
+    montarChaveCacheLookupJornada(
+      itemCampo,
+      extra
+    );
+
+  var itemCache =
+    obterItemCacheLookupJornada(
+      chaveCache
+    );
+
+  if (itemCache.encontrado) {
+    return Promise.resolve(itemCache.item);
+  }
+
+  window.consultasJornadaEmAndamento =
+    window.consultasJornadaEmAndamento ||
+    {};
+
+  /*
+   * Evita duas chamadas simultâneas para a
+   * mesma combinação de dataset e valor.
+   */
+  if (
+    window.consultasJornadaEmAndamento[
+    chaveCache
+    ]
+  ) {
+    return window.consultasJornadaEmAndamento[
+      chaveCache
+    ];
+  }
+
+  var constraintsBusca =
+    montarConstraintsBuscaDatasetParamJornada(
+      extra,
+      valorTecnico,
+      campoId
+    );
+
+  var promessa =
+    consultarDatasetParamJornadaAsync(
+      extra.datasetId,
+      constraintsBusca
+    )
+      .then(function (dataset) {
+        var itemDataset =
+          escolherItemDatasetPorValor(
+            dataset,
+            extra,
+            valorTecnico,
+            campoId
+          );
+
+        /*
+         * Se a consulta principal já continha
+         * somente a constraint do código, não
+         * repete exatamente a mesma consulta.
+         */
+        if (
+          itemDataset ||
+          constraintsBusca.length <= 1
+        ) {
+          return itemDataset;
+        }
+
+        var constraintSimples =
+          DatasetFactory.createConstraint(
+            extra.valueField,
+            valorTecnico,
+            valorTecnico,
+            ConstraintType.MUST
+          );
+
+        return consultarDatasetParamJornadaAsync(
+          extra.datasetId,
+          [constraintSimples]
+        ).then(function (datasetFallback) {
+          return escolherItemDatasetPorValor(
+            datasetFallback,
+            extra,
+            valorTecnico,
+            campoId
+          );
+        });
+      })
+      .then(function (itemDataset) {
+        if (itemDataset) {
+          salvarItemCacheLookupJornada(
+            chaveCache,
+            itemDataset
+          );
+        }
+
+        delete window
+          .consultasJornadaEmAndamento[
+          chaveCache
+        ];
+
+        return itemDataset;
+      })
+      .catch(function (erro) {
+        delete window
+          .consultasJornadaEmAndamento[
+          chaveCache
+        ];
+
+        console.warn(
+          "[Jornada] Falha ao carregar parâmetro:",
+          campoId,
+          erro
+        );
+
+        return null;
+      });
+
+  window.consultasJornadaEmAndamento[
+    chaveCache
+  ] = promessa;
+
+  return promessa;
+}
+
+function campoParametrizadoEhZoom(
+  itemCampo
+) {
+  return (
+    String(
+      itemCampo.campoTipo || ""
+    ).toLowerCase() === "zoom" ||
+    $("#" + itemCampo.campoId)
+      .is('[type="zoom"]')
+  );
+}
+
+function precarregarDatasetsJornada(campos) {
+  var mapaItens = {};
+  var tarefas = [];
+
+  $.each(campos || [], function (_, itemCampo) {
+    if (
+      !itemCampo.campoId ||
+      !campoParametrizadoEhZoom(itemCampo)
+    ) {
+      return true;
+    }
+
+    tarefas.push(
+      buscarItemDatasetParamJornadaAsync(
+        itemCampo
+      ).then(function (itemDataset) {
+        mapaItens[itemCampo.campoId] =
+          itemDataset;
+      })
+    );
+  });
+
+  return Promise.all(tarefas)
+    .then(function () {
+      return mapaItens;
+    });
+}
+
+function aplicarCampoZoomJornada(
+  itemCampo,
+  itemDatasetPrecarregado
+) {
+  var campoId = itemCampo.campoId;
+
+  var extra =
+    parseJsonSeguroParamJornada(
+      itemCampo.jsonExtra
+    );
+
+  var valorTecnico =
+    $.trim(
+      String(itemCampo.valor || "")
+    );
+
+  var textoFallback =
+    $.trim(
+      String(
+        itemCampo.descricao ||
+        itemCampo.valor ||
+        ""
+      )
+    );
+
+  var itemDataset =
+    itemDatasetPrecarregado || null;
+
   var textoVisual = textoFallback;
-  var valorOriginal = valorTecnico || textoFallback;
+
+  var valorOriginal =
+    valorTecnico || textoFallback;
 
   if (!campoId) {
     return;
@@ -3514,25 +4647,6 @@ function aplicarCampoZoomJornada(itemCampo) {
     tipo: "zoom",
     hiddenFields: extra.hiddenFields || []
   };
-
-  try {
-    if (extra.datasetId && extra.valueField && valorTecnico && typeof DatasetFactory !== "undefined") {
-      var constraintsBusca = montarConstraintsBuscaDatasetParamJornada(extra, valorTecnico, campoId);
-      var dataset = DatasetFactory.getDataset(extra.datasetId, null, constraintsBusca, null);
-
-      itemDataset = escolherItemDatasetPorValor(dataset, extra, valorTecnico, campoId);
-
-      // Fallback: se não encontrou com coligada/dependências, tenta só pelo código.
-      if (!itemDataset) {
-        var constraintSimples = DatasetFactory.createConstraint(extra.valueField, valorTecnico, valorTecnico, ConstraintType.MUST);
-        var datasetSimples = DatasetFactory.getDataset(extra.datasetId, null, [constraintSimples], null);
-
-        itemDataset = escolherItemDatasetPorValor(datasetSimples, extra, valorTecnico, campoId);
-      }
-    }
-  } catch (e) {
-    console.warn("[Jornada] Erro opcional ao consultar dataset para", campoId, e);
-  }
 
   textoVisual = obterTextoVisualJornada(itemCampo, itemDataset, extra) || textoFallback || valorTecnico;
 
@@ -3590,65 +4704,234 @@ function aplicarCampoZoomJornada(itemCampo) {
   });
 }
 
-function aplicarCamposJornadaEmSerie(campos, indice) {
+function aplicarCamposJornadaEmSerie(
+  campos,
+  indice,
+  itensDatasetPorCampo,
+  callbackFinal
+) {
   var lista = campos || [];
-  var posicao = indice || 0;
 
+  var posicao =
+    typeof indice === "number"
+      ? indice
+      : 0;
+
+  itensDatasetPorCampo =
+    itensDatasetPorCampo || {};
+
+  /*
+   * Quando todos os campos tiverem sido aplicados,
+   * encerra a parametrização e executa as regras
+   * posteriores.
+   */
   if (posicao >= lista.length) {
-    console.log("[Jornada] Aplicacao da jornada finalizada. Rodando pos-processamento.");
+    console.log(
+      "[Jornada] Aplicação da jornada finalizada. Rodando pós-processamento."
+    );
 
     window.aplicandoParametrosJornada = false;
     aplicandoParametrosJornada = false;
 
-    if (typeof gerenciarPainelContrato === "function") {
+    if (
+      typeof gerenciarPainelContrato ===
+      "function"
+    ) {
       gerenciarPainelContrato(false);
     }
 
-    agendarRecalculoExperienciaPorJornada("fim da aplicacao da jornada");
+    if (
+      typeof agendarRecalculoExperienciaPorJornada ===
+      "function"
+    ) {
+      agendarRecalculoExperienciaPorJornada(
+        "fim da aplicação da jornada"
+      );
+    }
 
-    if (typeof exibeDocumentosPorJornadaKit === "function") {
+    if (
+      typeof exibeDocumentosPorJornadaKit ===
+      "function"
+    ) {
       exibeDocumentosPorJornadaKit();
     }
 
-    if (typeof aplicarBloqueioDadosContratacaoPorJornada === "function") {
+    if (
+      typeof aplicarBloqueioDadosContratacaoPorJornada ===
+      "function"
+    ) {
       aplicarBloqueioDadosContratacaoPorJornada();
     }
 
-    if (typeof validarLiberacaoGED === "function") {
+    if (
+      typeof validarLiberacaoGED ===
+      "function"
+    ) {
       validarLiberacaoGED();
     }
 
-    console.log("[Jornada][Experiencia][Estado final]", {
-      cpContratoPrazo: $("#cpContratoPrazo").val(),
-      cpDataPrevisaoAdmissao: $("#cpDataPrevisaoAdmissao").val(),
-      FUN_ADMISSAO: $("#FUN_ADMISSAO").val(),
-      cpDiasVencPrimeiraExp: $("#cpDiasVencPrimeiraExp").val(),
-      cpVencPrimeiraExp: $("#cpVencPrimeiraExp").val(),
-      cpDiasVencSegundaExp: $("#cpDiasVencSegundaExp").val(),
-      cpVencSegundaExp: $("#cpVencSegundaExp").val()
-    });
+    console.log(
+      "[Jornada][Experiência][Estado final]",
+      {
+        cpContratoPrazo:
+          $("#cpContratoPrazo").val(),
+
+        cpDataPrevisaoAdmissao:
+          $("#cpDataPrevisaoAdmissao").val(),
+
+        FUN_ADMISSAO:
+          $("#FUN_ADMISSAO").val(),
+
+        cpDiasVencPrimeiraExp:
+          $("#cpDiasVencPrimeiraExp").val(),
+
+        cpVencPrimeiraExp:
+          $("#cpVencPrimeiraExp").val(),
+
+        cpDiasVencSegundaExp:
+          $("#cpDiasVencSegundaExp").val(),
+
+        cpVencSegundaExp:
+          $("#cpVencSegundaExp").val()
+      }
+    );
+
+    /*
+     * O callback final será responsável, por exemplo,
+     * por fechar o loading da parametrização.
+     */
+    if (
+      typeof callbackFinal === "function"
+    ) {
+      try {
+        callbackFinal();
+      } catch (e) {
+        console.warn(
+          "[Jornada] Erro executando callback final.",
+          e
+        );
+      }
+    }
 
     return;
   }
 
-  var itemCampo = lista[posicao] || {};
-  logJornadaGrupo("Aplicando campo em serie", {
-    indice: posicao + 1,
-    total: lista.length,
-    campoId: itemCampo.campoId,
-    tipo: itemCampo.campoTipo,
-    valor: itemCampo.valor,
-    descricao: itemCampo.descricao,
-    valorAntes: obterValorCampoAtual(itemCampo.campoId)
-  });
+  var itemCampo =
+    lista[posicao] || {};
 
-  if (String(itemCampo.campoTipo || "").toLowerCase() === "zoom" || $("#" + itemCampo.campoId).is('[type="zoom"]')) {
-    aplicarCampoZoomJornada(itemCampo);
-  } else {
-    aplicarCampoSimplesJornada(itemCampo);
+  logJornadaGrupo(
+    "Aplicando campo em série",
+    {
+      indice: posicao + 1,
+      total: lista.length,
+      campoId:
+        itemCampo.campoId || "",
+      tipo:
+        itemCampo.campoTipo || "",
+      valor:
+        itemCampo.valor || "",
+      descricao:
+        itemCampo.descricao || "",
+      valorAntes:
+        obterValorCampoAtual(
+          itemCampo.campoId
+        )
+    }
+  );
+
+  try {
+    /*
+     * Campos zoom recebem o item do dataset que já
+     * foi carregado anteriormente de forma assíncrona.
+     */
+    if (
+      typeof campoParametrizadoEhZoom ===
+      "function" &&
+      campoParametrizadoEhZoom(itemCampo)
+    ) {
+      aplicarCampoZoomJornada(
+        itemCampo,
+        itensDatasetPorCampo[
+        itemCampo.campoId
+        ] || null
+      );
+    } else {
+      aplicarCampoSimplesJornada(
+        itemCampo
+      );
+    }
+  } catch (e) {
+    console.warn(
+      "[Jornada] Erro aplicando o campo " +
+      (itemCampo.campoId || "") +
+      ".",
+      e
+    );
   }
 
-  aplicarCamposJornadaEmSerie(lista, posicao + 1);
+  /*
+   * Devolve o controle ao navegador antes de aplicar
+   * o próximo campo. Isso permite atualizar a tela,
+   * manter o loading animado e evitar congelamento.
+   */
+  setTimeout(function () {
+    aplicarCamposJornadaEmSerie(
+      lista,
+      posicao + 1,
+      itensDatasetPorCampo,
+      callbackFinal
+    );
+  }, 0);
+}
+
+function obterDescricaoJornadaPorCodigo(codigoJornada) {
+  var codigoNormalizado =
+    normalizarValorComparacao(codigoJornada);
+
+  for (var i = 0; i < jornadasAdmissaoConfig.length; i++) {
+    var jornada = jornadasAdmissaoConfig[i] || {};
+
+    if (
+      normalizarValorComparacao(jornada.codigo) ===
+      codigoNormalizado
+    ) {
+      return obterLabelJornada(jornada);
+    }
+  }
+
+  return "";
+}
+
+function sincronizarDescricaoJornadaSelecionada() {
+  var $campoJornada = $("#cpJornadaAdmissao");
+  var codigoJornada = $.trim(
+    String($campoJornada.val() || "")
+  );
+
+  var descricaoJornada =
+    obterDescricaoJornadaPorCodigo(codigoJornada);
+
+  if (!descricaoJornada) {
+    var textoSelecionado = $.trim(
+      String(
+        $campoJornada
+          .find("option:selected")
+          .text() || ""
+      )
+    );
+
+    if (
+      textoSelecionado &&
+      textoSelecionado !== codigoJornada
+    ) {
+      descricaoJornada = textoSelecionado;
+    }
+  }
+
+  $("#cpJornadaAdmissaoDescricao")
+    .val(descricaoJornada);
+
+  return descricaoJornada;
 }
 
 function popularJornadasAdmissaoPorColigada(codColigada) {
@@ -3729,6 +5012,8 @@ function popularJornadasAdmissaoPorColigada(codColigada) {
     $select.val(valorAtual);
     $select.removeAttr("data-jornada-pendente");
 
+    sincronizarDescricaoJornadaSelecionada();
+
     if (typeof aplicarParametrosJornadaAdmissao === "function") {
       aplicarBloqueioDadosContratacaoPorJornada();
 
@@ -3757,78 +5042,420 @@ function popularJornadasAdmissaoPorColigada(codColigada) {
   }
 }
 
-function aplicarParametrosJornadaAdmissao(codigoJornada) {
-  if (typeof aplicandoParametrosJornada === "undefined") {
-    window.aplicandoParametrosJornada = false;
-  }
-  if (typeof parametrosJornadaCarregados === "undefined") {
-    window.parametrosJornadaCarregados = false;
+function aplicarParametrosJornadaAdmissao(
+  codigoJornada
+) {
+  var modoFormulario = "";
+
+  try {
+    modoFormulario =
+      typeof getFormMode === "function"
+        ? String(
+          getFormMode() || ""
+        ).toUpperCase()
+        : "";
+  } catch (e) {
+    modoFormulario = "";
   }
 
-  if (!codigoJornada || aplicandoParametrosJornada) {
+  /*
+   * No modo de consulta, não cria novamente os
+   * campos espelho dos zooms parametrizados.
+   */
+  if (modoFormulario === "VIEW") {
+    $(".campo-parametrizado-jornada")
+      .remove();
+
+    if (
+      typeof ocultarCarregamentoParametrosJornada ===
+      "function"
+    ) {
+      ocultarCarregamentoParametrosJornada();
+    }
+
     return;
   }
 
+  var atividadeAtualJornada =
+    typeof getWKNumState === "function"
+      ? String(getWKNumState())
+      : "";
+
+  var atividadesQueAplicamJornada = [
+    "0",
+    "1",
+    "41"
+  ];
+
+  /*
+   * A parametrização deve preencher os campos somente
+   * na abertura ou na atividade de correção.
+   *
+   * Nas demais atividades, inclusive 97, os valores
+   * já devem vir persistidos no formulário.
+   */
+  if (
+    atividadesQueAplicamJornada.indexOf(
+      atividadeAtualJornada
+    ) === -1
+  ) {
+    if (
+      typeof sincronizarDescricaoJornadaSelecionada ===
+      "function"
+    ) {
+      sincronizarDescricaoJornadaSelecionada();
+    }
+
+    if (
+      typeof ocultarCarregamentoParametrosJornada ===
+      "function"
+    ) {
+      ocultarCarregamentoParametrosJornada();
+    }
+
+    console.log(
+      "[Jornada] Parametrização não reaplicada na atividade:",
+      atividadeAtualJornada
+    );
+
+    return;
+  }
+
+  if (
+    typeof aplicandoParametrosJornada ===
+    "undefined"
+  ) {
+    window.aplicandoParametrosJornada =
+      false;
+  }
+
+  if (
+    typeof parametrosJornadaCarregados ===
+    "undefined"
+  ) {
+    window.parametrosJornadaCarregados =
+      false;
+  }
+
+  codigoJornada = $.trim(
+    String(codigoJornada || "")
+  );
+
+  if (!codigoJornada) {
+    if (
+      typeof ocultarCarregamentoParametrosJornada ===
+      "function"
+    ) {
+      ocultarCarregamentoParametrosJornada();
+    }
+
+    return;
+  }
+
+  /*
+   * Impede duas aplicações simultâneas.
+   */
+  if (aplicandoParametrosJornada) {
+    window.codigoJornadaPendente =
+      codigoJornada;
+
+    console.log(
+      "[Jornada] Aplicação em andamento. Jornada colocada na fila:",
+      codigoJornada
+    );
+
+    return;
+  }
+
+  window.codigoJornadaPendente = "";
+
+  if (
+    typeof exibirCarregamentoParametrosJornada ===
+    "function"
+  ) {
+    exibirCarregamentoParametrosJornada();
+  }
+
+  /*
+   * Se a configuração ainda não foi carregada,
+   * aguarda o carregamento e tenta novamente.
+   */
   if (!parametrosJornadaCarregados) {
-    carregarParametrosJornadaAdmissao(function () {
-      aplicarParametrosJornadaAdmissao(codigoJornada);
-    });
+    carregarParametrosJornadaAdmissao(
+      function () {
+        aplicarParametrosJornadaAdmissao(
+          codigoJornada
+        );
+      }
+    );
+
     return;
   }
 
   aplicandoParametrosJornada = true;
+  window.aplicandoParametrosJornada = true;
 
   try {
     var jornadaSelecionada = null;
-    for (var i = 0; i < jornadasAdmissaoConfig.length; i++) {
-      if (normalizarValorComparacao(jornadasAdmissaoConfig[i].codigo) === normalizarValorComparacao(codigoJornada)) {
-        jornadaSelecionada = jornadasAdmissaoConfig[i];
+
+    for (
+      var i = 0;
+      i < jornadasAdmissaoConfig.length;
+      i++
+    ) {
+      if (
+        normalizarValorComparacao(
+          jornadasAdmissaoConfig[i].codigo
+        ) ===
+        normalizarValorComparacao(
+          codigoJornada
+        )
+      ) {
+        jornadaSelecionada =
+          jornadasAdmissaoConfig[i];
+
         break;
       }
     }
 
-    logJornadaGrupo("Jornada selecionada para aplicacao", {
-      codigoSelecionado: codigoJornada,
-      jornadaConfigurada: jornadaSelecionada || {},
-      totalJornadasConfiguradas: (jornadasAdmissaoConfig || []).length
-    });
+    logJornadaGrupo(
+      "Jornada selecionada para aplicação",
+      {
+        codigoSelecionado:
+          codigoJornada,
 
-    limparCamposJornadaAnterior();
+        jornadaConfigurada:
+          jornadaSelecionada || {},
 
-    var campos = obterCamposDaJornada(codigoJornada);
-    campos = ordenarCamposJornadaParaAplicacao(campos);
-    logJornadaTabela("De/para de campos encontrados para a jornada", campos.map(function (item, idx) {
-      return {
-        indice: idx + 1,
-        campoId: item.campoId || "",
-        campoTipo: item.campoTipo || "",
-        valorConfigurado: item.valor || "",
-        descricaoConfigurada: item.descricao || ""
-      };
-    }));
-
-    aplicarCamposJornadaEmSerie(campos, 0);
-  } catch (e) {
-    console.warn("[Param Jornada] Erro ao aplicar parametros.", e);
-  } finally {
-    if (aplicandoParametrosJornada) {
-      aplicandoParametrosJornada = false;
-      window.aplicandoParametrosJornada = false;
-
-      if (typeof gerenciarPainelContrato === "function") {
-        gerenciarPainelContrato(false);
+        totalJornadasConfiguradas:
+          (
+            jornadasAdmissaoConfig || []
+          ).length
       }
+    );
 
-      agendarRecalculoExperienciaPorJornada("finally da aplicacao da jornada");
-
-      if (typeof exibeDocumentosPorJornadaKit === "function") {
-        exibeDocumentosPorJornadaKit();
-      }
-
-      if (typeof validarLiberacaoGED === "function") {
-        validarLiberacaoGED();
-      }
+    /*
+     * Mantém o hidden da descrição sincronizado
+     * com o código técnico da jornada.
+     */
+    if (
+      typeof sincronizarDescricaoJornadaSelecionada ===
+      "function"
+    ) {
+      sincronizarDescricaoJornadaSelecionada();
     }
+
+    var campos =
+      obterCamposDaJornada(
+        codigoJornada
+      );
+
+    campos =
+      ordenarCamposJornadaParaAplicacao(
+        campos
+      );
+
+    logJornadaTabela(
+      "De/para de campos encontrados para a jornada",
+      campos.map(function (item, idx) {
+        return {
+          indice: idx + 1,
+
+          campoId:
+            item.campoId || "",
+
+          campoTipo:
+            item.campoTipo || "",
+
+          valorConfigurado:
+            item.valor || "",
+
+          descricaoConfigurada:
+            item.descricao || ""
+        };
+      })
+    );
+
+    /*
+     * Carrega todos os datasets necessários
+     * para os zooms de forma assíncrona e paralela.
+     */
+    var promessaPrecarregamento;
+
+    if (
+      typeof precarregarDatasetsJornada ===
+      "function"
+    ) {
+      promessaPrecarregamento =
+        precarregarDatasetsJornada(
+          campos
+        );
+    } else {
+      console.warn(
+        "[Jornada] Função precarregarDatasetsJornada não encontrada."
+      );
+
+      promessaPrecarregamento =
+        Promise.resolve({});
+    }
+
+    promessaPrecarregamento
+      .then(function (
+        itensDatasetPorCampo
+      ) {
+        /*
+         * Evita aplicar uma jornada antiga caso o
+         * valor tenha sido alterado durante a busca.
+         */
+        var jornadaAtualTela =
+          $.trim(
+            String(
+              $(
+                "#cpJornadaAdmissao"
+              ).val() || ""
+            )
+          );
+
+        if (
+          jornadaAtualTela &&
+          normalizarValorComparacao(
+            jornadaAtualTela
+          ) !==
+          normalizarValorComparacao(
+            codigoJornada
+          )
+        ) {
+          aplicandoParametrosJornada =
+            false;
+
+          window.aplicandoParametrosJornada =
+            false;
+
+          ocultarCarregamentoParametrosJornada();
+
+          console.log(
+            "[Jornada] Parâmetros aplicados com sucesso:",
+            codigoJornada
+          );
+
+          var codigoJornadaPendente =
+            $.trim(
+              String(
+                window.codigoJornadaPendente || ""
+              )
+            );
+
+          window.codigoJornadaPendente = "";
+
+          if (
+            codigoJornadaPendente &&
+            normalizarValorComparacao(
+              codigoJornadaPendente
+            ) !==
+            normalizarValorComparacao(
+              codigoJornada
+            )
+          ) {
+            setTimeout(function () {
+              aplicarParametrosJornadaAdmissao(
+                codigoJornadaPendente
+              );
+            }, 0);
+          }
+
+          return;
+        }
+
+        /*
+         * Só limpa os campos anteriores depois
+         * que os novos dados estiverem carregados.
+         * Isso reduz o período com campos vazios.
+         */
+        limparCamposJornadaAnterior();
+
+        aplicarCamposJornadaEmSerie(
+          campos,
+          0,
+          itensDatasetPorCampo || {},
+          function () {
+            if (
+              typeof sincronizarDescricaoJornadaSelecionada ===
+              "function"
+            ) {
+              sincronizarDescricaoJornadaSelecionada();
+            }
+
+            if (
+              typeof window.aplicarRegraEventosProgramadosPorJornada ===
+              "function"
+            ) {
+              window.aplicarRegraEventosProgramadosPorJornada();
+            }
+
+            if (
+              typeof aplicarObrigatoriedadeFrontEnd ===
+              "function" &&
+              typeof getWKNumState ===
+              "function"
+            ) {
+              aplicarObrigatoriedadeFrontEnd(
+                getWKNumState()
+              );
+            }
+
+            ocultarCarregamentoParametrosJornada();
+
+            console.log(
+              "[Jornada] Parâmetros aplicados com sucesso:",
+              codigoJornada
+            );
+          }
+        );
+      })
+      .catch(function (erro) {
+        aplicandoParametrosJornada =
+          false;
+
+        window.aplicandoParametrosJornada =
+          false;
+
+        ocultarCarregamentoParametrosJornada();
+
+        console.error(
+          "[Param Jornada] Erro carregando os datasets da jornada.",
+          erro
+        );
+
+        if (
+          typeof FLUIGC !==
+          "undefined" &&
+          typeof FLUIGC.toast ===
+          "function"
+        ) {
+          FLUIGC.toast({
+            title: "Parametrização: ",
+            message:
+              "Não foi possível carregar todos os parâmetros da jornada.",
+            type: "warning"
+          });
+        }
+      });
+  } catch (e) {
+    aplicandoParametrosJornada = false;
+    window.aplicandoParametrosJornada =
+      false;
+
+    if (
+      typeof ocultarCarregamentoParametrosJornada ===
+      "function"
+    ) {
+      ocultarCarregamentoParametrosJornada();
+    }
+
+    console.warn(
+      "[Param Jornada] Erro ao aplicar parâmetros.",
+      e
+    );
   }
 }
 
@@ -3854,59 +5481,142 @@ function aplicarParametrosDaJornadaSelecionada() {
 }
 
 function reaplicarJornadaSalvaAoCarregar() {
-  var jornadaAtual = $.trim(String($("#cpJornadaAdmissao").val() || ""));
-  var empresaAtual = $.trim(String($("#FUN_EMPRESA").val() || $("#txtCodcoligada").val() || ""));
+  var jornadaAtual =
+    $.trim(
+      String(
+        $("#cpJornadaAdmissao").val() || ""
+      )
+    );
+
+  var empresaAtual =
+    $.trim(
+      String(
+        $("#FUN_EMPRESA").val() ||
+        $("#txtCodcoligada").val() ||
+        ""
+      )
+    );
 
   if (!jornadaAtual || !empresaAtual) {
     return;
   }
 
-  if (window.reaplicandoJornadaSalvaAoCarregar || window.jornadaSalvaReaplicadaAoCarregar) {
+  if (
+    window.reaplicandoJornadaSalvaAoCarregar ||
+    window.jornadaSalvaReaplicadaAoCarregar
+  ) {
     return;
   }
 
-  window.reaplicandoJornadaSalvaAoCarregar = true;
+  window.reaplicandoJornadaSalvaAoCarregar =
+    true;
 
-  console.log("[Jornada][Reload] Reaplicando jornada salva ao carregar a atividade:", {
-    jornada: jornadaAtual,
-    empresa: empresaAtual
-  });
+  /*
+   * Carrega apenas a configuração necessária
+   * para localizar a descrição da jornada.
+   *
+   * Não reaplica campos e não limpa valores.
+   */
+  carregarParametrosJornadaAdmissao(
+    function () {
+      try {
+        var $selectJornada =
+          $("#cpJornadaAdmissao");
 
-  carregarParametrosJornadaAdmissao(function () {
-    try {
-      var $selectJornada = $("#cpJornadaAdmissao");
+        var descricaoJornadaAtual =
+          obterDescricaoJornadaPorCodigo(
+            jornadaAtual
+          ) ||
+          $.trim(
+            String(
+              $(
+                "#cpJornadaAdmissaoDescricao"
+              ).val() || ""
+            )
+          ) ||
+          jornadaAtual;
 
-      if ($selectJornada.length) {
-        var existeOpcao = false;
+        if ($selectJornada.length) {
+          var $opcaoJornadaAtual =
+            $selectJornada
+              .find("option")
+              .filter(function () {
+                return (
+                  String($(this).val()) ===
+                  String(jornadaAtual)
+                );
+              })
+              .first();
 
-        $selectJornada.find("option").each(function () {
-          if (String($(this).val()) === String(jornadaAtual)) {
-            existeOpcao = true;
-            return false;
+          if (!$opcaoJornadaAtual.length) {
+            $opcaoJornadaAtual =
+              $("<option>", {
+                value: jornadaAtual,
+                text: descricaoJornadaAtual
+              });
+
+            $selectJornada.append(
+              $opcaoJornadaAtual
+            );
+          } else {
+            $opcaoJornadaAtual.text(
+              descricaoJornadaAtual
+            );
           }
-        });
 
-        if (!existeOpcao) {
-          $selectJornada.append($("<option>", {
-            value: jornadaAtual,
-            text: jornadaAtual
-          }));
+          $selectJornada.val(
+            jornadaAtual
+          );
         }
 
-        $selectJornada.val(jornadaAtual);
+        $(
+          "#cpJornadaAdmissaoDescricao"
+        ).val(
+          descricaoJornadaAtual
+        );
+
+        if (
+          typeof window.aplicarRegraEventosProgramadosPorJornada ===
+          "function"
+        ) {
+          window.aplicarRegraEventosProgramadosPorJornada();
+        }
+
+        /*
+         * Não executar:
+         *
+         * aplicarParametrosJornadaAdmissao(
+         *   jornadaAtual
+         * );
+         *
+         * Os campos já foram gravados no início.
+         */
+
+        window.jornadaSalvaReaplicadaAoCarregar =
+          true;
+
+        window.reaplicandoJornadaSalvaAoCarregar =
+          false;
+
+        console.log(
+          "[Jornada] Descrição restaurada sem reaplicar parâmetros:",
+          {
+            codigo: jornadaAtual,
+            descricao:
+              descricaoJornadaAtual
+          }
+        );
+      } catch (e) {
+        window.reaplicandoJornadaSalvaAoCarregar =
+          false;
+
+        console.warn(
+          "[Jornada] Erro ao restaurar a descrição da jornada.",
+          e
+        );
       }
-
-      // Aplica diretamente a jornada salva, sem esperar o fluxo de popular o select.
-      // Isso reduz o tempo em que os zooms aparecem apenas com o código após avançar atividade.
-      aplicarParametrosJornadaAdmissao(jornadaAtual);
-
-      window.jornadaSalvaReaplicadaAoCarregar = true;
-      window.reaplicandoJornadaSalvaAoCarregar = false;
-    } catch (e) {
-      window.reaplicandoJornadaSalvaAoCarregar = false;
-      console.warn("[Jornada][Reload] Erro ao reaplicar jornada salva.", e);
     }
-  });
+  );
 }
 
 function agendarReaplicacaoJornadaSalvaAoCarregar() {

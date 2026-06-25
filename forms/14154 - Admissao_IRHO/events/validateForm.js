@@ -7,9 +7,7 @@ function validateForm(form) {
     //     return; 
     // }
 
-    var atividade = parseInt(getValue("WKNumState"));
-    var acaoUsuario = getValue("WKCompletTask");
-    var msg = "";
+
 
     // Só valida se o utilizador estiver a tentar avançar a tarefa
     if (acaoUsuario != "true") {
@@ -23,10 +21,8 @@ function validateForm(form) {
         return;
     }
 
-    // ... Restante das suas validações normais para o RH ...
-    var atividade = parseInt(getValue("WKNumState"));
-    // ...
 
+    var atividade = parseInt(getValue("WKNumState"));
     var acaoUsuario = getValue("WKCompletTask");
     var msg = "";
 
@@ -37,6 +33,30 @@ function validateForm(form) {
         if (val == null) return "";
         return new java.lang.String(val).trim();
     }
+
+    function normalizarJornada(valor) {
+        return String(valor || "")
+            .replace(/^\s+|\s+$/g, "")
+            .toLowerCase()
+            .replace(/[áàâãä]/g, "a")
+            .replace(/[éèêë]/g, "e")
+            .replace(/[íìîï]/g, "i")
+            .replace(/[óòôõö]/g, "o")
+            .replace(/[úùûü]/g, "u")
+            .replace(/ç/g, "c");
+    }
+
+    var jornadaNormalizada = normalizarJornada(
+        getSafeValue("cpJornadaAdmissao") +
+        " " +
+        getSafeValue("cpJornadaAdmissaoDescricao")
+    );
+
+    var jornadaEhCLT =
+        jornadaNormalizada.indexOf("clt") >= 0;
+
+    var jornadaEhAssociado =
+        jornadaNormalizada.indexOf("associado") >= 0;
 
     // Bypass para a atividade 97 (Admissão RH) - Caso a opção 4 esteja neste painel
     if (atividade == 97 && getSafeValue("cpAprovacaoAdmissao") == "4") {
@@ -109,7 +129,7 @@ function validateForm(form) {
     // 1. VARREDURA AUTOMÁTICA DE CAMPOS VAZIOS
     // =========================================================================
     var chaves = Object.keys(REGRAS_BACKEND);
-    var jornadaAdmissao = getSafeValue("cpJornadaAdmissao"); // <-- CAPTURA A JORNADA
+    var jornadaAdmissao = jornadaNormalizada;
 
     for (var i = 0; i < chaves.length; i++) {
         var listaAtividades = chaves[i].split(",");
@@ -128,7 +148,10 @@ function validateForm(form) {
                 ];
 
                 // Se NÃO for CLT e o campo estiver na lista acima, pula a validação
-                if (jornadaAdmissao != "CLT" && camposExclusivosCLT.indexOf(campoID) > -1) {
+                if (
+                    !jornadaEhCLT &&
+                    camposExclusivosCLT.indexOf(campoID) > -1
+                ) {
                     continue;
                 }
                 // --- FIM DA NOVA REGRA ---
@@ -165,19 +188,18 @@ function validateForm(form) {
             }
         }
 
-        var jornadaEventos = getSafeValue("cpJornadaAdmissao")
-            .replace(/^\s+|\s+$/g, "")
-            .toLowerCase();
+        var upFrontSelecionado =
+            getSafeValue("cpUpFront");
 
-        var upFrontSelecionado = getSafeValue("cpUpFront");
-        var hiringBonusSelecionado = getSafeValue("cpHiringBonus");
+        var hiringBonusSelecionado =
+            getSafeValue("cpHiringBonus");
 
         var permiteUpFront =
-            jornadaEventos == "associado";
+            jornadaEhAssociado;
 
         var permiteHiringBonus =
             !permiteUpFront &&
-            jornadaEventos.indexOf("clt") >= 0;
+            jornadaEhCLT;
 
         if (
             upFrontSelecionado == "sim" &&
@@ -254,7 +276,6 @@ function validateForm(form) {
     var etapasIniciais = [0, 1, 41];
     if (etapasIniciais.indexOf(atividade) > -1) {
         var tipoContrato = getSafeValue("cpContratoPrazo");
-        var jornada = getSafeValue("cpJornadaAdmissao"); // Lemos a jornada no servidor
 
         if (tipoContrato == "determinado") {
             if (getSafeValue("cpTerminoContrato") == "") {
@@ -262,7 +283,10 @@ function validateForm(form) {
             }
 
             // Só exige a Cláusula Assecuratória se a jornada for CLT
-            if (jornada == "CLT" && getSafeValue("cpClausulaAssecuratoria") == "") {
+            if (
+                jornadaEhCLT &&
+                getSafeValue("cpClausulaAssecuratoria") == ""
+            ) {
                 msg += "O campo <b>Cláusula Assecuratória</b> é obrigatório.<br/>";
             }
         }
@@ -279,7 +303,6 @@ function validateForm(form) {
     // =========================================================================
     if (msg != "") {
         throw "<br/><br/><b>Atenção! Verifique os seguintes erros antes de avançar:</b><br/><br/>" + msg;
-        return new java.lang.String(val).trim(); // Converte para Java String e remove espaços
     }
 
     // BLINDAGEM: Verifica se o campo existe antes de tentar fazer split
