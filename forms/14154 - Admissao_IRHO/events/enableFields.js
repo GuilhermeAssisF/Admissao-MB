@@ -525,13 +525,21 @@ function enableFields(form) {
   // ==========================================================
   if (atividade == 97) {
     var jornadaEventos = String(
-      form.getValue("cpJornadaAdmissao") || ""
+      (form.getValue("cpJornadaAdmissao") || "") +
+      " " +
+      (form.getValue("cpJornadaAdmissaoDescricao") || "")
     )
       .replace(/^\s+|\s+$/g, "")
-      .toLowerCase();
+      .toLowerCase()
+      .replace(/[áàâãä]/g, "a")
+      .replace(/[éèêë]/g, "e")
+      .replace(/[íìîï]/g, "i")
+      .replace(/[óòôõö]/g, "o")
+      .replace(/[úùûü]/g, "u")
+      .replace(/ç/g, "c");
 
     var permiteUpFront =
-      jornadaEventos == "associado";
+      jornadaEventos.indexOf("associado") >= 0;
 
     var permiteHiringBonus =
       !permiteUpFront &&

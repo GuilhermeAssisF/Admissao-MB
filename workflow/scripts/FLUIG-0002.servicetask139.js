@@ -157,6 +157,46 @@ function servicetask139(attempt, message) {
             return texto;
         }
 
+        function normalizarNivelIngles(valor) {
+            var texto = String(valor || "").trim();
+
+            if (!texto) return "";
+
+            try {
+                texto = texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            } catch (e) { }
+
+            texto = texto.toUpperCase();
+
+            if (
+                texto === "SELECIONE" ||
+                texto === "NULL" ||
+                texto === "UNDEFINED"
+            ) {
+                return "";
+            }
+
+            if (texto === "NAO INFORMADO") return "NAO INFORMADO";
+            if (texto === "BASICO") return "BASICO";
+            if (texto === "INTERMEDIARIO") return "INTERMEDIARIO";
+            if (texto === "AVANCADO") return "AVANCADO";
+            if (texto === "FLUENTE") return "FLUENTE";
+
+            return "";
+        }
+
+        function resultadoErroNivelIngles(result) {
+            var texto = String(result || "").toUpperCase();
+
+            return (
+                texto.indexOf("NIVEL_INGLES") > -1 ||
+                texto.indexOf("NIVEL INGLES") > -1 ||
+                texto.indexOf("NÍVEL INGLÊS") > -1 ||
+                texto.indexOf("INGLES") > -1 ||
+                texto.indexOf("INGLÊS") > -1
+            );
+        }
+
         function normalizarModeloTrabalho(valor) {
             var texto = String(valor || "").trim();
 
@@ -195,7 +235,7 @@ function servicetask139(attempt, message) {
         var dataInclusaoAO = getStr("cpDataInclusaoAO");
 
         var clawback = getStr("cpPrazoClawback");
-        // var nivelIngles = getStr("cpNivelIngles");
+        var nivelIngles = normalizarNivelIngles(getStr("cpNivelIngles"));
 
         var modeloTrabalho = normalizarModeloTrabalho(
             getStr("cpModeloTrabalho") ||
@@ -219,7 +259,7 @@ function servicetask139(attempt, message) {
             dataInclusaoAM === "" &&
             dataInclusaoAO === "" &&
             clawback === "" &&
-            // nivelIngles === "" &&
+            nivelIngles === "" &&
             modeloTrabalho === "" &&
             formacaoFuncionario === ""
         ) {
@@ -247,7 +287,7 @@ function servicetask139(attempt, message) {
             dataInclusaoAM !== "" ||
             dataInclusaoAO !== "" ||
             clawback !== "" ||
-            // nivelIngles !== "" ||
+            nivelIngles !== "" ||
             modeloTrabalho !== "" ||
             formacaoFuncionario !== ""
         ) {
@@ -275,9 +315,12 @@ function servicetask139(attempt, message) {
                 xmlCompl += tag("CLAWBACK", formatarDataRM(clawback));
             }
 
-            // if (nivelIngles !== "") {
-            //     xmlCompl += tag("NIVEL_INGLES", nivelIngles);
-            // }
+            var xmlTagNivelIngles = "";
+
+            if (nivelIngles !== "") {
+                xmlTagNivelIngles = tag("NIVEL_INGLES", nivelIngles);
+                xmlCompl += xmlTagNivelIngles;
+            }
 
             if (modeloTrabalho !== "") {
                 xmlCompl += tag("MODELODETRABALHO", modeloTrabalho);
@@ -293,16 +336,31 @@ function servicetask139(attempt, message) {
         }
 
         // // Tabela VPCOMPL (Emergência) - Ligação EXCLUSIVA por CODPESSOA (conforme documentação do RM)
-        // if (nomeEmergencia !== "" || parentescoEmergencia !== "" || telefoneEmergencia !== "") {
-        //     xmlCompl += "  <VPCOMPL>\n";
-        //     xmlCompl += tag("CODPESSOA", CODPESSOA); 
+        // Tabela VPCOMPL (Emergência) - Ligação EXCLUSIVA por CODPESSOA
+        if (nomeEmergencia !== "" || parentescoEmergencia !== "" || telefoneEmergencia !== "") {
+            if (!CODPESSOA || CODPESSOA === "") {
+                log.warn("### Contato de emergência ignorado: CODPESSOA não foi localizado.");
+            } else {
+                xmlCompl += "  <VPCOMPL>\n";
+                xmlCompl += tag("CODPESSOA", CODPESSOA);
 
-        //     if (nomeEmergencia !== "") xmlCompl += tag("CONTATO_EMERGENCIA", nomeEmergencia);
-        //     if (parentescoEmergencia !== "") xmlCompl += tag("GRAU_PAR_EMER", parentescoEmergencia);
-        //     if (telefoneEmergencia !== "") xmlCompl += tag("TELEFONE_EMERGENCIA", telefoneEmergencia);
+                if (nomeEmergencia !== "") {
+                    xmlCompl += tag("CONTATO_EMERGENCIA", nomeEmergencia);
+                }
 
-        //     xmlCompl += "  </VPCOMPL>\n";
-        // }
+                if (parentescoEmergencia !== "") {
+                    xmlCompl += tag("GRAU_PAR_EMER", parentescoEmergencia);
+                }
+
+                if (telefoneEmergencia !== "") {
+                    xmlCompl += tag("TELEFONE_EMERGENCIA", telefoneEmergencia);
+                }
+
+                xmlCompl += "  </VPCOMPL>\n";
+
+                possuiBlocoComplementar = true;
+            }
+        }
 
         if (!possuiBlocoComplementar) {
             log.info("### TASK 139 SEM BLOCOS COMPLEMENTARES ATIVOS. INTEGRAÇÃO IGNORADA.");
@@ -335,6 +393,21 @@ function servicetask139(attempt, message) {
         // Executa a gravação. O RM fará o UPDATE nas tabelas correspondentes.
         var result = authService.saveRecord("FopFuncData", xmlCompl, RM_CONTEXTO);
         log.info("### RETORNO RM (COMPLEMENTARES): " + result);
+
+        if (
+            result &&
+            result.indexOf("===") != -1 &&
+            xmlTagNivelIngles !== "" &&
+            resultadoErroNivelIngles(result)
+        ) {
+            log.warn("### RM rejeitou o nível de inglês. Reprocessando complementares sem NIVEL_INGLES para não bloquear a admissão.");
+
+            xmlCompl = xmlCompl.replace(xmlTagNivelIngles, "");
+            xmlTagNivelIngles = "";
+
+            result = authService.saveRecord("FopFuncData", xmlCompl, RM_CONTEXTO);
+            log.info("### RETORNO RM SEM NÍVEL DE INGLÊS: " + result);
+        }
 
         if (result && result.indexOf("===") != -1) {
             throw "Erro ao integrar os dados complementares: " + result;

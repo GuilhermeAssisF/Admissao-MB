@@ -49,6 +49,42 @@ function servicetask138(attempt, message) {
             return texto;
         }
 
+        function normalizarTipoSanguineoRM(valor) {
+            var texto = String(valor || "").trim().toUpperCase();
+
+            if (texto === "") return "";
+
+            texto = texto.replace(/\s+/g, "");
+
+            var permitidos = {
+                "A+": true,
+                "A-": true,
+                "B+": true,
+                "B-": true,
+                "AB+": true,
+                "AB-": true,
+                "O+": true,
+                "O-": true
+            };
+
+            if (!permitidos[texto]) {
+                return "";
+            }
+
+            return texto;
+        }
+
+        function resultadoErroTipoSanguineo(result) {
+            var texto = String(result || "").toUpperCase();
+
+            return (
+                texto.indexOf("TIPOSANG") > -1 ||
+                texto.indexOf("TIPO SANG") > -1 ||
+                texto.indexOf("SANGUINEO") > -1 ||
+                texto.indexOf("SANGUÍNEO") > -1
+            );
+        }
+
         function tag(n, v) {
             var texto = normalizarTextoIntegracao(v);
             if (texto === "") return "";
@@ -479,24 +515,50 @@ function servicetask138(attempt, message) {
         // =========================================================================
         // REGRAS DE CONTRATO COM PRAZO / EXPERIÊNCIA
         // =========================================================================
-        var tipoContratoPrazo = getStr("cpContratoPrazo");
-        var dtFimContrato = formatarDataRM(getStr("cpTerminoContrato"));
+        var tipoContratoPrazo = String(getStr("cpContratoPrazo") || "").toLowerCase();
         var assecuratoria = getStr("cpClausulaAssecuratoria") === "sim" ? "1" : "0";
 
+        var dataFimContrato = getStr("cpTerminoContrato");
+
+        if (tipoContratoPrazo === "experiencia" && dataFimContrato === "") {
+            dataFimContrato = getStr("cpVencSegundaExp") || getStr("cpVencPrimeiraExp");
+        }
+
+        var dtFimContrato = formatarDataRM(dataFimContrato);
+
         if (tipoContratoPrazo === "determinado" || tipoContratoPrazo === "experiencia") {
-            // Marca a Flag de Contrato com Prazo como Sim (1)
+            if (!dtFimContrato) {
+                throw "ERRO: Contrato com prazo selecionado, mas a data final do contrato não foi preenchida.";
+            }
+
+            // PFUNC.TEMPRAZOCONTR - Contrato com Prazo
             xmlFunc += tagInt("TEMPRAZOCONTR", "1");
 
-            // Envia a Data Final e a Cláusula
-            if (dtFimContrato) xmlFunc += tag("FIMPRAZOCONTR", dtFimContrato);
-            xmlFunc += tagInt("TEMCLAUASSEG", assecuratoria);
-
-            // Define o Tipo de Contrato no RM (Geralmente 2 = Experiência, 1 = Prazo Determinado/Lei 9601)
-            var codTipoPrazo = (tipoContratoPrazo === "experiencia") ? "2" : "1";
+            // PFUNC.TIPOCONTRATOPRAZO - Tipo de Contrato
+            // Mantido o mapeamento que já existia no código:
+            // 1 = Prazo Determinado
+            // 2 = Experiência
+            var codTipoPrazo = tipoContratoPrazo === "experiencia" ? "2" : "1";
             xmlFunc += tag("TIPOCONTRATOPRAZO", codTipoPrazo);
 
+            // PFUNC.FIMPRAZOCONTR - Data Final do Contrato
+            xmlFunc += tag("FIMPRAZOCONTR", dtFimContrato);
+
+            // PFUNC.TEMCLAUASSEG - Contém cláusula assecuratória
+            xmlFunc += tagInt("TEMCLAUASSEG", assecuratoria);
+
+            // PFUNC.TIPOCONTPRAZODETERMINADO - Tipo de contrato por prazo determinado
+            // Enviar apenas quando o contrato principal for Prazo Determinado.
+            if (tipoContratoPrazo === "determinado") {
+                var tipoContPrazoDeterminado = getStr("cpTipoContPrazoDeterminado");
+
+                if (tipoContPrazoDeterminado !== "") {
+                    xmlFunc += tag("TIPOCONTPRAZODETERMINADO", tipoContPrazoDeterminado);
+                }
+            }
+
         } else {
-            // Se for Indeterminado ou vazio, a Flag fica Não (0)
+            // PFUNC.TEMPRAZOCONTR - Contrato indeterminado: checkbox desmarcado no RM
             xmlFunc += tagInt("TEMPRAZOCONTR", "0");
         }
 
@@ -584,8 +646,15 @@ function servicetask138(attempt, message) {
         xmlFunc += tag("CODNATURALIDADE", getStr("txtNaturalidadeCod"));
         xmlFunc += tag("ESTADONATAL", getUF(getStr("ESTADO")));
 
-        // var tpSanguineo = cleanId(getStr("TipoSanguineo"));
-        // if (tpSanguineo) xmlFunc += tag("TIPOSANG", tpSanguineo);
+        var xmlTagTipoSanguineo = "";
+        var tpSanguineo = normalizarTipoSanguineoRM(getStr("TipoSanguineo"));
+
+        if (tpSanguineo !== "") {
+            xmlTagTipoSanguineo = tagRaw("TIPOSANG", tpSanguineo);
+            xmlFunc += xmlTagTipoSanguineo;
+        } else if (getStr("TipoSanguineo") !== "") {
+            log.warn("### Tipo sanguíneo ignorado na integração RM. Valor não reconhecido: " + getStr("TipoSanguineo"));
+        }
 
         // Endereço
         xmlFunc += tag("CEP", limparPontuacao(getStr("txtCEP")));
@@ -715,6 +784,21 @@ function servicetask138(attempt, message) {
         var result = authService.saveRecord("FopFuncData", xmlFunc, RM_CONTEXTO);
         log.info("### RETORNO RM (FUNCIONÁRIO): " + result);
 
+        if (
+            result &&
+            result.indexOf("===") != -1 &&
+            xmlTagTipoSanguineo !== "" &&
+            resultadoErroTipoSanguineo(result)
+        ) {
+            log.warn("### RM rejeitou o tipo sanguíneo. Reprocessando funcionário sem TIPOSANG para não bloquear a admissão.");
+
+            xmlFunc = xmlFunc.replace(xmlTagTipoSanguineo, "");
+            xmlTagTipoSanguineo = "";
+
+            result = authService.saveRecord("FopFuncData", xmlFunc, RM_CONTEXTO);
+            log.info("### RETORNO RM SEM TIPO SANGUÍNEO: " + result);
+        }
+
         // =========================================================================
         // TRATAMENTO DE AUTO-CORREÇÃO (PESSOA JÁ EXISTENTE)
         // =========================================================================
@@ -731,6 +815,22 @@ function servicetask138(attempt, message) {
                 }
 
                 result = authService.saveRecord("FopFuncData", xmlFunc, RM_CONTEXTO);
+
+                if (
+                    result &&
+                    result.indexOf("===") != -1 &&
+                    xmlTagTipoSanguineo !== "" &&
+                    resultadoErroTipoSanguineo(result)
+                ) {
+                    log.warn("### RM rejeitou o tipo sanguíneo após autocorreção de CODPESSOA. Reprocessando sem TIPOSANG.");
+
+                    xmlFunc = xmlFunc.replace(xmlTagTipoSanguineo, "");
+                    xmlTagTipoSanguineo = "";
+
+                    result = authService.saveRecord("FopFuncData", xmlFunc, RM_CONTEXTO);
+                    log.info("### RETORNO RM SEM TIPO SANGUÍNEO APÓS AUTOCORREÇÃO: " + result);
+                }
+
                 hAPI.setCardValue("FUN_CODPESSOA", codPessoaExtraido);
             }
         }

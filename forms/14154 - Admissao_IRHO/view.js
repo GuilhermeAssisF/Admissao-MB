@@ -5107,6 +5107,40 @@ function aplicarParametrosJornadaAdmissao(
     }
 
     if (
+      atividadesQueAplicamJornada.indexOf(
+        atividadeAtualJornada
+      ) === -1
+    ) {
+      if (
+        typeof sincronizarDescricaoJornadaSelecionada ===
+        "function"
+      ) {
+        sincronizarDescricaoJornadaSelecionada();
+      }
+
+      if (
+        atividadeAtualJornada === "97" &&
+        typeof aplicarRegraEventosProgramadosPorJornada === "function"
+      ) {
+        aplicarRegraEventosProgramadosPorJornada();
+      }
+
+      if (
+        typeof ocultarCarregamentoParametrosJornada ===
+        "function"
+      ) {
+        ocultarCarregamentoParametrosJornada();
+      }
+
+      console.log(
+        "[Jornada] Parametrização não reaplicada na atividade:",
+        atividadeAtualJornada
+      );
+
+      return;
+    }
+
+    if (
       typeof ocultarCarregamentoParametrosJornada ===
       "function"
     ) {

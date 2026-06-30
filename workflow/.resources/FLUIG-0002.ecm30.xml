@@ -29,7 +29,7 @@
     <processDefinitionVersionPK>
       <companyId>1</companyId>
       <processId>Admissão IRHO</processId>
-      <version>252</version>
+      <version>253</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
     <formId>14154</formId>
@@ -897,7 +897,7 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>1</expressionOrder>
-        <version>252</version>
+        <version>253</version>
         <sequence>151</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoAdmissao&quot;) == &quot;1&quot;</condition>
@@ -911,7 +911,7 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>2</expressionOrder>
-        <version>252</version>
+        <version>253</version>
         <sequence>151</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoAdmissao&quot;) == &quot;3&quot;</condition>
@@ -923,7 +923,7 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>3</expressionOrder>
-        <version>252</version>
+        <version>253</version>
         <sequence>151</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoAdmissao&quot;) == &quot;4&quot;</condition>
@@ -937,7 +937,7 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>1</expressionOrder>
-        <version>252</version>
+        <version>253</version>
         <sequence>170</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoKit&quot;) == &quot;1&quot;</condition>
@@ -949,7 +949,7 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>2</expressionOrder>
-        <version>252</version>
+        <version>253</version>
         <sequence>170</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoKit&quot;) == &quot;3&quot;</condition>
