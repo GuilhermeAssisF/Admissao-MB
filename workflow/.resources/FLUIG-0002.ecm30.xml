@@ -29,7 +29,7 @@
     <processDefinitionVersionPK>
       <companyId>1</companyId>
       <processId>Admissão IRHO</processId>
-      <version>253</version>
+      <version>254</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
     <formId>14154</formId>
@@ -897,7 +897,7 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>1</expressionOrder>
-        <version>253</version>
+        <version>254</version>
         <sequence>151</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoAdmissao&quot;) == &quot;1&quot;</condition>
@@ -911,7 +911,7 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>2</expressionOrder>
-        <version>253</version>
+        <version>254</version>
         <sequence>151</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoAdmissao&quot;) == &quot;3&quot;</condition>
@@ -923,7 +923,7 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>3</expressionOrder>
-        <version>253</version>
+        <version>254</version>
         <sequence>151</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoAdmissao&quot;) == &quot;4&quot;</condition>
@@ -937,7 +937,7 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>1</expressionOrder>
-        <version>253</version>
+        <version>254</version>
         <sequence>170</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoKit&quot;) == &quot;1&quot;</condition>
@@ -949,7 +949,7 @@
         <companyId>1</companyId>
         <processId>FLUIG-0002</processId>
         <expressionOrder>2</expressionOrder>
-        <version>253</version>
+        <version>254</version>
         <sequence>170</sequence>
       </conditionProcessStatePK>
       <condition>hAPI.getCardValue(&quot;cpAprovacaoKit&quot;) == &quot;3&quot;</condition>
@@ -2134,6 +2134,46 @@ function getUrlConfiguracao(campo) {&#xd;
             return texto;&#xd;
         }&#xd;
 &#xd;
+        function normalizarNivelIngles(valor) {&#xd;
+            var texto = String(valor || &quot;&quot;).trim();&#xd;
+&#xd;
+            if (!texto) return &quot;&quot;;&#xd;
+&#xd;
+            try {&#xd;
+                texto = texto.normalize(&quot;NFD&quot;).replace(/[\u0300-\u036f]/g, &quot;&quot;);&#xd;
+            } catch (e) { }&#xd;
+&#xd;
+            texto = texto.toUpperCase();&#xd;
+&#xd;
+            if (&#xd;
+                texto === &quot;SELECIONE&quot; ||&#xd;
+                texto === &quot;NULL&quot; ||&#xd;
+                texto === &quot;UNDEFINED&quot;&#xd;
+            ) {&#xd;
+                return &quot;&quot;;&#xd;
+            }&#xd;
+&#xd;
+            if (texto === &quot;NAO INFORMADO&quot;) return &quot;NAO INFORMADO&quot;;&#xd;
+            if (texto === &quot;BASICO&quot;) return &quot;BASICO&quot;;&#xd;
+            if (texto === &quot;INTERMEDIARIO&quot;) return &quot;INTERMEDIARIO&quot;;&#xd;
+            if (texto === &quot;AVANCADO&quot;) return &quot;AVANCADO&quot;;&#xd;
+            if (texto === &quot;FLUENTE&quot;) return &quot;FLUENTE&quot;;&#xd;
+&#xd;
+            return &quot;&quot;;&#xd;
+        }&#xd;
+&#xd;
+        function resultadoErroNivelIngles(result) {&#xd;
+            var texto = String(result || &quot;&quot;).toUpperCase();&#xd;
+&#xd;
+            return (&#xd;
+                texto.indexOf(&quot;NIVEL_INGLES&quot;) &gt; -1 ||&#xd;
+                texto.indexOf(&quot;NIVEL INGLES&quot;) &gt; -1 ||&#xd;
+                texto.indexOf(&quot;NÍVEL INGLÊS&quot;) &gt; -1 ||&#xd;
+                texto.indexOf(&quot;INGLES&quot;) &gt; -1 ||&#xd;
+                texto.indexOf(&quot;INGLÊS&quot;) &gt; -1&#xd;
+            );&#xd;
+        }&#xd;
+&#xd;
         function normalizarModeloTrabalho(valor) {&#xd;
             var texto = String(valor || &quot;&quot;).trim();&#xd;
 &#xd;
@@ -2172,7 +2212,7 @@ function getUrlConfiguracao(campo) {&#xd;
         var dataInclusaoAO = getStr(&quot;cpDataInclusaoAO&quot;);&#xd;
 &#xd;
         var clawback = getStr(&quot;cpPrazoClawback&quot;);&#xd;
-        // var nivelIngles = getStr(&quot;cpNivelIngles&quot;);&#xd;
+        var nivelIngles = normalizarNivelIngles(getStr(&quot;cpNivelIngles&quot;));&#xd;
 &#xd;
         var modeloTrabalho = normalizarModeloTrabalho(&#xd;
             getStr(&quot;cpModeloTrabalho&quot;) ||&#xd;
@@ -2196,7 +2236,7 @@ function getUrlConfiguracao(campo) {&#xd;
             dataInclusaoAM === &quot;&quot; &amp;&amp;&#xd;
             dataInclusaoAO === &quot;&quot; &amp;&amp;&#xd;
             clawback === &quot;&quot; &amp;&amp;&#xd;
-            // nivelIngles === &quot;&quot; &amp;&amp;&#xd;
+            nivelIngles === &quot;&quot; &amp;&amp;&#xd;
             modeloTrabalho === &quot;&quot; &amp;&amp;&#xd;
             formacaoFuncionario === &quot;&quot;&#xd;
         ) {&#xd;
@@ -2224,7 +2264,7 @@ function getUrlConfiguracao(campo) {&#xd;
             dataInclusaoAM !== &quot;&quot; ||&#xd;
             dataInclusaoAO !== &quot;&quot; ||&#xd;
             clawback !== &quot;&quot; ||&#xd;
-            // nivelIngles !== &quot;&quot; ||&#xd;
+            nivelIngles !== &quot;&quot; ||&#xd;
             modeloTrabalho !== &quot;&quot; ||&#xd;
             formacaoFuncionario !== &quot;&quot;&#xd;
         ) {&#xd;
@@ -2252,9 +2292,12 @@ function getUrlConfiguracao(campo) {&#xd;
                 xmlCompl += tag(&quot;CLAWBACK&quot;, formatarDataRM(clawback));&#xd;
             }&#xd;
 &#xd;
-            // if (nivelIngles !== &quot;&quot;) {&#xd;
-            //     xmlCompl += tag(&quot;NIVEL_INGLES&quot;, nivelIngles);&#xd;
-            // }&#xd;
+            var xmlTagNivelIngles = &quot;&quot;;&#xd;
+&#xd;
+            if (nivelIngles !== &quot;&quot;) {&#xd;
+                xmlTagNivelIngles = tag(&quot;NIVEL_INGLES&quot;, nivelIngles);&#xd;
+                xmlCompl += xmlTagNivelIngles;&#xd;
+            }&#xd;
 &#xd;
             if (modeloTrabalho !== &quot;&quot;) {&#xd;
                 xmlCompl += tag(&quot;MODELODETRABALHO&quot;, modeloTrabalho);&#xd;
@@ -2270,16 +2313,31 @@ function getUrlConfiguracao(campo) {&#xd;
         }&#xd;
 &#xd;
         // // Tabela VPCOMPL (Emergência) - Ligação EXCLUSIVA por CODPESSOA (conforme documentação do RM)&#xd;
-        // if (nomeEmergencia !== &quot;&quot; || parentescoEmergencia !== &quot;&quot; || telefoneEmergencia !== &quot;&quot;) {&#xd;
-        //     xmlCompl += &quot;  &lt;VPCOMPL&gt;\n&quot;;&#xd;
-        //     xmlCompl += tag(&quot;CODPESSOA&quot;, CODPESSOA); &#xd;
+        // Tabela VPCOMPL (Emergência) - Ligação EXCLUSIVA por CODPESSOA&#xd;
+        if (nomeEmergencia !== &quot;&quot; || parentescoEmergencia !== &quot;&quot; || telefoneEmergencia !== &quot;&quot;) {&#xd;
+            if (!CODPESSOA || CODPESSOA === &quot;&quot;) {&#xd;
+                log.warn(&quot;### Contato de emergência ignorado: CODPESSOA não foi localizado.&quot;);&#xd;
+            } else {&#xd;
+                xmlCompl += &quot;  &lt;VPCOMPL&gt;\n&quot;;&#xd;
+                xmlCompl += tag(&quot;CODPESSOA&quot;, CODPESSOA);&#xd;
 &#xd;
-        //     if (nomeEmergencia !== &quot;&quot;) xmlCompl += tag(&quot;CONTATO_EMERGENCIA&quot;, nomeEmergencia);&#xd;
-        //     if (parentescoEmergencia !== &quot;&quot;) xmlCompl += tag(&quot;GRAU_PAR_EMER&quot;, parentescoEmergencia);&#xd;
-        //     if (telefoneEmergencia !== &quot;&quot;) xmlCompl += tag(&quot;TELEFONE_EMERGENCIA&quot;, telefoneEmergencia);&#xd;
+                if (nomeEmergencia !== &quot;&quot;) {&#xd;
+                    xmlCompl += tag(&quot;CONTATO_EMERGENCIA&quot;, nomeEmergencia);&#xd;
+                }&#xd;
 &#xd;
-        //     xmlCompl += &quot;  &lt;/VPCOMPL&gt;\n&quot;;&#xd;
-        // }&#xd;
+                if (parentescoEmergencia !== &quot;&quot;) {&#xd;
+                    xmlCompl += tag(&quot;GRAU_PAR_EMER&quot;, parentescoEmergencia);&#xd;
+                }&#xd;
+&#xd;
+                if (telefoneEmergencia !== &quot;&quot;) {&#xd;
+                    xmlCompl += tag(&quot;TELEFONE_EMERGENCIA&quot;, telefoneEmergencia);&#xd;
+                }&#xd;
+&#xd;
+                xmlCompl += &quot;  &lt;/VPCOMPL&gt;\n&quot;;&#xd;
+&#xd;
+                possuiBlocoComplementar = true;&#xd;
+            }&#xd;
+        }&#xd;
 &#xd;
         if (!possuiBlocoComplementar) {&#xd;
             log.info(&quot;### TASK 139 SEM BLOCOS COMPLEMENTARES ATIVOS. INTEGRAÇÃO IGNORADA.&quot;);&#xd;
@@ -2312,6 +2370,21 @@ function getUrlConfiguracao(campo) {&#xd;
         // Executa a gravação. O RM fará o UPDATE nas tabelas correspondentes.&#xd;
         var result = authService.saveRecord(&quot;FopFuncData&quot;, xmlCompl, RM_CONTEXTO);&#xd;
         log.info(&quot;### RETORNO RM (COMPLEMENTARES): &quot; + result);&#xd;
+&#xd;
+        if (&#xd;
+            result &amp;&amp;&#xd;
+            result.indexOf(&quot;===&quot;) != -1 &amp;&amp;&#xd;
+            xmlTagNivelIngles !== &quot;&quot; &amp;&amp;&#xd;
+            resultadoErroNivelIngles(result)&#xd;
+        ) {&#xd;
+            log.warn(&quot;### RM rejeitou o nível de inglês. Reprocessando complementares sem NIVEL_INGLES para não bloquear a admissão.&quot;);&#xd;
+&#xd;
+            xmlCompl = xmlCompl.replace(xmlTagNivelIngles, &quot;&quot;);&#xd;
+            xmlTagNivelIngles = &quot;&quot;;&#xd;
+&#xd;
+            result = authService.saveRecord(&quot;FopFuncData&quot;, xmlCompl, RM_CONTEXTO);&#xd;
+            log.info(&quot;### RETORNO RM SEM NÍVEL DE INGLÊS: &quot; + result);&#xd;
+        }&#xd;
 &#xd;
         if (result &amp;&amp; result.indexOf(&quot;===&quot;) != -1) {&#xd;
             throw &quot;Erro ao integrar os dados complementares: &quot; + result;&#xd;
@@ -2382,6 +2455,44 @@ function getUrlConfiguracao(campo) {&#xd;
 &#xd;
             return texto;&#xd;
         }&#xd;
+&#xd;
+        function normalizarTipoSanguineoRM(valor) {&#xd;
+            var texto = String(valor || &quot;&quot;).trim().toUpperCase();&#xd;
+&#xd;
+            if (texto === &quot;&quot;) return &quot;&quot;;&#xd;
+&#xd;
+            texto = texto.replace(/\s+/g, &quot;&quot;);&#xd;
+&#xd;
+            var permitidos = {&#xd;
+                &quot;A+&quot;: true,&#xd;
+                &quot;A-&quot;: true,&#xd;
+                &quot;B+&quot;: true,&#xd;
+                &quot;B-&quot;: true,&#xd;
+                &quot;AB+&quot;: true,&#xd;
+                &quot;AB-&quot;: true,&#xd;
+                &quot;O+&quot;: true,&#xd;
+                &quot;O-&quot;: true&#xd;
+            };&#xd;
+&#xd;
+            if (!permitidos[texto]) {&#xd;
+                return &quot;&quot;;&#xd;
+            }&#xd;
+&#xd;
+            return texto;&#xd;
+        }&#xd;
+&#xd;
+        function resultadoErroTipoSanguineo(result) {&#xd;
+            var texto = String(result || &quot;&quot;).toUpperCase();&#xd;
+&#xd;
+            return (&#xd;
+                texto.indexOf(&quot;TIPOSANG&quot;) &gt; -1 ||&#xd;
+                texto.indexOf(&quot;TIPO SANG&quot;) &gt; -1 ||&#xd;
+                texto.indexOf(&quot;SANGUINEO&quot;) &gt; -1 ||&#xd;
+                texto.indexOf(&quot;SANGUÍNEO&quot;) &gt; -1&#xd;
+            );&#xd;
+        }&#xd;
+&#xd;
+&#xd;
 &#xd;
         function tag(n, v) {&#xd;
             var texto = normalizarTextoIntegracao(v);&#xd;
@@ -2810,27 +2921,103 @@ function getUrlConfiguracao(campo) {&#xd;
             xmlFunc += tag(&quot;DTMUDANCACONTRIBSINDICAL&quot;, dtAdmissaoXML);&#xd;
         }&#xd;
 &#xd;
+        function normalizarTipoContratoPrazoRM(valor) {&#xd;
+            var textoOriginal = String(valor || &quot;&quot;).trim();&#xd;
+&#xd;
+            if (textoOriginal === &quot;&quot;) {&#xd;
+                return &quot;&quot;;&#xd;
+            }&#xd;
+&#xd;
+            var codigo = cleanId(textoOriginal);&#xd;
+            var texto = normalizarTextoIntegracao(textoOriginal);&#xd;
+&#xd;
+            if (codigo === &quot;1&quot; || texto.indexOf(&quot;PRAZO DETERMINADO&quot;) &gt; -1 || texto.indexOf(&quot;DETERMINADO&quot;) &gt; -1) {&#xd;
+                return &quot;determinado&quot;;&#xd;
+            }&#xd;
+&#xd;
+            if (codigo === &quot;2&quot; || texto.indexOf(&quot;EXPERIENCIA&quot;) &gt; -1) {&#xd;
+                return &quot;experiencia&quot;;&#xd;
+            }&#xd;
+&#xd;
+            return &quot;&quot;;&#xd;
+        }&#xd;
+&#xd;
+        function normalizarClausulaAssecuratoriaRM(valor) {&#xd;
+            var texto = normalizarTextoIntegracao(valor);&#xd;
+&#xd;
+            if (&#xd;
+                texto === &quot;SIM&quot; ||&#xd;
+                texto === &quot;S&quot; ||&#xd;
+                texto === &quot;1&quot; ||&#xd;
+                texto === &quot;TRUE&quot;&#xd;
+            ) {&#xd;
+                return &quot;1&quot;;&#xd;
+            }&#xd;
+&#xd;
+            return &quot;0&quot;;&#xd;
+        }&#xd;
+&#xd;
         // =========================================================================&#xd;
         // REGRAS DE CONTRATO COM PRAZO / EXPERIÊNCIA&#xd;
         // =========================================================================&#xd;
-        var tipoContratoPrazo = getStr(&quot;cpContratoPrazo&quot;);&#xd;
-        var dtFimContrato = formatarDataRM(getStr(&quot;cpTerminoContrato&quot;));&#xd;
-        var assecuratoria = getStr(&quot;cpClausulaAssecuratoria&quot;) === &quot;sim&quot; ? &quot;1&quot; : &quot;0&quot;;&#xd;
+        var tipoContratoPrazoRaw = getStr(&quot;cpContratoPrazo&quot;);&#xd;
+        var tipoContratoPrazo = normalizarTipoContratoPrazoRM(tipoContratoPrazoRaw);&#xd;
+        var assecuratoria = normalizarClausulaAssecuratoriaRM(getStr(&quot;cpClausulaAssecuratoria&quot;));&#xd;
+&#xd;
+        var dataFimContrato = getStr(&quot;cpTerminoContrato&quot;);&#xd;
+&#xd;
+        if (tipoContratoPrazo === &quot;experiencia&quot; &amp;&amp; dataFimContrato === &quot;&quot;) {&#xd;
+            dataFimContrato = getStr(&quot;cpVencSegundaExp&quot;) || getStr(&quot;cpVencPrimeiraExp&quot;);&#xd;
+        }&#xd;
+&#xd;
+        var dtFimContrato = formatarDataRM(dataFimContrato);&#xd;
+&#xd;
+        log.info(&quot;### Contrato com prazo - integração: &quot; + JSON.stringify({&#xd;
+            cpContratoPrazoRaw: tipoContratoPrazoRaw,&#xd;
+            tipoContratoPrazoNormalizado: tipoContratoPrazo,&#xd;
+            cpTerminoContrato: getStr(&quot;cpTerminoContrato&quot;),&#xd;
+            cpDiasVencPrimeiraExp: getStr(&quot;cpDiasVencPrimeiraExp&quot;),&#xd;
+            cpVencPrimeiraExp: getStr(&quot;cpVencPrimeiraExp&quot;),&#xd;
+            cpDiasVencSegundaExp: getStr(&quot;cpDiasVencSegundaExp&quot;),&#xd;
+            cpVencSegundaExp: getStr(&quot;cpVencSegundaExp&quot;),&#xd;
+            dataFimContrato: dataFimContrato,&#xd;
+            dtFimContrato: dtFimContrato,&#xd;
+            assecuratoria: assecuratoria&#xd;
+        }));&#xd;
 &#xd;
         if (tipoContratoPrazo === &quot;determinado&quot; || tipoContratoPrazo === &quot;experiencia&quot;) {&#xd;
-            // Marca a Flag de Contrato com Prazo como Sim (1)&#xd;
+            if (!dtFimContrato) {&#xd;
+                throw &quot;ERRO: Contrato com prazo selecionado, mas a data final do contrato não foi preenchida.&quot;;&#xd;
+            }&#xd;
+&#xd;
+            // PFUNC.TEMPRAZOCONTR - Contrato com Prazo&#xd;
             xmlFunc += tagInt(&quot;TEMPRAZOCONTR&quot;, &quot;1&quot;);&#xd;
 &#xd;
-            // Envia a Data Final e a Cláusula&#xd;
-            if (dtFimContrato) xmlFunc += tag(&quot;FIMPRAZOCONTR&quot;, dtFimContrato);&#xd;
-            xmlFunc += tagInt(&quot;TEMCLAUASSEG&quot;, assecuratoria);&#xd;
-&#xd;
-            // Define o Tipo de Contrato no RM (Geralmente 2 = Experiência, 1 = Prazo Determinado/Lei 9601)&#xd;
-            var codTipoPrazo = (tipoContratoPrazo === &quot;experiencia&quot;) ? &quot;2&quot; : &quot;1&quot;;&#xd;
+            // PFUNC.TIPOCONTRATOPRAZO - Tipo de Contrato&#xd;
+            // Mantido o mapeamento que já existia no código:&#xd;
+            // 1 = Prazo Determinado&#xd;
+            // 2 = Experiência&#xd;
+            var codTipoPrazo = tipoContratoPrazo === &quot;experiencia&quot; ? &quot;2&quot; : &quot;1&quot;;&#xd;
             xmlFunc += tag(&quot;TIPOCONTRATOPRAZO&quot;, codTipoPrazo);&#xd;
 &#xd;
+            // PFUNC.FIMPRAZOCONTR - Data Final do Contrato&#xd;
+            xmlFunc += tag(&quot;FIMPRAZOCONTR&quot;, dtFimContrato);&#xd;
+&#xd;
+            // PFUNC.TEMCLAUASSEG - Contém cláusula assecuratória&#xd;
+            xmlFunc += tagInt(&quot;TEMCLAUASSEG&quot;, assecuratoria);&#xd;
+&#xd;
+            // PFUNC.TIPOCONTPRAZODETERMINADO - Tipo de contrato por prazo determinado&#xd;
+            // Enviar apenas quando o contrato principal for Prazo Determinado.&#xd;
+            if (tipoContratoPrazo === &quot;determinado&quot;) {&#xd;
+                var tipoContPrazoDeterminado = getStr(&quot;cpTipoContPrazoDeterminado&quot;);&#xd;
+&#xd;
+                if (tipoContPrazoDeterminado !== &quot;&quot;) {&#xd;
+                    xmlFunc += tag(&quot;TIPOCONTPRAZODETERMINADO&quot;, tipoContPrazoDeterminado);&#xd;
+                }&#xd;
+            }&#xd;
+&#xd;
         } else {&#xd;
-            // Se for Indeterminado ou vazio, a Flag fica Não (0)&#xd;
+            // PFUNC.TEMPRAZOCONTR - Contrato indeterminado: checkbox desmarcado no RM&#xd;
             xmlFunc += tagInt(&quot;TEMPRAZOCONTR&quot;, &quot;0&quot;);&#xd;
         }&#xd;
 &#xd;
@@ -2918,8 +3105,15 @@ function getUrlConfiguracao(campo) {&#xd;
         xmlFunc += tag(&quot;CODNATURALIDADE&quot;, getStr(&quot;txtNaturalidadeCod&quot;));&#xd;
         xmlFunc += tag(&quot;ESTADONATAL&quot;, getUF(getStr(&quot;ESTADO&quot;)));&#xd;
 &#xd;
-        // var tpSanguineo = cleanId(getStr(&quot;TipoSanguineo&quot;));&#xd;
-        // if (tpSanguineo) xmlFunc += tag(&quot;TIPOSANG&quot;, tpSanguineo);&#xd;
+        var xmlTagTipoSanguineo = &quot;&quot;;&#xd;
+        var tpSanguineo = normalizarTipoSanguineoRM(getStr(&quot;TipoSanguineo&quot;));&#xd;
+&#xd;
+        if (tpSanguineo !== &quot;&quot;) {&#xd;
+            xmlTagTipoSanguineo = tagRaw(&quot;TIPOSANG&quot;, tpSanguineo);&#xd;
+            xmlFunc += xmlTagTipoSanguineo;&#xd;
+        } else if (getStr(&quot;TipoSanguineo&quot;) !== &quot;&quot;) {&#xd;
+            log.warn(&quot;### Tipo sanguíneo ignorado na integração RM. Valor não reconhecido: &quot; + getStr(&quot;TipoSanguineo&quot;));&#xd;
+        }&#xd;
 &#xd;
         // Endereço&#xd;
         xmlFunc += tag(&quot;CEP&quot;, limparPontuacao(getStr(&quot;txtCEP&quot;)));&#xd;
@@ -3049,6 +3243,21 @@ function getUrlConfiguracao(campo) {&#xd;
         var result = authService.saveRecord(&quot;FopFuncData&quot;, xmlFunc, RM_CONTEXTO);&#xd;
         log.info(&quot;### RETORNO RM (FUNCIONÁRIO): &quot; + result);&#xd;
 &#xd;
+        if (&#xd;
+            result &amp;&amp;&#xd;
+            result.indexOf(&quot;===&quot;) != -1 &amp;&amp;&#xd;
+            xmlTagTipoSanguineo !== &quot;&quot; &amp;&amp;&#xd;
+            resultadoErroTipoSanguineo(result)&#xd;
+        ) {&#xd;
+            log.warn(&quot;### RM rejeitou o tipo sanguíneo. Reprocessando funcionário sem TIPOSANG para não bloquear a admissão.&quot;);&#xd;
+&#xd;
+            xmlFunc = xmlFunc.replace(xmlTagTipoSanguineo, &quot;&quot;);&#xd;
+            xmlTagTipoSanguineo = &quot;&quot;;&#xd;
+&#xd;
+            result = authService.saveRecord(&quot;FopFuncData&quot;, xmlFunc, RM_CONTEXTO);&#xd;
+            log.info(&quot;### RETORNO RM SEM TIPO SANGUÍNEO: &quot; + result);&#xd;
+        }&#xd;
+&#xd;
         // =========================================================================&#xd;
         // TRATAMENTO DE AUTO-CORREÇÃO (PESSOA JÁ EXISTENTE)&#xd;
         // =========================================================================&#xd;
@@ -3065,6 +3274,22 @@ function getUrlConfiguracao(campo) {&#xd;
                 }&#xd;
 &#xd;
                 result = authService.saveRecord(&quot;FopFuncData&quot;, xmlFunc, RM_CONTEXTO);&#xd;
+&#xd;
+                if (&#xd;
+                    result &amp;&amp;&#xd;
+                    result.indexOf(&quot;===&quot;) != -1 &amp;&amp;&#xd;
+                    xmlTagTipoSanguineo !== &quot;&quot; &amp;&amp;&#xd;
+                    resultadoErroTipoSanguineo(result)&#xd;
+                ) {&#xd;
+                    log.warn(&quot;### RM rejeitou o tipo sanguíneo após autocorreção de CODPESSOA. Reprocessando sem TIPOSANG.&quot;);&#xd;
+&#xd;
+                    xmlFunc = xmlFunc.replace(xmlTagTipoSanguineo, &quot;&quot;);&#xd;
+                    xmlTagTipoSanguineo = &quot;&quot;;&#xd;
+&#xd;
+                    result = authService.saveRecord(&quot;FopFuncData&quot;, xmlFunc, RM_CONTEXTO);&#xd;
+                    log.info(&quot;### RETORNO RM SEM TIPO SANGUÍNEO APÓS AUTOCORREÇÃO: &quot; + result);&#xd;
+                }&#xd;
+&#xd;
                 hAPI.setCardValue(&quot;FUN_CODPESSOA&quot;, codPessoaExtraido);&#xd;
             }&#xd;
         }&#xd;
@@ -3110,9 +3335,9 @@ function getUrlConfiguracao(campo) {&#xd;
 &#xd;
             for (var i = 0; i &lt; indexesDep.length; i++) {&#xd;
                 var idx = indexesDep[i];&#xd;
-                var nomeDep = String(getStr(&quot;txtNomDepen___&quot; + idx) || &quot;&quot;).trim();
-
-                if (nomeDep !== &quot;&quot;) {
+                var nomeDep = String(getStr(&quot;txtNomDepen___&quot; + idx) || &quot;&quot;).trim();&#xd;
+&#xd;
+                if (nomeDep !== &quot;&quot;) {&#xd;
                     nroDepend++;&#xd;
                     var cpfDep = limparPontuacao(getStr(&quot;TxtCPFDep___&quot; + idx));&#xd;
                     var dtNascDep = formatarDataRM(getStr(&quot;cpDataNascimentoDep___&quot; + idx));&#xd;
@@ -3199,7 +3424,7 @@ function getUrlConfiguracao(campo) {&#xd;
         log.error(&quot;### ERRO FATAL NA INTEGRAÇÃO RM: &quot; + e);&#xd;
         throw e;&#xd;
     }&#xd;
-}
+}&#xd;
 </eventDescription>
     </WorkflowProcessEvent>
     <WorkflowProcessEvent>

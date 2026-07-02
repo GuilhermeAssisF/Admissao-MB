@@ -7,11 +7,11 @@ var REGRAS_OBRIGATORIEDADE = {
     // Atividades 0, 1 e 41 (Abertura e Correção)
     "0,1,41": [
         "cpfcnpj", "txtNomeColaborador", "dtDataNascColaborador",
-        "txtTELEFONE", "txtCELULAR", "txtEmail", "txtNomeSocial",
+        "txtTELEFONE", "txtCELULAR", "txtEmail",
         "IDDESC_EMPRESAFILIAL", "descricaoJornada", "FUN_ADMISSAO", "cpJornadaAdmissao",
         "FUN_TPADMISSAO_IDDESC_AD", "FUN_SECAO_IDDESC_AD", "FUN_IDDESCFUN", "selectTemRemuneracao",
         "FUN_VLRSALARIO", "FUN_IDDESCTURN", "zoomTipoFuncionario", "FUN_SEQTURN_IDDESC_AD", "FUN_TPJORNADA",
-        "cpDataHoraExame", "cpEnderecoClinica", "cpNomeClinica", "cpEmailCandidatoInicio", "cpEmailCandidato",
+        "cpEmailCandidato",
         "cpContratoPrazo"
     ],
 
@@ -72,7 +72,7 @@ function aplicarObrigatoriedadeFrontEnd(atividadeAtual) {
         // Verifica se a regra se aplica à atividade atual
         if (listaAtividades.indexOf(atividadeAtual.toString()) > -1) {
             $.each(campos, function (i, idCampo) {
-                
+
                 // --- NOVA REGRA: SE FOR ESTÁGIO E O CAMPO FOR DE CLT, IGNORA E PULA! ---
                 if ((jornada === "Estagio" || jornada === "Estágio") && camposExclusivosCLT.indexOf(idCampo) > -1) {
                     return true; // Funciona como um 'continue', pulando este campo específico
@@ -80,6 +80,16 @@ function aplicarObrigatoriedadeFrontEnd(atividadeAtual) {
 
                 var $campo = $("#" + idCampo);
                 if ($campo.length > 0) {
+                    var $containerCampo = $campo.closest(".form-group");
+
+                    if (!$containerCampo.length) {
+                        $containerCampo = $campo.closest("div[class*='col-']");
+                    }
+
+                    if ($containerCampo.length && !$containerCampo.is(":visible")) {
+                        return true;
+                    }
+
                     $campo.attr("obrigatorio", "true");
                 }
             });

@@ -85,6 +85,8 @@ function servicetask138(attempt, message) {
             );
         }
 
+
+
         function tag(n, v) {
             var texto = normalizarTextoIntegracao(v);
             if (texto === "") return "";
@@ -512,11 +514,48 @@ function servicetask138(attempt, message) {
             xmlFunc += tag("DTMUDANCACONTRIBSINDICAL", dtAdmissaoXML);
         }
 
+        function normalizarTipoContratoPrazoRM(valor) {
+            var textoOriginal = String(valor || "").trim();
+
+            if (textoOriginal === "") {
+                return "";
+            }
+
+            var codigo = cleanId(textoOriginal);
+            var texto = normalizarTextoIntegracao(textoOriginal);
+
+            if (codigo === "1" || texto.indexOf("PRAZO DETERMINADO") > -1 || texto.indexOf("DETERMINADO") > -1) {
+                return "determinado";
+            }
+
+            if (codigo === "2" || texto.indexOf("EXPERIENCIA") > -1) {
+                return "experiencia";
+            }
+
+            return "";
+        }
+
+        function normalizarClausulaAssecuratoriaRM(valor) {
+            var texto = normalizarTextoIntegracao(valor);
+
+            if (
+                texto === "SIM" ||
+                texto === "S" ||
+                texto === "1" ||
+                texto === "TRUE"
+            ) {
+                return "1";
+            }
+
+            return "0";
+        }
+
         // =========================================================================
         // REGRAS DE CONTRATO COM PRAZO / EXPERIÊNCIA
         // =========================================================================
-        var tipoContratoPrazo = String(getStr("cpContratoPrazo") || "").toLowerCase();
-        var assecuratoria = getStr("cpClausulaAssecuratoria") === "sim" ? "1" : "0";
+        var tipoContratoPrazoRaw = getStr("cpContratoPrazo");
+        var tipoContratoPrazo = normalizarTipoContratoPrazoRM(tipoContratoPrazoRaw);
+        var assecuratoria = normalizarClausulaAssecuratoriaRM(getStr("cpClausulaAssecuratoria"));
 
         var dataFimContrato = getStr("cpTerminoContrato");
 
@@ -525,6 +564,19 @@ function servicetask138(attempt, message) {
         }
 
         var dtFimContrato = formatarDataRM(dataFimContrato);
+
+        log.info("### Contrato com prazo - integração: " + JSON.stringify({
+            cpContratoPrazoRaw: tipoContratoPrazoRaw,
+            tipoContratoPrazoNormalizado: tipoContratoPrazo,
+            cpTerminoContrato: getStr("cpTerminoContrato"),
+            cpDiasVencPrimeiraExp: getStr("cpDiasVencPrimeiraExp"),
+            cpVencPrimeiraExp: getStr("cpVencPrimeiraExp"),
+            cpDiasVencSegundaExp: getStr("cpDiasVencSegundaExp"),
+            cpVencSegundaExp: getStr("cpVencSegundaExp"),
+            dataFimContrato: dataFimContrato,
+            dtFimContrato: dtFimContrato,
+            assecuratoria: assecuratoria
+        }));
 
         if (tipoContratoPrazo === "determinado" || tipoContratoPrazo === "experiencia") {
             if (!dtFimContrato) {

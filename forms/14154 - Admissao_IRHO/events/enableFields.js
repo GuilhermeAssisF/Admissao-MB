@@ -80,7 +80,6 @@ function enableFields(form) {
     { campo: "OrgEmRIC", atividade: "0,1,41" },
     { campo: "DtEmRIC", atividade: "0,1,41" },
     { campo: "DtChegBras", atividade: "0,1,41" },
-    { campo: "Visto", atividade: "0,1,41" },
     { campo: "RNE", atividade: "0,1,41" },
     { campo: "DTRNE", atividade: "0,1,41" },
     { campo: "OrgRNE", atividade: "0,1,41" },
@@ -419,7 +418,6 @@ function enableFields(form) {
     { campo: "cpParecerBPO", atividade: "89" },
 
     // CAMPOS LEGADOS OU OCULTOS
-    { campo: "TipoSanguineo", atividade: "0,1,41" },
     { campo: "TxtSegDesemprego", atividade: "0,1,41" },
     { campo: "FGTSBANPagto", atividade: "0,1,41" },
     { campo: "PlanSaude", atividade: "0,1,41" },

@@ -9,7 +9,11 @@ function validateForm(form) {
 
 
 
-    // Só valida se o utilizador estiver a tentar avançar a tarefa
+    var atividade = parseInt(getValue("WKNumState"));
+    var acaoUsuario = getValue("WKCompletTask");
+    var msg = "";
+
+    // Só valida se o usuário estiver tentando avançar a tarefa
     if (acaoUsuario != "true") {
         return;
     }
@@ -17,14 +21,9 @@ function validateForm(form) {
     // Se quem está movendo é o usuário da Widget, IGNORA validações e permite avançar.
     // Isso evita erro 500 pois os campos estarão vazios nesse momento.
     var usuarioLogado = getValue("WKUser");
-    if (usuarioLogado == "widgetpublicadeadmissao") { // Use o login exato do seu usuário integrador
+    if (usuarioLogado == "widgetpublicadeadmissao") {
         return;
     }
-
-
-    var atividade = parseInt(getValue("WKNumState"));
-    var acaoUsuario = getValue("WKCompletTask");
-    var msg = "";
 
     // --- FUNÇÃO AUXILIAR DE SEGURANÇA ---
     // Garante que retorna String vazia se o campo for nulo, evitando erro 500
@@ -72,7 +71,6 @@ function validateForm(form) {
             { id: "cpfcnpj", nome: "CPF/CNPJ" },
             { id: "txtNomeColaborador", nome: "Nome Completo" },
             { id: "dtDataNascColaborador", nome: "Data de Nascimento" },
-            { id: "txtNomeSocial", nome: "Nome Social" },
             { id: "txtEmail", nome: "E-mail" },
             { id: "txtCELULAR", nome: "Celular 1" },
             { id: "txtTELEFONE", nome: "Telefone 2" },
@@ -86,12 +84,7 @@ function validateForm(form) {
             { id: "FUN_IDDESCFUN", nome: "Função" },
             { id: "selectTemRemuneracao", nome: "Remuneração" },
             { id: "FUN_VLRSALARIO", nome: "Salário" },
-            { id: "cpContratoPrazo", nome: "Contrato com Prazo" },
-
-            { id: "cpDataHoraExame", nome: "Data e Hora do Exame" },
-            { id: "cpEnderecoClinica", nome: "Endereço da Clínica" },
-            { id: "cpNomeClinica", nome: "Nome da Clínica" },
-            { id: "cpEmailCandidatoInicio", nome: "E-mail para Envio do Exame" }
+            { id: "cpContratoPrazo", nome: "Contrato com Prazo" }
 
         ],
 

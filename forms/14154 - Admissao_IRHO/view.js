@@ -852,9 +852,6 @@ $(document).ready(function () {
     // Oculta "Escolaridade"
     $("#txtEscolaridade").closest(".col-md-6").hide();
 
-    // Oculta "Tipo Sanguíneo"
-    $("#TipoSanguineo").closest("div[class*='col-']").hide();
-
     // Oculta o painel inteiro de "Dependentes" e "Filiação"
     $('a[href="#dados_pessoais"]').closest('.panel.panel-default').hide();
 
@@ -1002,7 +999,7 @@ $(document).ready(function () {
     '#cpDataOpcaoFGTS', '#cpDataInclusaoAM', '#cpDataInclusaoAO',
     '#cpUpFrontDataInicio', '#cpHiringBonusDataInicio', '#cpDataPLR',
     '#cpEstagioDataInicio', '#cpEstagioDataFim',
-    '#Reg_Prof_Emissao', '#Passaporte_Emissao', '#Passaporte_Validade', '#cpDataExameAdmissional',
+    '#Reg_Prof_Emissao', '#cpDataExameAdmissional',
     '#cpPrazoClawback'
   ];
 
@@ -1156,6 +1153,10 @@ $(document).ready(function () {
           aplicarParametrosJornadaAdmissao(jornada);
         }
 
+        if (typeof aplicarAjustesPontuaisPorContratacao === "function") {
+          aplicarAjustesPontuaisPorContratacao();
+        }
+
         if (typeof aplicarObrigatoriedadeFrontEnd === "function") {
           aplicarObrigatoriedadeFrontEnd(getWKNumState());
         }
@@ -1239,6 +1240,13 @@ $(document).ready(function () {
     pickTime: true,
     sideBySide: true
   });
+
+  // Estagiário não participa da etapa de exame admissional
+  var jornadaAdmissaoAtual = String($("#cpJornadaAdmissao").val() || $("#cpJornadaAdmissaoDescricao").val() || "")
+    .toLowerCase();
+  if (jornadaAdmissaoAtual.indexOf("estagio") > -1 || jornadaAdmissaoAtual.indexOf("estagiario") > -1) {
+    $("#blocoExameAdmissional").hide();
+  }
 
   // TRAVA DE SEGURANÇA INICIAL
   // Se não houver empresa selecionada, desabilita os campos dependentes imediatamente
@@ -2422,6 +2430,17 @@ $(document).ready(function () {
       .find(".bloco-mae-filho-dependente")
       .toggle(isFilho);
 
+    var $campoNomeMaeObservacao = $linha
+      .find(".bloco-nome-mae-observacao-dependente");
+
+    $campoNomeMaeObservacao.toggle(!isFilho);
+
+    if (isFilho) {
+      $campoNomeMaeObservacao
+        .find("input, select, textarea")
+        .val("");
+    }
+
     $linha
       .find(".bloco-data-uniao-dependente")
       .toggle(isConjuge);
@@ -2462,6 +2481,28 @@ $(document).ready(function () {
     });
 
   aplicarBloqueioContratoEstagioAprendizRH();
+
+  if (typeof aplicarAjustesPontuaisPorContratacao === "function") {
+    aplicarAjustesPontuaisPorContratacao();
+  }
+
+  if (typeof aplicarObrigatoriedadeFrontEnd === "function") {
+    aplicarObrigatoriedadeFrontEnd(getWKNumState());
+  }
+
+  // Garante obrigatoriedade padrão no carregamento inicial,
+  // sem depender do change da Jornada.
+  setTimeout(function () {
+    if (typeof aplicarObrigatoriedadeFrontEnd === "function") {
+      aplicarObrigatoriedadeFrontEnd(getWKNumState());
+    }
+  }, 300);
+
+  setTimeout(function () {
+    if (typeof aplicarObrigatoriedadeFrontEnd === "function") {
+      aplicarObrigatoriedadeFrontEnd(getWKNumState());
+    }
+  }, 800);
 
   $("#cpJornadaAdmissao")
     .off("change.bloqueioEstagioAprendiz")
@@ -5880,8 +5921,6 @@ var preencherInfoFuncionario = function (info) {
   $("#txtEstadoCivil").val(info['FUN_ESTADOCIV_DESC_AD']); // Campo Descrição
   $("#GRAUINSTRUCAOCod").val(info['FUN_CODGINRAI']);
   $("#txtEscolaridade").val(info['FUN_CODGINRAI_DESC_AD']); // Campo Descrição
-  $("#TipoSanguineo").val(info['FUN_TIPOSANG']);
-
   // Deficiências
   $("#DEFICIENTEFISICO").val(info['FUN_DEFICIENTEFISICO']);
   $("#DEFICIENTEAUDITIVO").val(info['FUN_DEFICIENTEAUDITIVO']);
@@ -6956,6 +6995,165 @@ function replicarNomeSocial() {
   }
 }
 
+function normalizarTextoRegraContratacao(valor) {
+  return String(valor || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function obterTextoContratacaoRegraPontual() {
+  return normalizarTextoRegraContratacao([
+    $("#cpJornadaAdmissao").val(),
+    $("#cpJornadaAdmissaoDescricao").val(),
+    $("#cpJornadaAdmissao").find("option:selected").text(),
+    $("#cpTipoContrato").val(),
+    $("#zoomTipoFuncionario").val(),
+    $("#codTipoFuncionario").val()
+  ].join(" "));
+}
+
+function isContratacaoAssociadoRegraPontual() {
+  return obterTextoContratacaoRegraPontual().indexOf("associado") > -1;
+}
+
+function isContratacaoEstagioRegraPontual() {
+  var texto = obterTextoContratacaoRegraPontual();
+  return texto.indexOf("estagio") > -1 || texto.indexOf("estagiario") > -1;
+}
+
+function isContratacaoCltRegraPontual() {
+  return obterTextoContratacaoRegraPontual().indexOf("clt") > -1;
+}
+
+function ocultarElementoRegraPontual($elemento) {
+  $elemento.each(function () {
+    var $item = $(this);
+
+    if (!$item.attr("data-display-original-regra-pontual")) {
+      $item.attr("data-display-original-regra-pontual", $item.css("display") || "");
+    }
+
+    $item.attr("data-regra-contratacao-pontual", "true").hide();
+  });
+}
+
+function restaurarElementosRegraPontual() {
+  $("[data-regra-contratacao-pontual='true']").each(function () {
+    var $item = $(this);
+    var displayOriginal = $item.attr("data-display-original-regra-pontual");
+
+    if (displayOriginal === "none") {
+      $item.hide();
+    } else {
+      $item.show();
+    }
+
+    $item.removeAttr("data-regra-contratacao-pontual");
+    $item.removeAttr("data-display-original-regra-pontual");
+  });
+}
+
+function aplicarAjustesPontuaisPorContratacao() {
+  var textoContratacao = obterTextoContratacaoRegraPontual();
+
+  var isAssociado = isContratacaoAssociadoRegraPontual();
+  var isEstagio = isContratacaoEstagioRegraPontual();
+  var isClt = isContratacaoCltRegraPontual();
+
+  restaurarElementosRegraPontual();
+
+  // Se ainda não houver Jornada/Contratação selecionada,
+  // mantém a tela no comportamento padrão e apenas reaplica obrigatoriedade.
+  if (!textoContratacao) {
+    if (typeof aplicarObrigatoriedadeFrontEnd === "function") {
+      aplicarObrigatoriedadeFrontEnd(getWKNumState());
+    }
+
+    if (typeof validarLiberacaoGED === "function") {
+      validarLiberacaoGED();
+    }
+
+    return;
+  }
+
+  // Tipo Sanguíneo: no formulário principal não há campo, mas existe item no checklist.
+  // Remove visualmente o item para Associado e CLT.
+  if (isAssociado || isClt) {
+    ocultarElementoRegraPontual($("#Ckb15").closest(".col-md-6"));
+  }
+
+  // Associado: remove Título de Eleitor.
+  if (isAssociado) {
+    ocultarElementoRegraPontual($("#Titulo_Digital").closest(".row").prev(".row"));
+    ocultarElementoRegraPontual($("#Titulo_Digital").closest(".row"));
+    ocultarElementoRegraPontual($("#Ckb5").closest(".col-md-6"));
+  }
+
+  // Associado e Estágio: remove Vale-Transporte.
+  if (isAssociado || isEstagio) {
+    var $linhaVt = $("#ValeTransp").closest(".row");
+
+    ocultarElementoRegraPontual($linhaVt.prev("h4"));
+    ocultarElementoRegraPontual($linhaVt);
+    ocultarElementoRegraPontual($("#tabela_rotas_vt").closest(".row"));
+
+    $("#ValeTransp").val("2");
+  }
+
+  // Estágio: remove Plano Odontológico.
+  if (isEstagio) {
+    var $linhaOdonto = $("#TxtIncPlanoOdontoOpcao").closest(".row");
+
+    ocultarElementoRegraPontual($linhaOdonto.prev("h4"));
+    ocultarElementoRegraPontual($linhaOdonto);
+    ocultarElementoRegraPontual($("#TxtDepsPlanoOdonto").closest(".row"));
+
+    $("#TxtIncPlanoOdontoOpcao").val("");
+    $("#TxtIncPlanoOdontoTipo").val("");
+    $("#TxtIncPlanoOdontoTipoCod").val("");
+    $("#TxtDepsPlanoOdonto").val("");
+    $("#cpPlanoAO").val("");
+    $("#cpDataInclusaoAO").val("");
+  }
+
+  // Estágio: remove campos complementares de exame admissional.
+  if (isEstagio) {
+    $("#blocoExameAdmissional").hide();
+
+    ocultarElementoRegraPontual($("#cpDataHoraExame").closest(".row"));
+    ocultarElementoRegraPontual($("#cpEnderecoClinica").closest(".row"));
+    ocultarElementoRegraPontual($("#cpNomeClinica").closest(".row"));
+
+    $("#cpDataHoraExame").val("");
+    $("#cpEnderecoClinica").val("");
+    $("#cpNomeClinica").val("");
+    $("#cpLocalExameAdmissional").val("");
+    $("#cpDataExameAdmissional").val("");
+  }
+
+  // CLT: remove RG da mãe e Deficiência na Filiação.
+  if (isClt) {
+    ocultarElementoRegraPontual($("input[id^='TxtRgMaeDep']").closest("div[class*='col-']"));
+    ocultarElementoRegraPontual($(".bloco-deficiencia-dependente"));
+    ocultarElementoRegraPontual($(".bloco-tipo-deficiencia-dependente"));
+
+    $("input[id^='TxtRgMaeDep']").val("");
+    $("select[id^='TxtPossuiDeficienciaDep']").val("");
+    $("select[id^='TxtTipoDeficienciaDep']").val("");
+  }
+
+  if (typeof aplicarObrigatoriedadeFrontEnd === "function") {
+    aplicarObrigatoriedadeFrontEnd(getWKNumState());
+  }
+
+  if (typeof validarLiberacaoGED === "function") {
+    validarLiberacaoGED();
+  }
+}
+
 function aplicarBloqueioDadosContratacaoPorJornada() {
   var atvAtual = typeof getWKNumState !== "undefined" ? getWKNumState() : 0;
   var etapaEditavel = atvAtual == 0 || atvAtual == 1 || atvAtual == 41;
@@ -7915,7 +8113,6 @@ function obterCamposObrigatoriosParaLiberarGED() {
     "dtDataNascColaborador",
 
     // Contato
-    "txtNomeSocial",
     "txtEmail",
     "txtCELULAR",
     "txtTELEFONE",
